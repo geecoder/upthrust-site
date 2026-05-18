@@ -4,8 +4,67 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { scenarios } from '@/lib/scenarios';
 import { calculateResult, getResultMeta, type Answer } from '@/lib/scoring';
+import { TALLY_FORMS, tallyDirectUrl } from '@/lib/config';
 
 type Stage = 'intro' | 'lead-capture' | 'scenario' | 'result';
+
+// Silently submit the assessment to Tally by posting to the form's submission URL via a hidden iframe.
+// This avoids CORS issues since Tally's API requires their dashboard auth.
+// The hidden iframe technique posts to Tally's public form endpoint just like a regular form submission would.
+function submitAssessmentToTally(data: {
+  firstName: string;
+  email: string;
+  country: string;
+  selfReported: string;
+  resultType: string;
+  pmScore: number;
+  baScore: number;
+  designScore: number;
+  primary: string;
+  answers: Answer[];
+}) {
+  if (typeof window === 'undefined') return;
+
+  // Create a hidden form and submit to Tally
+  const form = document.createElement('form');
+  form.action = tallyDirectUrl(TALLY_FORMS.assessment);
+  form.method = 'POST';
+  form.target = '_blank';
+  form.style.display = 'none';
+
+  const fields: Record<string, string> = {
+    'First Name': data.firstName,
+    'Email': data.email,
+    'Country': data.country,
+    'Self-Reported Pathway': data.selfReported || 'Not specified',
+    'Assessment Result Type': data.resultType,
+    'PM Score': String(data.pmScore),
+    'BA Score': String(data.baScore),
+    'Design Score': String(data.designScore),
+    'Primary Pathway': data.primary,
+    'All Answers': JSON.stringify(data.answers),
+  };
+
+  Object.entries(fields).forEach(([name, value]) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  });
+
+  // NOTE: The direct POST to tally.so/r/{formId} won't work cross-origin.
+  // Instead, we use fetch with no-cors mode (fire and forget).
+  fetch(tallyDirectUrl(TALLY_FORMS.assessment), {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(fields).toString(),
+  }).catch(() => {
+    // Silent fail — we still show the result to the user
+    // Lead capture is best-effort
+  });
+}
 
 export default function AssessmentPage() {
   const [stage, setStage] = useState<Stage>('intro');
@@ -34,9 +93,21 @@ export default function AssessmentPage() {
     setAnswers(newAnswers);
 
     if (currentIdx + 1 >= total) {
+      // Calculate and submit to Tally before transitioning to result
+      const finalResult = calculateResult(newAnswers);
+      submitAssessmentToTally({
+        firstName: leadData.firstName,
+        email: leadData.email,
+        country: leadData.country,
+        selfReported: leadData.selfReported,
+        resultType: finalResult.resultType,
+        pmScore: finalResult.scores.PM,
+        baScore: finalResult.scores.BA,
+        designScore: finalResult.scores.Design,
+        primary: finalResult.primary,
+        answers: newAnswers,
+      });
       setStage('result');
-      // TODO: post leadData + answers to your form endpoint here
-      // e.g. fetch('https://tally.so/...', { method: 'POST', body: JSON.stringify({...leadData, answers, resultType}) })
     } else {
       setCurrentIdx(currentIdx + 1);
     }

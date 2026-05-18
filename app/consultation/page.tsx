@@ -1,6 +1,25 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { TALLY_FORMS, tallyEmbedUrl } from '@/lib/config';
 
 export default function ConsultationPage() {
+  // Load Tally embed script once
+  useEffect(() => {
+    const scriptSrc = 'https://tally.so/widgets/embed.js';
+    const existing = document.querySelector(`script[src="${scriptSrc}"]`);
+    if (!existing) {
+      const script = document.createElement('script');
+      script.src = scriptSrc;
+      script.async = true;
+      document.body.appendChild(script);
+    } else {
+      // @ts-ignore
+      if (typeof Tally !== 'undefined') Tally.loadEmbeds();
+    }
+  }, []);
+
   return (
     <>
       {/* HERO */}
@@ -60,52 +79,21 @@ export default function ConsultationPage() {
 
           <div style={{
             marginTop: 32,
-            padding: 32,
             background: 'var(--white)',
             border: '1px solid var(--paper-line)',
+            overflow: 'hidden',
           }}>
-            {/* Replace TALLY_FORM_ID with your real Tally form ID when you create it */}
-            <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', color: 'var(--amber-deep)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
-              [ Tally Form Embed Placeholder ]
-            </p>
-            <p className="text-soft" style={{ fontSize: '0.9375rem', lineHeight: 1.6 }}>
-              This is where your Tally consultation booking form will embed. Once you create the form in Tally, replace this section with the embed code, or use a Tally iframe like:
-            </p>
-            <pre style={{
-              marginTop: 16,
-              padding: 16,
-              background: 'var(--paper-soft)',
-              fontSize: '0.8125rem',
-              fontFamily: 'Geist Mono, monospace',
-              overflow: 'auto',
-              lineHeight: 1.6,
-            }}>
-{`<iframe
-  src="https://tally.so/embed/YOUR_FORM_ID?alignLeft=1&transparentBackground=1"
-  loading="lazy"
-  width="100%"
-  height="800"
-  frameBorder="0"
-/>`}
-            </pre>
-
-            <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid var(--paper-line)' }}>
-              <p className="eyebrow">Tally form fields to include</p>
-              <ul style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.875rem', color: 'var(--ink-soft)' }}>
-                <li>· Full name</li>
-                <li>· Email</li>
-                <li>· Phone or WhatsApp</li>
-                <li>· Country (used to determine regional pricing)</li>
-                <li>· Current role or background</li>
-                <li>· Pathway interest: PM Cohort 1 / BA Cohort 1 / Not sure / Design Cohort 2 waitlist</li>
-                <li>· Did you complete the Career Assessment? (Yes / No)</li>
-                <li>· If yes, what was your result?</li>
-                <li>· Biggest career challenge right now (short text)</li>
-                <li>· Goal for the next 6–12 months (short text)</li>
-                <li>· Tier interest: Standard / Premium / Not sure</li>
-                <li>· Preferred call times (3 slots)</li>
-              </ul>
-            </div>
+            <iframe
+              data-tally-src={tallyEmbedUrl(TALLY_FORMS.consultation, { alignLeft: true, transparentBackground: true })}
+              loading="lazy"
+              width="100%"
+              height="900"
+              frameBorder={0}
+              marginHeight={0}
+              marginWidth={0}
+              title="Upthrust Consultation Booking"
+              style={{ display: 'block', border: 0 }}
+            />
           </div>
         </div>
       </section>

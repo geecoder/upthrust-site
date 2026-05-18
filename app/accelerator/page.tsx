@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Pricing from '@/components/Pricing';
 
 export default function AcceleratorPage() {
   return (
@@ -279,88 +280,7 @@ export default function AcceleratorPage() {
             </p>
           </div>
 
-          <div className="grid grid-2" style={{ gap: 24 }}>
-            {/* STANDARD */}
-            <div className="card" style={{ padding: 40, display: 'flex', flexDirection: 'column' }}>
-              <p className="eyebrow">Tier 01</p>
-              <h3 className="display-s" style={{ marginTop: 12, fontSize: '1.875rem' }}>Standard</h3>
-              <p className="text-soft" style={{ marginTop: 12, fontSize: '0.9375rem', lineHeight: 1.6 }}>
-                For self-driven learners who want the live program, the assignments, and the community — without portfolio review or Passport eligibility.
-              </p>
-              <ul style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.9375rem' }}>
-                {['Live concept classes + labs', 'All program templates', 'Weekly assignments + group feedback', 'Cohort community access', 'Completion certificate', 'Capstone submission'].map((item) => (
-                  <li key={item} style={{ display: 'flex', gap: 10 }}>
-                    <span style={{ color: 'var(--moss)' }}>✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/consultation" className="btn btn-secondary" style={{ marginTop: 32, alignSelf: 'flex-start' }}>
-                Discuss Standard tier
-              </Link>
-            </div>
-
-            {/* PREMIUM */}
-            <div className="card" style={{ padding: 40, display: 'flex', flexDirection: 'column', background: 'var(--white)', border: '2px solid var(--ink)', position: 'relative' }}>
-              <div style={{
-                position: 'absolute',
-                top: -12,
-                right: 24,
-                background: 'var(--amber)',
-                color: 'var(--paper)',
-                padding: '6px 12px',
-                fontFamily: 'Geist Mono, monospace',
-                fontSize: '0.6875rem',
-                letterSpacing: '0.12em',
-              }}>
-                MOST CHOSEN
-              </div>
-              <p className="eyebrow">Tier 02</p>
-              <h3 className="display-s" style={{ marginTop: 12, fontSize: '1.875rem' }}>Premium</h3>
-              <p className="text-soft" style={{ marginTop: 12, fontSize: '0.9375rem', lineHeight: 1.6 }}>
-                For serious career switchers. Everything in Standard, plus enhanced feedback, portfolio review, mock interview, and Capability Passport eligibility.
-              </p>
-              <ul style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.9375rem' }}>
-                {['Everything in Standard', '1:1 portfolio review session', 'Mock interview with feedback', 'Enhanced facilitator feedback', 'Capability Passport eligibility', 'Demo Day spotlight slot'].map((item) => (
-                  <li key={item} style={{ display: 'flex', gap: 10 }}>
-                    <span style={{ color: 'var(--moss)' }}>✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/consultation" className="btn btn-primary" style={{ marginTop: 32, alignSelf: 'flex-start' }}>
-                Discuss Premium tier
-              </Link>
-            </div>
-          </div>
-
-          <div style={{
-            marginTop: 32,
-            padding: 24,
-            background: 'var(--paper)',
-            border: '1px dashed var(--paper-line)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: 16,
-          }}>
-            <div>
-              <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.125rem', fontStyle: 'italic', color: 'var(--ink-soft)' }}>
-                VIP 1:1 mentorship
-              </p>
-              <p className="text-muted" style={{ fontSize: '0.875rem', marginTop: 4 }}>
-                Not available in Cohort 1. We are proving mentorship capacity through PM and BA delivery first. Opens in Cohort 2.
-              </p>
-            </div>
-            <Link href="/consultation" className="btn-ghost btn-arrow" style={{ fontSize: '0.875rem' }}>
-              Join the VIP waitlist
-            </Link>
-          </div>
-
-          <p style={{ marginTop: 32, fontSize: '0.875rem', color: 'var(--ink-muted)', fontStyle: 'italic', textAlign: 'center' }}>
-            Pricing is shared during the consultation. We use regional pricing — Nigeria/Africa, UK, Canada, Australia are priced differently to reflect local realities.
-          </p>
+          <Pricing />
         </div>
       </section>
 
