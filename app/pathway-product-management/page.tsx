@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import PMWeeklyWork from '@/components/PMWeeklyWork';
 
 export default function PMPathwayPage() {
   return (
@@ -65,10 +66,10 @@ export default function PMPathwayPage() {
         </div>
       </section>
 
-      {/* WHAT YOU'LL ACTUALLY DO */}
+      {/* WHAT YOU'LL ACTUALLY DO — interactive grid */}
       <section className="section">
         <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 56 }}>
+          <div style={{ maxWidth: 720, marginBottom: 48 }}>
             <p className="eyebrow">The PM-specific work</p>
             <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
               What you'll actually do — week by week.
@@ -77,44 +78,7 @@ export default function PMPathwayPage() {
               On top of the shared 12-week curriculum, here's where the PM pathway diverges. Each week you produce a tangible PM artefact that becomes part of your portfolio.
             </p>
           </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {[
-              { wk: 'Week 1', activity: 'Teardown a real product (likely a fintech or health app). Document the strategy you can infer from the product itself.' },
-              { wk: 'Week 2', activity: 'Write a problem brief for a real user problem. Define the user, the moment of pain, the current alternative.' },
-              { wk: 'Week 3', activity: 'Build a one-page product strategy canvas. North star metric, success measures, MVP scope, what we will not build.' },
-              { wk: 'Week 4', activity: 'Write a full PRD for a real feature. Define done. Anticipate edge cases. Make engineering and design able to start.' },
-              { wk: 'Week 5', activity: 'Map the end-to-end user journey for your PRD feature. Identify the riskiest moments.' },
-              { wk: 'Week 6', activity: 'Review your feature with a design lens. Where does the experience fail? What are you not seeing?' },
-              { wk: 'Week 7', activity: 'Walk through a real Figma prototype. Practise reviewing design as a PM — what feedback adds value, what does not.' },
-              { wk: 'Week 8', activity: 'Build a sprint backlog from your PRD. Write user stories. Define ready and done. Run a mock sprint planning.' },
-              { wk: 'Week 9', activity: 'Practise stakeholder conversations. Vague exec request, conflicting priorities, scope pressure, trade-off escalation.' },
-              { wk: 'Week 10', activity: 'Build a launch plan. UAT scope, support readiness, rollout strategy, kill criteria.' },
-              { wk: 'Week 11', activity: 'Define your metrics plan. What will you measure in week 1, week 4, week 12. What would tell you to kill the feature.' },
-              { wk: 'Week 12', activity: 'Present your full capstone. Defend every decision. Receive Capability Passport assessment.' },
-            ].map((week, i) => (
-              <div key={week.wk} style={{
-                display: 'grid',
-                gridTemplateColumns: '100px 1fr',
-                gap: 32,
-                padding: '20px 0',
-                borderTop: i === 0 ? '2px solid var(--ink)' : '1px solid var(--paper-line)',
-                alignItems: 'start',
-              }} className="pm-week-row">
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', color: 'var(--amber-deep)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{week.wk}</p>
-                <p className="text-soft" style={{ fontSize: '1rem', lineHeight: 1.6 }}>{week.activity}</p>
-              </div>
-            ))}
-          </div>
-
-          <style>{`
-            @media (max-width: 600px) {
-              section .pm-week-row {
-                grid-template-columns: 1fr !important;
-                gap: 4px !important;
-              }
-            }
-          `}</style>
+          <PMWeeklyWork />
         </div>
       </section>
 

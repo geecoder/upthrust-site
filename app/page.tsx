@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Testimonials from '@/components/Testimonials';
-import FounderPhoto from '@/components/FounderPhoto';
+import AnimatedHeritage from '@/components/AnimatedHeritage';
+import OperatingModelInteractive from '@/components/OperatingModelInteractive';
 
 export default function Home() {
   return (
@@ -57,45 +58,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HERITAGE STRIP */}
-      <section style={{
-        borderTop: '1px solid var(--paper-line)',
-        borderBottom: '1px solid var(--paper-line)',
-        padding: '28px 0',
-        background: 'var(--paper)',
-      }}>
-        <div className="container" style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 32,
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-          <p style={{
-            fontFamily: 'Fraunces, serif',
-            fontSize: 'clamp(1rem, 1.6vw, 1.25rem)',
-            fontStyle: 'italic',
-            color: 'var(--ink-soft)',
-            letterSpacing: '-0.01em',
-            maxWidth: 720,
-          }}>
-            From the team that has trained <span style={{ color: 'var(--ink)', fontStyle: 'normal', fontWeight: 500 }}>1,000+ professionals globally since 2019</span> — now repositioned around verified capability.
-          </p>
-          <div style={{
-            display: 'flex',
-            gap: 24,
-            fontFamily: 'Geist Mono, monospace',
-            fontSize: '0.6875rem',
-            color: 'var(--ink-muted)',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-          }}>
-            <span>Est. 2019</span>
-            <span>·</span>
-            <span>Lagos · London · Toronto · Sydney</span>
-          </div>
-        </div>
-      </section>
+      {/* HERITAGE STRIP — animated count-up */}
+      <AnimatedHeritage />
 
       {/* PROBLEM SECTION */}
       <section style={{
@@ -145,10 +109,10 @@ export default function Home() {
         `}</style>
       </section>
 
-      {/* OPERATING MODEL */}
+      {/* OPERATING MODEL — interactive step-through */}
       <section className="section">
         <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 72 }}>
+          <div style={{ maxWidth: 720, marginBottom: 56 }}>
             <p className="eyebrow">How Upthrust Works</p>
             <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
               Four steps. Each one earns the next.
@@ -157,128 +121,7 @@ export default function Home() {
               We don't sell hours of training. We sell a sequence: a way of moving from confusion to capability to evidence, where each step proves you've earned the right to the next one.
             </p>
           </div>
-
-          {/* Visual infographic */}
-          <div style={{ overflowX: 'auto' }}>
-            <div style={{ minWidth: 680 }}>
-              {/* Step connector line */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 0, position: 'relative' }}>
-                {/* Background connector */}
-                <div aria-hidden style={{
-                  position: 'absolute', top: 60, left: '12.5%', right: '12.5%',
-                  height: 2, background: 'var(--paper-line)', zIndex: 0,
-                }} />
-                <div aria-hidden style={{
-                  position: 'absolute', top: 60, left: '12.5%', width: '25%',
-                  height: 2, background: 'var(--amber)', zIndex: 1,
-                  transition: 'width 1s ease',
-                }} />
-
-                {[
-                  {
-                    num: '01', label: 'Assess', color: 'var(--ink)',
-                    icon: (
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="1.5"/>
-                        <path d="M10 16 L14 20 L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    ),
-                    body: 'Diagnose where you are. Our Career Assessment routes you to the pathway that fits how you actually think.',
-                    outcome: '→ Your pathway confirmed',
-                  },
-                  {
-                    num: '02', label: 'Build', color: 'var(--ink)',
-                    icon: (
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="4" y="20" width="6" height="8" stroke="currentColor" strokeWidth="1.5"/>
-                        <rect x="13" y="12" width="6" height="16" stroke="currentColor" strokeWidth="1.5"/>
-                        <rect x="22" y="4" width="6" height="24" stroke="currentColor" strokeWidth="1.5"/>
-                      </svg>
-                    ),
-                    body: '12 weeks of real product work. Stakeholder simulations, assignments, and a capstone. Mentorship from practitioners.',
-                    outcome: '→ Portfolio of real work',
-                  },
-                  {
-                    num: '03', label: 'Verify', color: 'var(--ink)',
-                    icon: (
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 4 L20 12 L28 13 L22 19 L24 28 L16 24 L8 28 L10 19 L4 13 L12 12 Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-                      </svg>
-                    ),
-                    body: 'Your work is reviewed against capability rubrics built from how real product teams hire. Pass the bar, Passport issued.',
-                    outcome: '→ Capability Passport',
-                  },
-                  {
-                    num: '04', label: 'Showcase', color: 'var(--ink)',
-                    icon: (
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="16" cy="10" r="6" stroke="currentColor" strokeWidth="1.5"/>
-                        <path d="M4 28 C4 22 8 18 16 18 C24 18 28 22 28 28" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                        <path d="M20 10 L26 4 M22 4 L26 4 L26 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    ),
-                    body: 'Portfolio, capstone, and Capability Passport — packaged so employers can see exactly what you can do. Demo Day.',
-                    outcome: '→ Career opportunities',
-                  },
-                ].map((step, i) => (
-                  <div key={step.num} style={{
-                    display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    padding: '0 16px', position: 'relative', zIndex: 2,
-                  }}>
-                    {/* Step circle */}
-                    <div style={{
-                      width: 80, height: 80, borderRadius: '50%',
-                      background: i === 0 ? 'var(--ink)' : i === 3 ? 'var(--amber)' : 'var(--paper)',
-                      border: `2px solid ${i === 0 ? 'var(--ink)' : i === 3 ? 'var(--amber)' : 'var(--paper-line)'}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: i === 0 ? 'var(--paper)' : i === 3 ? 'var(--paper)' : 'var(--ink)',
-                      flexShrink: 0,
-                      boxShadow: '0 0 0 6px var(--paper)',
-                    }}>
-                      {step.icon}
-                    </div>
-
-                    {/* Step number */}
-                    <p style={{
-                      fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
-                      letterSpacing: '0.12em', textTransform: 'uppercase',
-                      color: 'var(--amber-deep)', marginTop: 20, marginBottom: 8,
-                    }}>{step.num}</p>
-
-                    {/* Label */}
-                    <h3 style={{
-                      fontFamily: 'Fraunces, serif', fontSize: '1.5rem',
-                      fontWeight: 500, letterSpacing: '-0.025em', textAlign: 'center',
-                    }}>{step.label}</h3>
-
-                    {/* Body */}
-                    <p style={{
-                      marginTop: 12, fontSize: '0.875rem', lineHeight: 1.6,
-                      color: 'var(--ink-muted)', textAlign: 'center',
-                    }}>{step.body}</p>
-
-                    {/* Outcome pill */}
-                    <div style={{
-                      marginTop: 16, padding: '6px 12px',
-                      background: i === 3 ? 'var(--amber)' : 'var(--paper-soft)',
-                      border: `1px solid ${i === 3 ? 'var(--amber)' : 'var(--paper-line)'}`,
-                      fontFamily: 'Geist Mono, monospace',
-                      fontSize: '0.6875rem', letterSpacing: '0.08em',
-                      color: i === 3 ? 'var(--paper)' : 'var(--ink-muted)',
-                    }}>
-                      {step.outcome}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 56, textAlign: 'center' }}>
-            <Link href="/assessment" className="btn btn-primary btn-arrow">
-              Start with the Assessment
-            </Link>
-          </div>
+          <OperatingModelInteractive />
         </div>
       </section>
 
@@ -637,7 +480,25 @@ export default function Home() {
 
             {/* Left: photo + credential badges */}
             <div>
-              <FounderPhoto />
+              <div style={{
+                width: '100%', aspectRatio: '4/5',
+                position: 'relative', overflow: 'hidden',
+                background: 'var(--ink)',
+              }}>
+                <img
+                  src="/images/founder-genesis.jpg"
+                  alt="Genesis Nneji Enwenyeokwu — Founder, Upthrust"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+                {/* Corner rule */}
+                <div aria-hidden style={{
+                  position: 'absolute', bottom: 0, right: 0,
+                  width: 0, height: 0,
+                  borderStyle: 'solid',
+                  borderWidth: '0 0 48px 48px',
+                  borderColor: `transparent transparent var(--amber) transparent`,
+                }} />
+              </div>
 
               {/* Name + title */}
               <div style={{ marginTop: 20 }}>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import BAWeeklyWork from '@/components/BAWeeklyWork';
 
 export default function BAPathwayPage() {
   return (
@@ -65,10 +66,10 @@ export default function BAPathwayPage() {
         </div>
       </section>
 
-      {/* WHAT YOU'LL ACTUALLY DO */}
+      {/* WHAT YOU'LL ACTUALLY DO — interactive grid */}
       <section className="section">
         <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 56 }}>
+          <div style={{ maxWidth: 720, marginBottom: 48 }}>
             <p className="eyebrow">The BA-specific work</p>
             <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
               What you'll actually do — week by week.
@@ -77,44 +78,7 @@ export default function BAPathwayPage() {
               On top of the shared 12-week curriculum, here's where the BA pathway diverges. Each week produces a tangible BA artefact that lives in your portfolio.
             </p>
           </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {[
-              { wk: 'Week 1', activity: 'Map the stakeholders of a real product. Identify who decides, who is affected, who blocks, and who advocates.' },
-              { wk: 'Week 2', activity: 'Run a structured elicitation interview with a real or simulated stakeholder. Capture the underlying problem, not the stated request.' },
-              { wk: 'Week 3', activity: 'Build the business case for a real feature. Connect it to revenue, cost, risk, or strategic positioning.' },
-              { wk: 'Week 4', activity: 'Write a full BRD. Functional and non-functional requirements. Assumptions. Constraints. Out-of-scope items.' },
-              { wk: 'Week 5', activity: 'Map the current-state process for a real workflow. Then map the future-state. Identify the gap.' },
-              { wk: 'Week 6', activity: 'Layer user journey analysis onto your process map. Where do users get stuck where the system does not see it?' },
-              { wk: 'Week 7', activity: 'Review a Figma prototype as a BA. Spot the requirements the design assumes but does not document.' },
-              { wk: 'Week 8', activity: 'Write user stories with acceptance criteria. Practise INVEST. Get the Definition of Ready right.' },
-              { wk: 'Week 9', activity: 'Practise stakeholder workshops. Conflicting priorities, missing approvers, scope creep mid-build — handle them on the page.' },
-              { wk: 'Week 10', activity: 'Build a complete UAT pack. Test scenarios, expected results, edge cases, regression considerations.' },
-              { wk: 'Week 11', activity: 'Define the reporting and feedback structure for the feature post-launch. What signals will tell us it worked.' },
-              { wk: 'Week 12', activity: 'Present your full capstone. Walk through your BA artefacts. Receive Capability Passport assessment.' },
-            ].map((week, i) => (
-              <div key={week.wk} style={{
-                display: 'grid',
-                gridTemplateColumns: '100px 1fr',
-                gap: 32,
-                padding: '20px 0',
-                borderTop: i === 0 ? '2px solid var(--ink)' : '1px solid var(--paper-line)',
-                alignItems: 'start',
-              }} className="ba-week-row">
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', color: 'var(--amber-deep)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{week.wk}</p>
-                <p className="text-soft" style={{ fontSize: '1rem', lineHeight: 1.6 }}>{week.activity}</p>
-              </div>
-            ))}
-          </div>
-
-          <style>{`
-            @media (max-width: 600px) {
-              section .ba-week-row {
-                grid-template-columns: 1fr !important;
-                gap: 4px !important;
-              }
-            }
-          `}</style>
+          <BAWeeklyWork />
         </div>
       </section>
 

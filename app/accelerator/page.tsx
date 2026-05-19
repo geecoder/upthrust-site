@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Pricing from '@/components/Pricing';
+import CurriculumInteractive from '@/components/CurriculumInteractive';
 import { getRegionFromRequest } from '@/lib/geoServer';
 
 export default async function AcceleratorPage() {
@@ -123,64 +124,19 @@ export default async function AcceleratorPage() {
         </div>
       </section>
 
-      {/* WEEKLY CURRICULUM */}
+      {/* WEEKLY CURRICULUM — interactive phase tabs */}
       <section className="section">
         <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 56 }}>
+          <div style={{ maxWidth: 720, marginBottom: 48 }}>
             <p className="eyebrow">The 12-week curriculum</p>
             <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
               Twelve weeks, each one building on the last.
             </h2>
             <p className="lede" style={{ marginTop: 20 }}>
-              This is the spine of the program. Specific pathway content (PM vs BA) layers on top of this structure — but every learner moves through the same weekly themes so cross-pathway collaboration is possible.
+              The program runs in four phases. Click a phase to explore the weekly themes. Specific pathway content (PM vs BA) layers on top of this shared structure.
             </p>
           </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {[
-              { wk: 'Week 0', title: 'Onboarding & Diagnostic', body: 'Baseline assessment, tool setup, pathway confirmation, community induction.' },
-              { wk: 'Week 1', title: 'Digital Product Foundations', body: 'How real product teams work. The roles of PM, BA, Design, Engineering, QA, Marketing, Ops.' },
-              { wk: 'Week 2', title: 'Problem Discovery', body: 'How to define user and business problems clearly before jumping to solutions.' },
-              { wk: 'Week 3', title: 'Product Strategy & Business Context', body: 'Connecting problems to business goals, MVP scope, and success measures.' },
-              { wk: 'Week 4', title: 'Requirements & Scope', body: 'Turning ideas into clear requirements, user stories, acceptance criteria, and scope boundaries.' },
-              { wk: 'Week 5', title: 'Journey, Workflow & Process Design', body: 'Mapping user journeys, business processes, operational workflows, and edge cases.' },
-              { wk: 'Week 6', title: 'UX & Product Design Foundations', body: 'Understanding users, personas, journey maps, information architecture.' },
-              { wk: 'Week 7', title: 'Prototyping & Design Systems', body: 'How prototypes are built and reviewed. Figma workflows. Design system thinking.' },
-              { wk: 'Week 8', title: 'Agile Delivery & Backlog', body: 'Epics, stories, tasks, Definition of Ready, Definition of Done, sprint flow.' },
-              { wk: 'Week 9', title: 'Stakeholder Management', body: 'Vague requests, conflicting priorities, scope pressure, trade-off conversations.' },
-              { wk: 'Week 10', title: 'Testing, UAT & Launch Readiness', body: 'UAT scenarios, release checklists, support readiness, launch controls.' },
-              { wk: 'Week 11', title: 'Metrics & Continuous Improvement', body: 'Defining product success, funnels, activation, retention, feedback loops.' },
-              { wk: 'Week 12', title: 'Capstone & Portfolio Defence', body: 'Present your final project. Defend your decisions. Submit evidence for Capability Passport review.' },
-            ].map((week, i) => (
-              <div key={week.wk} style={{
-                display: 'grid',
-                gridTemplateColumns: '120px 1fr 2fr',
-                gap: 24,
-                padding: '24px 0',
-                borderTop: i === 0 ? '2px solid var(--ink)' : '1px solid var(--paper-line)',
-                alignItems: 'start',
-              }} className="week-row">
-                <div>
-                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', color: 'var(--amber-deep)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{week.wk}</p>
-                </div>
-                <div>
-                  <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.018em' }}>{week.title}</h3>
-                </div>
-                <div>
-                  <p className="text-soft" style={{ fontSize: '0.9375rem', lineHeight: 1.55 }}>{week.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <style>{`
-            @media (max-width: 760px) {
-              section .week-row {
-                grid-template-columns: 1fr !important;
-                gap: 8px !important;
-              }
-            }
-          `}</style>
+          <CurriculumInteractive />
         </div>
       </section>
 
