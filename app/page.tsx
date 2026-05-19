@@ -1,12 +1,10 @@
 import Link from 'next/link';
 import Testimonials from '@/components/Testimonials';
-import UrgencyBanner from '@/components/UrgencyBanner';
+import FounderImage from '@/components/FounderImage';
 
 export default function Home() {
   return (
     <>
-      {/* COHORT 1 URGENCY BANNER — dynamic, updates daily */}
-      <UrgencyBanner />
 
       {/* HERO */}
       <section style={{
@@ -468,19 +466,7 @@ export default function Home() {
         <div className="container-medium">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 56, alignItems: 'start' }} className="founder-grid">
             <div>
-              <div style={{
-                width: '100%',
-                aspectRatio: '4/5',
-                position: 'relative',
-                overflow: 'hidden',
-                background: 'var(--ink)',
-              }}>
-                <img
-                  src="/images/founder-genesis.jpg"
-                  alt="Genesis Nneji Enwenyeokwu — Founder, Upthrust"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              </div>
+              <FounderImage />
             </div>
 
             <div>
