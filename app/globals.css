@@ -282,3 +282,14 @@ code, kbd, samp,
   .grid-3 { grid-template-columns: repeat(2, 1fr); }
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ── Consistency ─────────────────────────────────────────── */
+
+/* Left-align is the default — only override with explicit style in JSX for CTAs/centers */
+p, h1, h2, h3, h4 { text-align: left; }
+
+/* Scroll offset for sticky header+urgency strip */
+[id] { scroll-margin-top: 110px; }
+
+/* Manrope numeric features */
+body { font-variant-numeric: tabular-nums; }
