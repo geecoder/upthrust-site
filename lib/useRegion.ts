@@ -5,8 +5,8 @@ import type { Region } from './config';
 
 // Reads the region the server detected (passed via data-region on <body>)
 // Falls back to localStorage override, then to 'NG' as default.
-export function useRegion(initialRegion: Region = 'NG'): [Region, (r: Region) => void] {
-  const [region, setRegionState] = useState<Region>(initialRegion);
+export function useRegion(initial: Region = 'NG'): [Region, (r: Region) => void] {
+  const [region, setRegionState] = useState<Region>(initial);
 
   useEffect(() => {
     // 1. Check if user has manually overridden via localStorage
