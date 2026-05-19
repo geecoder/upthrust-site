@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import Pricing from '@/components/Pricing';
+import { getRegionFromRequest } from '@/lib/geoServer';
 
-export default function AcceleratorPage() {
+export default async function AcceleratorPage() {
+  const region = await getRegionFromRequest();
   return (
     <>
       {/* HERO */}
@@ -280,7 +282,7 @@ export default function AcceleratorPage() {
             </p>
           </div>
 
-          <Pricing />
+          <Pricing initialRegion={region} />
         </div>
       </section>
 

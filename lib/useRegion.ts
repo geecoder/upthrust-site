@@ -1,57 +1,37 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import type { Region } from './config';
 
-// Maps country codes to our pricing regions
-const COUNTRY_TO_REGION: Record<string, Region> = {
-  NG: 'NG', GH: 'NG', KE: 'NG', ZA: 'NG', UG: 'NG', TZ: 'NG', RW: 'NG', SN: 'NG', CI: 'NG', EG: 'NG',
-  GB: 'GB', IE: 'GB',
-  CA: 'CA',
-  AU: 'AU', NZ: 'AU',
-};
-
-// Detects region from browser timezone (fast, no network call)
-function detectRegionFromTimezone(): Region {
-  if (typeof window === 'undefined') return 'OTHER';
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (tz.includes('Africa') || tz.includes('Lagos') || tz.includes('Nairobi') || tz.includes('Cairo')) return 'NG';
-    if (tz.includes('London') || tz.includes('Dublin') || tz.includes('Europe/Lon')) return 'GB';
-    if (tz.includes('America/Toronto') || tz.includes('America/Vancouver') || tz.includes('America/Montreal') || tz.includes('America/Edmonton')) return 'CA';
-    if (tz.includes('Australia') || tz.includes('Pacific/Auckland')) return 'AU';
-  } catch {
-    // Intl not available
-  }
-  return 'OTHER';
-}
-
 export function useRegion(): [Region, (r: Region) => void] {
-  const [region, setRegion] = useState<Region>('NG'); // Default to NG since most leads are Nigerian
+  const [region, setRegionState] = useState<Region>('NG');
 
   useEffect(() => {
-    // Check localStorage first (if user has manually selected)
     try {
       const stored = localStorage.getItem('upthrust_region') as Region | null;
-      if (stored && ['NG', 'GB', 'CA', 'AU', 'OTHER'].includes(stored)) {
-        setRegion(stored);
+      if (stored && ['NG', 'GB', 'CA', 'US', 'OTHER'].includes(stored)) {
+        setRegionState(stored);
         return;
       }
-    } catch {
-      // localStorage not available
+    } catch {}
+    const bodyRegion = document.body.getAttribute('data-region') as Region | null;
+    if (bodyRegion && ['NG', 'GB', 'CA', 'US', 'OTHER'].includes(bodyRegion)) {
+      setRegionState(bodyRegion);
+      return;
     }
-    // Otherwise detect from timezone
-    setRegion(detectRegionFromTimezone());
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (tz.startsWith('Africa') || tz.includes('Lagos')) { setRegionState('NG'); return; }
+      if (tz.includes('London') || tz.includes('Dublin')) { setRegionState('GB'); return; }
+      if (tz.includes('Toronto') || tz.includes('Vancouver') || tz.includes('Montreal')) { setRegionState('CA'); return; }
+      if (tz.startsWith('America/') && !tz.includes('Canada')) { setRegionState('US'); return; }
+    } catch {}
+    setRegionState('NG');
   }, []);
 
-  const updateRegion = (r: Region) => {
-    setRegion(r);
-    try {
-      localStorage.setItem('upthrust_region', r);
-    } catch {
-      // localStorage not available
-    }
+  const setRegion = (r: Region) => {
+    setRegionState(r);
+    try { localStorage.setItem('upthrust_region', r); } catch {}
   };
 
-  return [region, updateRegion];
+  return [region, setRegion];
 }
