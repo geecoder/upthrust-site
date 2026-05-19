@@ -33,7 +33,7 @@ export function tallyApiUrl(formId: string): string {
 // These are the recommended Cohort 1 prices from the delivery pack.
 // Update as needed before going live.
 
-export type Region = 'NG' | 'GB' | 'CA' | 'AU' | 'OTHER';
+export type Region = 'NG' | 'GB' | 'CA' | 'US' | 'OTHER';
 
 export interface Pricing {
   currency: string;
@@ -48,42 +48,42 @@ export const PRICING: Record<Region, Pricing> = {
   NG: {
     currency: 'NGN',
     symbol: '₦',
-    standard: 350000,
+    standard: 400000,
     premium: 600000,
-    standardInstallment2: 175000,
+    standardInstallment2: 200000,
     premiumInstallment2: 300000,
   },
   GB: {
     currency: 'GBP',
     symbol: '£',
-    standard: 750,
-    premium: 1250,
-    standardInstallment2: 375,
-    premiumInstallment2: 625,
+    standard: 600,
+    premium: 900,
+    standardInstallment2: 300,
+    premiumInstallment2: 450,
   },
   CA: {
     currency: 'CAD',
     symbol: 'C$',
-    standard: 1200,
-    premium: 2000,
-    standardInstallment2: 600,
-    premiumInstallment2: 1000,
+    standard: 900,
+    premium: 1500,
+    standardInstallment2: 450,
+    premiumInstallment2: 750,
   },
-  AU: {
-    currency: 'AUD',
-    symbol: 'A$',
-    standard: 1250,
-    premium: 2000,
-    standardInstallment2: 625,
-    premiumInstallment2: 1000,
+  US: {
+    currency: 'USD',
+    symbol: '$',
+    standard: 750,
+    premium: 1000,
+    standardInstallment2: 375,
+    premiumInstallment2: 500,
   },
   OTHER: {
     currency: 'USD',
     symbol: '$',
-    standard: 950,
-    premium: 1600,
-    standardInstallment2: 475,
-    premiumInstallment2: 800,
+    standard: 750,
+    premium: 1000,
+    standardInstallment2: 375,
+    premiumInstallment2: 500,
   },
 };
 
@@ -118,7 +118,7 @@ export const PAYMENT_LINKS = {
     premiumFull: '',
     premiumInstallment: '',
   },
-  AU: {
+  US: {
     standardFull: '',
     standardInstallment: '',
     premiumFull: '',
