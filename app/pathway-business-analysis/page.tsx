@@ -51,7 +51,7 @@ export default function BAPathwayPage() {
                   'You take quiet satisfaction from a process map that captures every step, every exception, every handoff.',
                 ].map((item, i) => (
                   <li key={i} style={{ display: 'flex', gap: 14 }}>
-                    <span style={{ color: 'var(--amber-deep)', fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', flexShrink: 0, paddingTop: 4 }}>0{i + 1}</span>
+                    <span style={{ color: 'var(--amber-deep)', fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', flexShrink: 0, paddingTop: 4 }}>0{i + 1}</span>
                     <span style={{ color: 'var(--ink-soft)' }}>{item}</span>
                   </li>
                 ))}
@@ -119,7 +119,7 @@ export default function BAPathwayPage() {
               <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.625rem', lineHeight: 1.3, fontStyle: 'italic', color: 'var(--amber-soft)' }}>
                 "A great BA is invisible in the success of a product — but the failure of a product almost always traces back to where one was missing."
               </p>
-              <p style={{ marginTop: 20, fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', color: 'rgba(250,247,241,0.6)', letterSpacing: '0.1em' }}>
+              <p style={{ marginTop: 20, fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'rgba(250,247,241,0.6)', letterSpacing: '0.1em' }}>
                 — UPTHRUST BA CAPABILITY RUBRIC
               </p>
             </div>

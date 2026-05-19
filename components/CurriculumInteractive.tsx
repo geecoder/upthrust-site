@@ -84,7 +84,7 @@ export default function CurriculumInteractive() {
               }}
             >
               <p style={{
-                fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
                 letterSpacing: '0.12em', textTransform: 'uppercase',
                 color: isActive ? phase.color : 'var(--ink-muted)',
                 transition: 'color 200ms',
@@ -121,7 +121,7 @@ export default function CurriculumInteractive() {
             }}
           >
             <p style={{
-              fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
               letterSpacing: '0.12em', textTransform: 'uppercase',
               color: PHASES[activePhase].color, marginBottom: 10,
             }}>{week.wk}</p>
@@ -141,7 +141,7 @@ export default function CurriculumInteractive() {
         display: 'flex', gap: 8, alignItems: 'center',
         paddingTop: 24, borderTop: '1px solid var(--paper-line)',
       }}>
-        <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', color: 'var(--ink-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: 8 }}>
+        <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', color: 'var(--ink-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: 8 }}>
           Program progress
         </p>
         {PHASES.map((phase, i) => (
@@ -152,7 +152,7 @@ export default function CurriculumInteractive() {
             cursor: 'pointer',
           }} onClick={() => setActivePhase(i)} />
         ))}
-        <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', color: 'var(--ink-muted)', letterSpacing: '0.1em', marginLeft: 8 }}>
+        <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', color: 'var(--ink-muted)', letterSpacing: '0.1em', marginLeft: 8 }}>
           12 weeks
         </p>
       </div>

@@ -116,7 +116,7 @@ export default function AboutPage() {
               <div style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {['CBAP Certified', 'MBA · University of East London', 'Product Lead', 'IIBA Nigeria', '10+ Years Experience', 'Nigeria · UK · US'].map((b) => (
                   <span key={b} style={{
-                    fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem',
+                    fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem',
                     letterSpacing: '0.1em', textTransform: 'uppercase',
                     padding: '5px 8px', border: '1px solid var(--paper-line)',
                     color: 'var(--ink-muted)', background: 'var(--white)',
@@ -127,7 +127,7 @@ export default function AboutPage() {
               {/* Expertise matrix */}
               <div style={{ marginTop: 24, border: '1px solid var(--paper-line)', background: 'var(--white)' }}>
                 <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--paper-line)' }}>
-                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>Expertise spans</p>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>Expertise spans</p>
                 </div>
                 {[
                   ['Product Management', 'Strategy · Discovery · Delivery'],
@@ -141,7 +141,7 @@ export default function AboutPage() {
                     display: 'flex', justifyContent: 'space-between', gap: 8,
                   }}>
                     <span style={{ fontSize: '0.8125rem', fontWeight: 500 }}>{domain}</span>
-                    <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.06em', textAlign: 'right' }}>{detail}</span>
+                    <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.06em', textAlign: 'right' }}>{detail}</span>
                   </div>
                 ))}
               </div>
@@ -160,28 +160,28 @@ export default function AboutPage() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                 <div>
-                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The practitioner</p>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The practitioner</p>
                   <p style={{ fontSize: '1.0625rem', lineHeight: 1.7, color: 'var(--ink-soft)' }}>
                     Genesis is a Product Lead, CBAP-certified Business Analyst, and MBA graduate from the University of East London — with over a decade of experience across product management, business analysis, digital strategy, process automation, fintech, and technology-enabled transformation. He has built his career helping organisations move from unclear ideas to well-defined strategies, from fragmented processes to scalable systems, and from customer problems to digital products that create measurable business value. His work spans Nigeria, the UK, and the US.
                   </p>
                 </div>
 
                 <div>
-                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The breadth</p>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The breadth</p>
                   <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
                     Over the years, Genesis has operated across multiple roles — Business Analyst, Product Owner, Technical Product Manager, Senior Product Manager, and Product Lead — across fintech, technology, consulting, NGOs, and digital transformation environments. This end-to-end experience has given him a rare perspective: not just how to write requirements or manage delivery, but how to connect business strategy, customer needs, technology decisions, regulatory realities, stakeholder alignment, and commercial outcomes into one coherent product direction.
                   </p>
                 </div>
 
                 <div>
-                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Current work at Rova</p>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Current work at Rova</p>
                   <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
                     Genesis currently works as a Product Lead at <strong style={{ color: 'var(--ink)' }}>Rova</strong>, contributing to the development of digital financial products for Africans in the diaspora — multi-currency accounts, cross-border payments, remittance journeys, savings products, compliance-led onboarding, operational tooling, and customer engagement improvements. This hands-on fintech experience has sharpened his ability to operate where customer experience, regulation, technology, operations, and commercial strategy must work together.
                   </p>
                 </div>
 
                 <div>
-                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Building people</p>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Building people</p>
                   <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
                     Beyond building products, Genesis has built people. He has trained, mentored, and coached over 1,000 professionals globally — helping career switchers and early-career professionals transition into and grow within business analysis, product management, and digital careers. Many came with ambition but lacked structure, confidence, practical exposure, and evidence of capability. Through his teaching and coaching, Genesis has helped them understand how real product work happens, how to think like professionals, how to engage stakeholders, and how to position themselves in competitive markets. He also serves within the <strong style={{ color: 'var(--ink)' }}>IIBA Nigeria Chapter</strong>, contributing to the growth of the business analysis profession.
                   </p>
@@ -190,7 +190,7 @@ export default function AboutPage() {
 
               {/* Mission — from potential to proof */}
               <div style={{ marginTop: 36, background: 'var(--ink)', color: 'var(--paper)', padding: '24px 28px' }}>
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-soft)', marginBottom: 16 }}>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-soft)', marginBottom: 16 }}>
                   His mission through Upthrust
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -238,7 +238,7 @@ export default function AboutPage() {
               { num: '03', title: 'We are not a course marketplace.', body: 'We stay narrow on Product Management, Business Analysis, and Product Design until each is proven. No drift into adjacent tracks. No padding the catalogue.' },
             ].map((principle) => (
               <div key={principle.num} className="card" style={{ padding: 32 }}>
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', color: 'var(--amber-deep)', letterSpacing: '0.1em' }}>{principle.num}</p>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--amber-deep)', letterSpacing: '0.1em' }}>{principle.num}</p>
                 <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.375rem', fontWeight: 500, letterSpacing: '-0.02em', marginTop: 12, lineHeight: 1.25 }}>{principle.title}</h3>
                 <p className="text-soft" style={{ marginTop: 14, fontSize: '0.9375rem', lineHeight: 1.6 }}>{principle.body}</p>
               </div>

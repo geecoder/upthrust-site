@@ -19,7 +19,7 @@ function AnimatedStat({ target, suffix = '', label }: { target: number; suffix?:
         {value.toLocaleString()}{suffix}
       </p>
       <p style={{
-        fontFamily: 'Geist Mono, monospace',
+        fontFamily: 'Manrope, sans-serif',
         fontSize: '0.6875rem',
         letterSpacing: '0.14em',
         textTransform: 'uppercase',

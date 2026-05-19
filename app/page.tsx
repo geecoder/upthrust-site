@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Testimonials from '@/components/Testimonials';
 import AnimatedHeritage from '@/components/AnimatedHeritage';
 import OperatingModelInteractive from '@/components/OperatingModelInteractive';
+import FounderPhoto from '@/components/FounderPhoto';
 
 export default function Home() {
   return (
@@ -290,8 +291,8 @@ export default function Home() {
                     <span style={{ fontFamily: 'Fraunces, serif', fontSize: '1rem', color: 'var(--paper)', letterSpacing: '-0.01em' }}>Upthrust</span>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.18em', color: 'var(--amber-soft)', textTransform: 'uppercase' }}>Capability Passport</p>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'rgba(250,247,241,0.45)', marginTop: 2, letterSpacing: '0.1em' }}>ID: UP-C1-0047-BA</p>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.18em', color: 'var(--amber-soft)', textTransform: 'uppercase' }}>Capability Passport</p>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', color: 'rgba(250,247,241,0.45)', marginTop: 2, letterSpacing: '0.1em' }}>ID: UP-C1-0047-BA</p>
                   </div>
                 </div>
 
@@ -306,7 +307,7 @@ export default function Home() {
                     <div style={{
                       background: 'var(--moss)', color: 'var(--paper)',
                       padding: '6px 10px', textAlign: 'center',
-                      fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem',
+                      fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem',
                       letterSpacing: '0.12em', textTransform: 'uppercase',
                     }}>
                       VERIFIED<br/>READY
@@ -315,7 +316,7 @@ export default function Home() {
 
                   {/* Capabilities grid */}
                   <div style={{ marginTop: 20 }}>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 16 }}>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 16 }}>
                       Assessed Capability Areas
                     </p>
 
@@ -331,7 +332,7 @@ export default function Home() {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                           <span style={{ fontSize: '0.8125rem', color: 'var(--ink)' }}>{cap.label}</span>
                           <span style={{
-                            fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem',
+                            fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem',
                             letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 6px',
                             background: cap.level === 'Proficient' ? 'rgba(79,106,74,0.12)' : 'rgba(197,116,58,0.1)',
                             color: cap.level === 'Proficient' ? 'var(--moss)' : 'var(--amber-deep)',
@@ -353,26 +354,26 @@ export default function Home() {
 
                   {/* Capstone summary */}
                   <div style={{ marginTop: 20, padding: '14px 16px', background: 'var(--paper-soft)', borderLeft: '3px solid var(--amber)' }}>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 6 }}>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 6 }}>
                       Capstone Defence · Week 12
                     </p>
                     <p style={{ fontSize: '0.8125rem', fontStyle: 'italic', lineHeight: 1.55, color: 'var(--ink-soft)' }}>
                       "Adaeze demonstrates strong requirements discipline and clear thinking under ambiguity. Her UAT pack caught three edge cases the scoping team had missed. She is ready for associate-level BA work in a serious product team."
                     </p>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'var(--ink-muted)', marginTop: 8, letterSpacing: '0.08em' }}>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', color: 'var(--ink-muted)', marginTop: 8, letterSpacing: '0.08em' }}>
                       — FACILITATOR SIGN-OFF · GENESIS N. ENWENYEOKWU · CBAP
                     </p>
                   </div>
 
                   {/* Footer */}
                   <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.08em' }}>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.08em' }}>
                       ISSUED: AUGUST 2026 · upthrustdigital.com/verify
                     </p>
                     <div style={{
                       width: 36, height: 36, border: '1px solid var(--paper-line)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontFamily: 'Geist Mono, monospace', fontSize: '0.5rem', color: 'var(--ink-muted)',
+                      fontFamily: 'Manrope, sans-serif', fontSize: '0.5rem', color: 'var(--ink-muted)',
                       textAlign: 'center', letterSpacing: '0.05em', lineHeight: 1.2,
                     }}>
                       QR<br/>CODE
@@ -386,7 +387,7 @@ export default function Home() {
                 position: 'absolute', top: 20, right: -6,
                 background: 'var(--amber)', color: 'var(--paper)',
                 padding: '4px 8px',
-                fontFamily: 'Geist Mono, monospace',
+                fontFamily: 'Manrope, sans-serif',
                 fontSize: '0.5rem', letterSpacing: '0.18em',
                 transform: 'rotate(8deg)',
                 zIndex: 2,
@@ -480,25 +481,7 @@ export default function Home() {
 
             {/* Left: photo + credential badges */}
             <div>
-              <div style={{
-                width: '100%', aspectRatio: '4/5',
-                position: 'relative', overflow: 'hidden',
-                background: 'var(--ink)',
-              }}>
-                <img
-                  src="/images/founder-genesis.jpg"
-                  alt="Genesis Nneji Enwenyeokwu — Founder, Upthrust"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-                {/* Corner rule */}
-                <div aria-hidden style={{
-                  position: 'absolute', bottom: 0, right: 0,
-                  width: 0, height: 0,
-                  borderStyle: 'solid',
-                  borderWidth: '0 0 48px 48px',
-                  borderColor: `transparent transparent var(--amber) transparent`,
-                }} />
-              </div>
+              <FounderPhoto />
 
               {/* Name + title */}
               <div style={{ marginTop: 20 }}>
@@ -515,7 +498,7 @@ export default function Home() {
               <div style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {['CBAP Certified', 'MBA · UEL', 'Product Lead', 'IIBA Nigeria', '10+ Years'].map((badge) => (
                   <span key={badge} style={{
-                    fontFamily: 'Geist Mono, monospace',
+                    fontFamily: 'Manrope, sans-serif',
                     fontSize: '0.625rem', letterSpacing: '0.1em',
                     textTransform: 'uppercase', padding: '5px 10px',
                     border: '1px solid var(--paper-line)',
@@ -538,7 +521,7 @@ export default function Home() {
                   ].map(({ domain, detail }) => (
                     <div key={domain} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
                       <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--ink)', whiteSpace: 'nowrap' }}>{domain}</span>
-                      <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', color: 'var(--ink-muted)', letterSpacing: '0.06em', textAlign: 'right' }}>{detail}</span>
+                      <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', color: 'var(--ink-muted)', letterSpacing: '0.06em', textAlign: 'right' }}>{detail}</span>
                     </div>
                   ))}
                 </div>
@@ -586,7 +569,7 @@ export default function Home() {
                     background: 'var(--white)', border: '1px solid var(--paper-line)',
                     borderTop: '3px solid var(--amber)',
                   }}>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>{label}</p>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>{label}</p>
                     <p style={{ fontSize: '0.9375rem', lineHeight: 1.6, color: 'var(--ink-soft)' }}>{body}</p>
                   </div>
                 ))}

@@ -48,7 +48,7 @@ export default function UrgencyBanner() {
             <strong style={{ color: 'var(--amber-soft)' }}>June 6, 2026</strong>.
           </span>
           <Link href="/consultation" style={{
-            fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem',
             letterSpacing: '0.1em', textTransform: 'uppercase',
             color: 'var(--amber)', borderBottom: '1px solid currentColor',
             paddingBottom: 1,
@@ -78,7 +78,7 @@ export default function UrgencyBanner() {
             </span>
           </div>
           <Link href="/assessment" style={{
-            fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem',
             letterSpacing: '0.1em', textTransform: 'uppercase',
             color: 'var(--amber)', borderBottom: '1px solid currentColor',
             paddingBottom: 1, whiteSpace: 'nowrap',

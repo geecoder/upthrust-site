@@ -283,7 +283,7 @@ export default function AssessmentPage() {
           <div className="container-narrow">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
               <p className="eyebrow">Scenario {currentIdx + 1} of {total}</p>
-              <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', color: 'var(--ink-muted)', letterSpacing: '0.08em' }}>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--ink-muted)', letterSpacing: '0.08em' }}>
                 {progress}% complete
               </p>
             </div>
@@ -333,7 +333,7 @@ export default function AssessmentPage() {
                   }}
                 >
                   <span style={{
-                    fontFamily: 'Geist Mono, monospace',
+                    fontFamily: 'Manrope, sans-serif',
                     fontSize: '0.75rem',
                     color: 'var(--amber-deep)',
                     letterSpacing: '0.08em',
@@ -412,7 +412,7 @@ export default function AssessmentPage() {
                         {isPrimary && (
                           <span style={{
                             marginLeft: 10,
-                            fontFamily: 'Geist Mono, monospace',
+                            fontFamily: 'Manrope, sans-serif',
                             fontSize: '0.625rem',
                             background: 'var(--amber)',
                             color: 'var(--paper)',
@@ -421,7 +421,7 @@ export default function AssessmentPage() {
                           }}>PRIMARY</span>
                         )}
                       </span>
-                      <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.8125rem', color: 'var(--ink-muted)' }}>
+                      <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.8125rem', color: 'var(--ink-muted)' }}>
                         {result.percentages[track]}%
                       </span>
                     </div>
@@ -470,7 +470,7 @@ export default function AssessmentPage() {
                   </p>
                   <p style={{ marginTop: 8, fontSize: '1.0625rem', lineHeight: 1.55, color: 'var(--ink)' }}>
                     <span style={{
-                      fontFamily: 'Geist Mono, monospace',
+                      fontFamily: 'Manrope, sans-serif',
                       fontSize: '0.75rem',
                       color: 'var(--ink-muted)',
                       letterSpacing: '0.08em',

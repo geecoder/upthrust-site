@@ -128,13 +128,13 @@ export default function WeeklyRhythmInteractive() {
                 {step.icon(isActive)}
               </div>
               <div>
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: isActive ? 'var(--amber-soft)' : 'var(--amber-deep)', marginBottom: 6 }}>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: isActive ? 'var(--amber-soft)' : 'var(--amber-deep)', marginBottom: 6 }}>
                   {step.num}
                 </p>
                 <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.125rem', fontWeight: 500, letterSpacing: '-0.018em', color: isActive ? 'var(--paper)' : 'var(--ink)', lineHeight: 1.2 }}>
                   {step.title}
                 </h3>
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', color: isActive ? 'rgba(250,247,241,0.5)' : 'var(--ink-muted)', marginTop: 4, letterSpacing: '0.06em' }}>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', color: isActive ? 'rgba(250,247,241,0.5)' : 'var(--ink-muted)', marginTop: 4, letterSpacing: '0.06em' }}>
                   {step.duration}
                 </p>
               </div>
@@ -143,7 +143,7 @@ export default function WeeklyRhythmInteractive() {
                 background: isActive ? 'rgba(197,116,58,0.2)' : 'var(--paper-soft)',
                 borderLeft: `2px solid ${isActive ? 'var(--amber)' : 'var(--paper-line)'}`,
               }}>
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: isActive ? 'var(--amber-soft)' : 'var(--ink-muted)' }}>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: isActive ? 'var(--amber-soft)' : 'var(--ink-muted)' }}>
                   → {step.output}
                 </p>
               </div>
@@ -164,7 +164,7 @@ export default function WeeklyRhythmInteractive() {
           animation: 'slideDown 250ms cubic-bezier(0.2,0.7,0.2,1)',
         }}>
           <div>
-            <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 8 }}>
+            <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 8 }}>
               {RHYTHM_STEPS[active].num} · {RHYTHM_STEPS[active].duration}
             </p>
             <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.375rem', fontWeight: 500, letterSpacing: '-0.02em', marginBottom: 12 }}>

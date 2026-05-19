@@ -151,7 +151,7 @@ export default function OperatingModelInteractive() {
               </div>
 
               <p style={{
-                fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem',
                 letterSpacing: '0.16em', textTransform: 'uppercase',
                 color: 'var(--amber-deep)', marginTop: 16, marginBottom: 6,
               }}>{step.num}</p>
@@ -194,7 +194,7 @@ export default function OperatingModelInteractive() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
             <span style={{
-              fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem',
               letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--amber-deep)',
             }}>Step {STEPS[active].num}</span>
             <span style={{ height: 1, flex: 1, background: 'var(--paper-line)' }} />
@@ -217,7 +217,7 @@ export default function OperatingModelInteractive() {
             padding: '12px 20px',
             background: active === 3 ? 'var(--amber)' : 'var(--ink)',
             color: 'var(--paper)',
-            fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
             letterSpacing: '0.1em', textTransform: 'uppercase',
             textAlign: 'center', whiteSpace: 'nowrap',
             transition: 'background 300ms',

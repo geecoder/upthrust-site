@@ -45,7 +45,7 @@ function UrgencyStrip() {
             Cohort 1 enrollment is closed · Starts <strong style={{ color: 'var(--amber-soft)' }}>June 6, 2026</strong>
           </span>
           <Link href="/consultation" style={{
-            fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
             letterSpacing: '0.12em', textTransform: 'uppercase',
             color: 'var(--amber)', borderBottom: '1px solid currentColor', paddingBottom: 1,
           }}>
@@ -73,7 +73,7 @@ function UrgencyStrip() {
             </span>
           </span>
           <Link href="/assessment" style={{
-            fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
             letterSpacing: '0.12em', textTransform: 'uppercase',
             color: 'var(--amber)', borderBottom: '1px solid currentColor',
             paddingBottom: 1, whiteSpace: 'nowrap',

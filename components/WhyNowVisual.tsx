@@ -88,7 +88,7 @@ export default function WhyNowVisual() {
             </g>
           </svg>
 
-          <div style={{ position: 'absolute', top: 16, right: 16, fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-deep)' }}>
+          <div style={{ position: 'absolute', top: 16, right: 16, fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-deep)' }}>
             SAMPLE ILLUSTRATION
           </div>
         </div>
@@ -110,11 +110,11 @@ export default function WhyNowVisual() {
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, alignItems: 'flex-end' }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', color: 'var(--ink-muted)', textDecoration: 'line-through', letterSpacing: '0.04em' }}>{shift.old}</span>
+                  <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', color: 'var(--ink-muted)', textDecoration: 'line-through', letterSpacing: '0.04em' }}>{shift.old}</span>
                   <span style={{ color: 'var(--amber)', fontSize: '0.75rem' }}>→</span>
-                  <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', color: 'var(--moss)', letterSpacing: '0.04em', fontWeight: 500 }}>{shift.new}</span>
+                  <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', color: 'var(--moss)', letterSpacing: '0.04em', fontWeight: 500 }}>{shift.new}</span>
                 </div>
-                <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', color: 'var(--amber-deep)', letterSpacing: '0.08em', flexShrink: 0, marginLeft: 8 }}>{shift.pct}%</span>
+                <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', color: 'var(--amber-deep)', letterSpacing: '0.08em', flexShrink: 0, marginLeft: 8 }}>{shift.pct}%</span>
               </div>
               <div style={{ height: 3, background: 'var(--paper-line)', borderRadius: 2, overflow: 'hidden' }}>
                 <div style={{

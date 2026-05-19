@@ -156,7 +156,7 @@ export default function Pricing({ initialRegion = 'NG' }: Props) {
             background: 'var(--amber)',
             color: 'var(--paper)',
             padding: '6px 12px',
-            fontFamily: 'Geist Mono, monospace',
+            fontFamily: 'Manrope, sans-serif',
             fontSize: '0.6875rem',
             letterSpacing: '0.12em',
           }}>

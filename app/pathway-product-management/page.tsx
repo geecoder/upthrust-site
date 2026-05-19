@@ -51,7 +51,7 @@ export default function PMPathwayPage() {
                   "You're comfortable with ambiguity, because product work is mostly figuring out what the right question is before answering it.",
                 ].map((item, i) => (
                   <li key={i} style={{ display: 'flex', gap: 14 }}>
-                    <span style={{ color: 'var(--amber-deep)', fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', flexShrink: 0, paddingTop: 4 }}>0{i + 1}</span>
+                    <span style={{ color: 'var(--amber-deep)', fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', flexShrink: 0, paddingTop: 4 }}>0{i + 1}</span>
                     <span style={{ color: 'var(--ink-soft)' }}>{item}</span>
                   </li>
                 ))}
@@ -119,7 +119,7 @@ export default function PMPathwayPage() {
               <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.625rem', lineHeight: 1.3, fontStyle: 'italic', color: 'var(--amber-soft)' }}>
                 "A PM portfolio is not a list of features you touched. It is a record of decisions you made — and your reasoning that holds up to scrutiny."
               </p>
-              <p style={{ marginTop: 20, fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem', color: 'rgba(250,247,241,0.6)', letterSpacing: '0.1em' }}>
+              <p style={{ marginTop: 20, fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'rgba(250,247,241,0.6)', letterSpacing: '0.1em' }}>
                 — UPTHRUST PM CAPABILITY RUBRIC
               </p>
             </div>

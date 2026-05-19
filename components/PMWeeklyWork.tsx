@@ -43,14 +43,14 @@ export default function PMWeeklyWork() {
         {PHASES.map((phase) => (
           <div key={phase.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 12, height: 12, background: phase.color, borderRadius: 1 }} />
-            <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+            <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
               {phase.label}
             </span>
           </div>
         ))}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 12, height: 12, background: 'var(--amber)', borderRadius: 1 }} />
-          <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+          <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
             Capstone
           </span>
         </div>
@@ -82,7 +82,7 @@ export default function PMWeeklyWork() {
               }}
             >
               <p style={{
-                fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem',
                 letterSpacing: '0.12em', textTransform: 'uppercase',
                 color: isSelected ? 'rgba(250,247,241,0.6)' : 'var(--ink-muted)',
                 marginBottom: 6,
@@ -99,7 +99,7 @@ export default function PMWeeklyWork() {
                 display: 'inline-block',
               }}>
                 <p style={{
-                  fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem',
+                  fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem',
                   letterSpacing: '0.1em', textTransform: 'uppercase',
                   color: isSelected ? 'var(--amber-soft)' : phaseColor,
                 }}>{week.artefact}</p>
@@ -122,7 +122,7 @@ export default function PMWeeklyWork() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
             <div>
               <p style={{
-                fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
                 letterSpacing: '0.12em', textTransform: 'uppercase',
                 color: getPhaseColor(selected), marginBottom: 8,
               }}>{PM_WEEKS[selected].wk} · {PM_WEEKS[selected].artefact}</p>

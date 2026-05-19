@@ -122,7 +122,7 @@ export default function CapstonesInteractive() {
             <button key={p} onClick={() => setPathway(p)} style={{
               padding: '8px 20px', background: pathway === p ? 'var(--ink)' : 'transparent',
               color: pathway === p ? 'var(--paper)' : 'var(--ink-muted)',
-              border: 'none', cursor: 'pointer', fontFamily: 'Geist Mono, monospace',
+              border: 'none', cursor: 'pointer', fontFamily: 'Manrope, sans-serif',
               fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase',
               transition: 'all 200ms',
             }}>{p} Pathway</button>
@@ -137,7 +137,7 @@ export default function CapstonesInteractive() {
               background: activeDifficulty === d ? 'var(--amber)' : 'transparent',
               color: activeDifficulty === d ? 'var(--paper)' : 'var(--ink-muted)',
               border: `1px solid ${activeDifficulty === d ? 'var(--amber)' : 'var(--paper-line)'}`,
-              cursor: 'pointer', fontFamily: 'Geist Mono, monospace',
+              cursor: 'pointer', fontFamily: 'Manrope, sans-serif',
               fontSize: '0.625rem', letterSpacing: '0.1em', textTransform: 'uppercase',
               transition: 'all 200ms',
             }}>{d}</button>
@@ -161,13 +161,13 @@ export default function CapstonesInteractive() {
               <div style={{ padding: '24px 24px 0' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 12 }}>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '3px 8px', background: 'var(--paper-soft)', color: 'var(--ink-muted)' }}>{cap.id}</span>
-                    <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '3px 8px', background: cap.difficulty === 'Advanced' ? 'rgba(160,90,38,0.1)' : 'rgba(79,106,74,0.1)', color: cap.difficulty === 'Advanced' ? 'var(--amber-deep)' : 'var(--moss)' }}>{cap.difficulty}</span>
+                    <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '3px 8px', background: 'var(--paper-soft)', color: 'var(--ink-muted)' }}>{cap.id}</span>
+                    <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '3px 8px', background: cap.difficulty === 'Advanced' ? 'rgba(160,90,38,0.1)' : 'rgba(79,106,74,0.1)', color: cap.difficulty === 'Advanced' ? 'var(--amber-deep)' : 'var(--moss)' }}>{cap.difficulty}</span>
                   </div>
-                  <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0 }}>{cap.region}</span>
+                  <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0 }}>{cap.region}</span>
                 </div>
                 <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 10 }}>
-                  <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--amber-deep)', padding: '2px 6px', background: 'rgba(197,116,58,0.08)' }}>{cap.industry}</span>
+                  <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--amber-deep)', padding: '2px 6px', background: 'rgba(197,116,58,0.08)' }}>{cap.industry}</span>
                 </div>
                 <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.125rem', fontWeight: 500, letterSpacing: '-0.018em', lineHeight: 1.3, marginBottom: 12 }}>{cap.title}</h3>
                 <p style={{ fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--ink-soft)' }}>{cap.context}</p>
@@ -177,7 +177,7 @@ export default function CapstonesInteractive() {
               {isExpanded && (
                 <div style={{ padding: '20px 24px', borderTop: '1px solid var(--paper-line)', marginTop: 16, animation: 'slideDown 250ms ease' }}>
                   <div style={{ padding: '16px 18px', background: 'var(--paper-soft)', borderLeft: `3px solid ${pathway === 'PM' ? 'var(--ink)' : 'var(--amber-deep)'}`, marginBottom: 16 }}>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: pathway === 'PM' ? 'var(--ink)' : 'var(--amber-deep)', marginBottom: 8 }}>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: pathway === 'PM' ? 'var(--ink)' : 'var(--amber-deep)', marginBottom: 8 }}>
                       {pathway} Brief
                     </p>
                     <p style={{ fontSize: '0.875rem', lineHeight: 1.65, color: 'var(--ink-soft)' }}>
@@ -185,10 +185,10 @@ export default function CapstonesInteractive() {
                     </p>
                   </div>
                   <div>
-                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 8 }}>Tools used</p>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 8 }}>Tools used</p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {cap.tools.map(tool => (
-                        <span key={tool} style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', padding: '3px 8px', background: 'var(--paper-soft)', color: 'var(--ink-muted)', letterSpacing: '0.06em' }}>{tool}</span>
+                        <span key={tool} style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', padding: '3px 8px', background: 'var(--paper-soft)', color: 'var(--ink-muted)', letterSpacing: '0.06em' }}>{tool}</span>
                       ))}
                     </div>
                   </div>
@@ -198,7 +198,7 @@ export default function CapstonesInteractive() {
               <div style={{ padding: '16px 24px', marginTop: 'auto', borderTop: '1px solid var(--paper-line)' }}>
                 <button onClick={() => setExpanded(isExpanded ? null : cap.id)} style={{
                   background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                  fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+                  fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
                   letterSpacing: '0.1em', textTransform: 'uppercase',
                   color: isExpanded ? 'var(--amber-deep)' : 'var(--ink)',
                   display: 'flex', alignItems: 'center', gap: 8,

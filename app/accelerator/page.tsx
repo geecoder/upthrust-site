@@ -55,7 +55,7 @@ export default function AcceleratorPage() {
               { label: 'Format', value: 'Live + async' },
             ].map((stat) => (
               <div key={stat.label} style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(250,247,241,0.5)', marginBottom: 8 }}>{stat.label}</p>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(250,247,241,0.5)', marginBottom: 8 }}>{stat.label}</p>
                 <p style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 500, letterSpacing: '-0.025em', color: 'var(--paper)' }}>
                   {stat.value}
                 </p>
@@ -139,7 +139,7 @@ export default function AcceleratorPage() {
                 border: '1px solid rgba(250,247,241,0.12)',
                 borderTop: `3px solid ${section.accent}`,
               }}>
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: section.accent, marginBottom: 24 }}>{section.pathway}</p>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: section.accent, marginBottom: 24 }}>{section.pathway}</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, listStyle: 'none', padding: 0, margin: 0 }}>
                   {section.items.map((item, i) => (
                     <li key={i} style={{ display: 'flex', gap: 12, fontSize: '0.9375rem', color: i === section.items.length - 1 ? section.accent : 'rgba(250,247,241,0.82)', fontWeight: i === section.items.length - 1 ? 500 : 400 }}>

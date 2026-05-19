@@ -43,14 +43,14 @@ export default function BAWeeklyWork() {
         {PHASES.map((phase) => (
           <div key={phase.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 12, height: 12, background: phase.color, borderRadius: 1 }} />
-            <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+            <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
               {phase.label}
             </span>
           </div>
         ))}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 12, height: 12, background: 'var(--amber)', borderRadius: 1 }} />
-          <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+          <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
             Capstone
           </span>
         </div>
@@ -75,10 +75,10 @@ export default function BAWeeklyWork() {
                 transform: visible[i] ? 'translateY(0)' : 'translateY(20px)',
               }}
             >
-              <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: isSelected ? 'rgba(250,247,241,0.6)' : 'var(--ink-muted)', marginBottom: 6 }}>{week.wk}</p>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: isSelected ? 'rgba(250,247,241,0.6)' : 'var(--ink-muted)', marginBottom: 6 }}>{week.wk}</p>
               <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1rem', fontWeight: 500, letterSpacing: '-0.015em', color: isSelected ? 'var(--paper)' : 'var(--ink)', lineHeight: 1.3 }}>{week.title}</p>
               <div style={{ marginTop: 10, padding: '4px 8px', background: isSelected ? 'rgba(250,247,241,0.12)' : 'var(--paper-soft)', display: 'inline-block' }}>
-                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: isSelected ? 'var(--amber-soft)' : phaseColor }}>{week.artefact}</p>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: isSelected ? 'var(--amber-soft)' : phaseColor }}>{week.artefact}</p>
               </div>
             </button>
           );
@@ -89,7 +89,7 @@ export default function BAWeeklyWork() {
         <div style={{ marginTop: 20, padding: '24px 28px', background: 'var(--paper-soft)', border: '1px solid var(--paper-line)', borderLeft: `4px solid ${getPhaseColor(selected)}`, animation: 'slideDown 250ms cubic-bezier(0.2, 0.7, 0.2, 1)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
             <div>
-              <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: getPhaseColor(selected), marginBottom: 8 }}>{BA_WEEKS[selected].wk} · {BA_WEEKS[selected].artefact}</p>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: getPhaseColor(selected), marginBottom: 8 }}>{BA_WEEKS[selected].wk} · {BA_WEEKS[selected].artefact}</p>
               <h4 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.375rem', fontWeight: 500, letterSpacing: '-0.02em', marginBottom: 12 }}>{BA_WEEKS[selected].title}</h4>
               <p style={{ fontSize: '0.9375rem', lineHeight: 1.65, color: 'var(--ink-soft)', maxWidth: 640 }}>{BA_WEEKS[selected].body}</p>
             </div>

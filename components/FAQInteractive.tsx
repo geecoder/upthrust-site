@@ -76,7 +76,7 @@ function FAQItem({ item, index, isOpen, onToggle }: { item: FAQItem; index: numb
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           {item.tag && (
             <span style={{
-              fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem',
               letterSpacing: '0.12em', textTransform: 'uppercase',
               padding: '3px 8px',
               background: isOpen ? 'var(--ink)' : 'var(--paper-soft)',

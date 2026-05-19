@@ -25,7 +25,7 @@ export default function Footer() {
         }}>
           <div>
             <p style={{
-              fontFamily: 'Geist Mono, monospace', fontSize: '0.75rem',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem',
               letterSpacing: '0.16em', textTransform: 'uppercase',
               color: 'var(--amber-soft)', marginBottom: 16,
             }}>
@@ -89,7 +89,7 @@ export default function Footer() {
             }}>
               {['Lagos', 'London', 'Toronto', 'Sydney'].map((city) => (
                 <span key={city} style={{
-                  fontFamily: 'Geist Mono, monospace',
+                  fontFamily: 'Manrope, sans-serif',
                   fontSize: '0.6875rem', letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   padding: '4px 10px',
@@ -102,7 +102,7 @@ export default function Footer() {
             </div>
             <p style={{
               marginTop: 20,
-              fontFamily: 'Geist Mono, monospace',
+              fontFamily: 'Manrope, sans-serif',
               fontSize: '0.6875rem', letterSpacing: '0.1em',
               textTransform: 'uppercase', color: 'rgba(250,247,241,0.35)',
             }}>
@@ -113,7 +113,7 @@ export default function Footer() {
           {/* Program */}
           <div>
             <h4 style={{
-              fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
               letterSpacing: '0.16em', textTransform: 'uppercase',
               color: 'rgba(250,247,241,0.45)', marginBottom: 20,
             }}>
@@ -145,7 +145,7 @@ export default function Footer() {
           {/* Company */}
           <div>
             <h4 style={{
-              fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
               letterSpacing: '0.16em', textTransform: 'uppercase',
               color: 'rgba(250,247,241,0.45)', marginBottom: 20,
             }}>
@@ -175,7 +175,7 @@ export default function Footer() {
           {/* Connect */}
           <div>
             <h4 style={{
-              fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
               letterSpacing: '0.16em', textTransform: 'uppercase',
               color: 'rgba(250,247,241,0.45)', marginBottom: 20,
             }}>
