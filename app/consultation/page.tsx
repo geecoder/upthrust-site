@@ -105,7 +105,7 @@ export default function ConsultationPage() {
             Prefer to email or WhatsApp?
           </h3>
           <p style={{ marginTop: 12, fontSize: '1rem', color: 'var(--ink-soft)' }}>
-            Reach us at <a href="mailto:hello@upthrust.io" style={{ color: 'var(--amber-deep)', borderBottom: '1px solid currentColor', paddingBottom: 1 }}>hello@upthrust.io</a> and we will get back within 24 hours.
+            Reach us at <a href="mailto:info@upthrustdigital.com" style={{ color: 'var(--amber-deep)', borderBottom: '1px solid currentColor', paddingBottom: 1 }}>info@upthrustdigital.com</a> and we will get back within 24 hours.
           </p>
           <p style={{ marginTop: 24, fontSize: '0.875rem', color: 'var(--ink-muted)', fontStyle: 'italic' }}>
             If you haven't taken the Career Assessment yet, we'd recommend doing that first. It gives us a much better starting point for the call.

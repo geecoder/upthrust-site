@@ -514,7 +514,7 @@ export default function AssessmentPage() {
 
             <div style={{ marginTop: 64, paddingTop: 32, borderTop: '1px solid rgba(250,247,241,0.18)' }}>
               <p style={{ fontSize: '0.875rem', color: 'rgba(250,247,241,0.6)', lineHeight: 1.6 }}>
-                A copy of your full result is on its way to {leadData.email || 'your inbox'}. If you do not see it within 10 minutes, check your spam folder, or email hello@upthrust.io and we will resend it.
+                A copy of your full result is on its way to {leadData.email || 'your inbox'}. If you do not see it within 10 minutes, check your spam folder, or email info@upthrustdigital.com and we will resend it.
               </p>
             </div>
           </div>

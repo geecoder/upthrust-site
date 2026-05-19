@@ -18,7 +18,7 @@ const REGION_LABELS: Record<Region, string> = {
 };
 
 export default function Pricing({ initialRegion = 'NG' }: Props) {
-  const [region, setRegion] = useRegion();
+  const [region, setRegion] = useRegion(initialRegion);
   const [showSelector, setShowSelector] = useState(false);
   const pricing = PRICING[region];
 

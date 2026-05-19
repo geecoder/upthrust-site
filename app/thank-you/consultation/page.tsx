@@ -34,7 +34,7 @@ export default function ConsultationThankYou() {
         </div>
 
         <p style={{ marginTop: 40, fontSize: '0.875rem', color: 'var(--ink-muted)', fontStyle: 'italic' }}>
-          If you don't hear from us within 24 hours, email <a href="mailto:hello@upthrust.io" style={{ color: 'var(--amber-deep)', borderBottom: '1px solid currentColor' }}>hello@upthrust.io</a> and we'll fix it.
+          If you don't hear from us within 24 hours, email <a href="mailto:info@upthrustdigital.com" style={{ color: 'var(--amber-deep)', borderBottom: '1px solid currentColor' }}>info@upthrustdigital.com</a> and we'll fix it.
         </p>
       </div>
     </section>

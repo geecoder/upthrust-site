@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Testimonials from '@/components/Testimonials';
-import FounderImage from '@/components/FounderImage';
+import FounderPhoto from '@/components/FounderPhoto';
 
 export default function Home() {
   return (
@@ -158,31 +158,126 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-4">
-            {[
-              { num: '01', label: 'Assess', body: 'Diagnose where you are. Our Career Assessment routes you to the pathway that fits how you actually think — Product Management or Business Analysis.' },
-              { num: '02', label: 'Build', body: 'Twelve weeks of real product work. Stakeholder simulations, weekly assignments, and a capstone project. Mentorship from practitioners. AI-assisted feedback at scale.' },
-              { num: '03', label: 'Verify', body: 'Your work is reviewed against capability rubrics built from how real product teams hire. Pass the bar, and your Capability Passport is issued. Not before.' },
-              { num: '04', label: 'Showcase', body: 'Your portfolio, your capstone, your Capability Passport — packaged so employers can see exactly what you can do. Demo day puts you in front of them.' },
-            ].map((step) => (
-              <div key={step.num} style={{ position: 'relative', paddingTop: 24 }}>
-                <div style={{
-                  position: 'absolute',
-                  top: 0, left: 0,
-                  fontFamily: 'Fraunces, serif',
-                  fontSize: '0.875rem',
-                  color: 'var(--amber-deep)',
-                  letterSpacing: '0.08em',
-                }}>{step.num}</div>
-                <div style={{
-                  borderTop: '2px solid var(--ink)',
-                  paddingTop: 20,
-                }}>
-                  <h3 className="display-s" style={{ fontSize: '1.5rem' }}>{step.label}</h3>
-                  <p className="text-soft" style={{ marginTop: 14, fontSize: '0.9375rem', lineHeight: 1.6 }}>{step.body}</p>
-                </div>
+          {/* Visual infographic */}
+          <div style={{ overflowX: 'auto' }}>
+            <div style={{ minWidth: 680 }}>
+              {/* Step connector line */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 0, position: 'relative' }}>
+                {/* Background connector */}
+                <div aria-hidden style={{
+                  position: 'absolute', top: 60, left: '12.5%', right: '12.5%',
+                  height: 2, background: 'var(--paper-line)', zIndex: 0,
+                }} />
+                <div aria-hidden style={{
+                  position: 'absolute', top: 60, left: '12.5%', width: '25%',
+                  height: 2, background: 'var(--amber)', zIndex: 1,
+                  transition: 'width 1s ease',
+                }} />
+
+                {[
+                  {
+                    num: '01', label: 'Assess', color: 'var(--ink)',
+                    icon: (
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="1.5"/>
+                        <path d="M10 16 L14 20 L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    ),
+                    body: 'Diagnose where you are. Our Career Assessment routes you to the pathway that fits how you actually think.',
+                    outcome: '→ Your pathway confirmed',
+                  },
+                  {
+                    num: '02', label: 'Build', color: 'var(--ink)',
+                    icon: (
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="20" width="6" height="8" stroke="currentColor" strokeWidth="1.5"/>
+                        <rect x="13" y="12" width="6" height="16" stroke="currentColor" strokeWidth="1.5"/>
+                        <rect x="22" y="4" width="6" height="24" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
+                    ),
+                    body: '12 weeks of real product work. Stakeholder simulations, assignments, and a capstone. Mentorship from practitioners.',
+                    outcome: '→ Portfolio of real work',
+                  },
+                  {
+                    num: '03', label: 'Verify', color: 'var(--ink)',
+                    icon: (
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 4 L20 12 L28 13 L22 19 L24 28 L16 24 L8 28 L10 19 L4 13 L12 12 Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+                      </svg>
+                    ),
+                    body: 'Your work is reviewed against capability rubrics built from how real product teams hire. Pass the bar, Passport issued.',
+                    outcome: '→ Capability Passport',
+                  },
+                  {
+                    num: '04', label: 'Showcase', color: 'var(--ink)',
+                    icon: (
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="10" r="6" stroke="currentColor" strokeWidth="1.5"/>
+                        <path d="M4 28 C4 22 8 18 16 18 C24 18 28 22 28 28" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        <path d="M20 10 L26 4 M22 4 L26 4 L26 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    ),
+                    body: 'Portfolio, capstone, and Capability Passport — packaged so employers can see exactly what you can do. Demo Day.',
+                    outcome: '→ Career opportunities',
+                  },
+                ].map((step, i) => (
+                  <div key={step.num} style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                    padding: '0 16px', position: 'relative', zIndex: 2,
+                  }}>
+                    {/* Step circle */}
+                    <div style={{
+                      width: 80, height: 80, borderRadius: '50%',
+                      background: i === 0 ? 'var(--ink)' : i === 3 ? 'var(--amber)' : 'var(--paper)',
+                      border: `2px solid ${i === 0 ? 'var(--ink)' : i === 3 ? 'var(--amber)' : 'var(--paper-line)'}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: i === 0 ? 'var(--paper)' : i === 3 ? 'var(--paper)' : 'var(--ink)',
+                      flexShrink: 0,
+                      boxShadow: '0 0 0 6px var(--paper)',
+                    }}>
+                      {step.icon}
+                    </div>
+
+                    {/* Step number */}
+                    <p style={{
+                      fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem',
+                      letterSpacing: '0.12em', textTransform: 'uppercase',
+                      color: 'var(--amber-deep)', marginTop: 20, marginBottom: 8,
+                    }}>{step.num}</p>
+
+                    {/* Label */}
+                    <h3 style={{
+                      fontFamily: 'Fraunces, serif', fontSize: '1.5rem',
+                      fontWeight: 500, letterSpacing: '-0.025em', textAlign: 'center',
+                    }}>{step.label}</h3>
+
+                    {/* Body */}
+                    <p style={{
+                      marginTop: 12, fontSize: '0.875rem', lineHeight: 1.6,
+                      color: 'var(--ink-muted)', textAlign: 'center',
+                    }}>{step.body}</p>
+
+                    {/* Outcome pill */}
+                    <div style={{
+                      marginTop: 16, padding: '6px 12px',
+                      background: i === 3 ? 'var(--amber)' : 'var(--paper-soft)',
+                      border: `1px solid ${i === 3 ? 'var(--amber)' : 'var(--paper-line)'}`,
+                      fontFamily: 'Geist Mono, monospace',
+                      fontSize: '0.6875rem', letterSpacing: '0.08em',
+                      color: i === 3 ? 'var(--paper)' : 'var(--ink-muted)',
+                    }}>
+                      {step.outcome}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 56, textAlign: 'center' }}>
+            <Link href="/assessment" className="btn btn-primary btn-arrow">
+              Start with the Assessment
+            </Link>
           </div>
         </div>
       </section>
@@ -308,84 +403,150 @@ export default function Home() {
                 A certificate says you attended. Your Passport shows what you can do.
               </h2>
               <p className="lede" style={{ marginTop: 24, color: 'var(--ink-soft)' }}>
-                The Upthrust Capability Passport is an evidence record. Capability areas assessed against a published rubric. Real artefacts you produced. A capstone you defended. A facilitator's signed feedback.
+                The Upthrust Capability Passport is a structured evidence record — not a certificate. Every capability area is assessed against a published rubric. Every score is backed by real work you produced. Every Passport is signed by a facilitator who reviewed your capstone.
               </p>
               <p style={{ marginTop: 20, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                We're honest about this: the Passport's value to employers grows as our alumni network grows. Today, what you have is a verifiable, defensible record of your work. As Cohort 1 graduates start landing roles, that record will mean more — to more people — every quarter.
+                We're honest: the Passport's value grows as our alumni network grows. Today, what you hold is a verifiable, defensible record of your work that you can present in any interview, on any application, to any employer. As Cohort 1 graduates land roles, that record will carry more weight every quarter.
               </p>
+              <div style={{ marginTop: 32, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {['Capability areas assessed against published rubric', 'Real artefacts produced during the program', 'Capstone defence score and summary', 'Facilitator review and sign-off', 'Shareable digital record with unique Passport ID'].map((item) => (
+                  <div key={item} style={{ display: 'flex', gap: 12, fontSize: '0.9375rem', alignItems: 'flex-start' }}>
+                    <span style={{ color: 'var(--moss)', flexShrink: 0, marginTop: 2 }}>✓</span>
+                    <span style={{ color: 'var(--ink-soft)' }}>{item}</span>
+                  </div>
+                ))}
+              </div>
               <Link href="/accelerator" className="btn-ghost btn-arrow" style={{ marginTop: 32, display: 'inline-block' }}>
-                See what's verified
+                See what gets verified
               </Link>
             </div>
 
-            {/* Passport mockup */}
-            <div style={{
-              background: 'var(--paper-soft)',
-              border: '1px solid var(--paper-line)',
-              padding: 36,
-              position: 'relative',
-              fontSize: '0.875rem',
-              boxShadow: '0 24px 60px -28px rgba(15,26,46,0.18)',
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 20 }}>
-                <div>
-                  <p className="eyebrow" style={{ fontSize: '0.6875rem' }}>Upthrust Capability Passport</p>
-                  <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.625rem', fontWeight: 500, marginTop: 8, letterSpacing: '-0.02em' }}>Adaeze O.</p>
-                  <p className="text-muted" style={{ fontSize: '0.8125rem', marginTop: 2 }}>Business Analysis · Cohort 1 · 2026</p>
-                </div>
+            {/* Passport mockup — professional document style */}
+            <div style={{ position: 'relative' }}>
+              {/* Shadow stack effect */}
+              <div aria-hidden style={{
+                position: 'absolute', top: 8, left: 8, right: -8, bottom: -8,
+                background: 'var(--paper-line)', border: '1px solid var(--paper-line)',
+                zIndex: 0,
+              }} />
+              <div style={{
+                position: 'relative', zIndex: 1,
+                background: 'var(--white)',
+                border: '1px solid var(--paper-line)',
+                boxShadow: '0 24px 60px -20px rgba(15,26,46,0.2)',
+              }}>
+                {/* Passport header bar */}
                 <div style={{
-                  fontFamily: 'Geist Mono, monospace',
-                  fontSize: '0.625rem',
-                  letterSpacing: '0.08em',
-                  color: 'var(--ink-muted)',
-                  textAlign: 'right',
+                  background: 'var(--ink)', padding: '20px 28px',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 }}>
-                  VERIFIED<br/>
-                  ID 0142-BA
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+                      <path d="M4 22 L14 6 L24 22 M9 18 L19 18" stroke="var(--paper)" strokeWidth="2" strokeLinecap="square"/>
+                    </svg>
+                    <span style={{ fontFamily: 'Fraunces, serif', fontSize: '1rem', color: 'var(--paper)', letterSpacing: '-0.01em' }}>Upthrust</span>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.18em', color: 'var(--amber-soft)', textTransform: 'uppercase' }}>Capability Passport</p>
+                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'rgba(250,247,241,0.45)', marginTop: 2, letterSpacing: '0.1em' }}>ID: UP-C1-0047-BA</p>
+                  </div>
+                </div>
+
+                <div style={{ padding: '24px 28px' }}>
+                  {/* Learner info */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', paddingBottom: 20, borderBottom: '1px solid var(--paper-line)' }}>
+                    <div>
+                      <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.02em' }}>Adaeze Okonkwo</p>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--amber-deep)', fontWeight: 500, marginTop: 4 }}>Business Analysis Pathway</p>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--ink-muted)', marginTop: 2 }}>Cohort 1 · Upthrust Career Capability Accelerator · 2026</p>
+                    </div>
+                    <div style={{
+                      background: 'var(--moss)', color: 'var(--paper)',
+                      padding: '6px 10px', textAlign: 'center',
+                      fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem',
+                      letterSpacing: '0.12em', textTransform: 'uppercase',
+                    }}>
+                      VERIFIED<br/>READY
+                    </div>
+                  </div>
+
+                  {/* Capabilities grid */}
+                  <div style={{ marginTop: 20 }}>
+                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 16 }}>
+                      Assessed Capability Areas
+                    </p>
+
+                    {[
+                      { label: 'Requirements Elicitation & Analysis', level: 'Proficient', score: 87 },
+                      { label: 'Stakeholder Management & Facilitation', level: 'Proficient', score: 83 },
+                      { label: 'Business Process Modelling', level: 'Developing', score: 71 },
+                      { label: 'Solution Design & Documentation (BRD)', level: 'Proficient', score: 89 },
+                      { label: 'UAT Planning & Test Scenario Writing', level: 'Proficient', score: 85 },
+                      { label: 'Agile Delivery & Backlog Contribution', level: 'Developing', score: 69 },
+                    ].map((cap) => (
+                      <div key={cap.label} style={{ marginBottom: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                          <span style={{ fontSize: '0.8125rem', color: 'var(--ink)' }}>{cap.label}</span>
+                          <span style={{
+                            fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem',
+                            letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 6px',
+                            background: cap.level === 'Proficient' ? 'rgba(79,106,74,0.12)' : 'rgba(197,116,58,0.1)',
+                            color: cap.level === 'Proficient' ? 'var(--moss)' : 'var(--amber-deep)',
+                            flexShrink: 0, marginLeft: 8,
+                          }}>
+                            {cap.level}
+                          </span>
+                        </div>
+                        <div style={{ height: 4, background: 'var(--paper-line)', borderRadius: 2, overflow: 'hidden' }}>
+                          <div style={{
+                            height: '100%', width: `${cap.score}%`,
+                            background: cap.level === 'Proficient' ? 'var(--moss)' : 'var(--amber)',
+                            borderRadius: 2,
+                          }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Capstone summary */}
+                  <div style={{ marginTop: 20, padding: '14px 16px', background: 'var(--paper-soft)', borderLeft: '3px solid var(--amber)' }}>
+                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 6 }}>
+                      Capstone Defence · Week 12
+                    </p>
+                    <p style={{ fontSize: '0.8125rem', fontStyle: 'italic', lineHeight: 1.55, color: 'var(--ink-soft)' }}>
+                      "Adaeze demonstrates strong requirements discipline and clear thinking under ambiguity. Her UAT pack caught three edge cases the scoping team had missed. She is ready for associate-level BA work in a serious product team."
+                    </p>
+                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'var(--ink-muted)', marginTop: 8, letterSpacing: '0.08em' }}>
+                      — FACILITATOR SIGN-OFF · GENESIS N. ENWENYEOKWU · CBAP
+                    </p>
+                  </div>
+
+                  {/* Footer */}
+                  <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.08em' }}>
+                      ISSUED: AUGUST 2026 · upthrustdigital.com/verify
+                    </p>
+                    <div style={{
+                      width: 36, height: 36, border: '1px solid var(--paper-line)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: 'Geist Mono, monospace', fontSize: '0.5rem', color: 'var(--ink-muted)',
+                      textAlign: 'center', letterSpacing: '0.05em', lineHeight: 1.2,
+                    }}>
+                      QR<br/>CODE
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div style={{ height: 1, background: 'var(--paper-line)', margin: '20px 0' }}></div>
-
-              <p style={{ fontSize: '0.75rem', color: 'var(--ink-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12 }}>Verified Capabilities</p>
-
-              {[
-                { label: 'Requirements Documentation', level: 'Strong', value: 88 },
-                { label: 'Stakeholder Analysis', level: 'Strong', value: 84 },
-                { label: 'Process Mapping', level: 'Developing', value: 68 },
-                { label: 'UAT Planning', level: 'Strong', value: 86 },
-              ].map((cap, i) => (
-                <div key={i} style={{ marginBottom: 14 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginBottom: 6 }}>
-                    <span>{cap.label}</span>
-                    <span style={{ color: cap.level === 'Strong' ? 'var(--moss)' : 'var(--amber-deep)', fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{cap.level}</span>
-                  </div>
-                  <div style={{ height: 3, background: 'var(--paper-line)', position: 'relative' }}>
-                    <div style={{ height: '100%', width: `${cap.value}%`, background: cap.level === 'Strong' ? 'var(--moss)' : 'var(--amber)' }}></div>
-                  </div>
-                </div>
-              ))}
-
-              <div style={{ height: 1, background: 'var(--paper-line)', margin: '20px 0' }}></div>
-
-              <p className="text-soft" style={{ fontSize: '0.8125rem', fontStyle: 'italic', lineHeight: 1.55 }}>
-                "Adaeze demonstrates strong requirements thinking and clear documentation discipline. Her UAT pack caught three edge cases the original PM had missed. She is ready for associate-level BA work in a serious product team."
-              </p>
-              <p className="text-muted" style={{ fontSize: '0.6875rem', marginTop: 10, fontFamily: 'Geist Mono, monospace', letterSpacing: '0.05em' }}>
-                — FACILITATOR REVIEW · CAPSTONE WK 12
-              </p>
-
+              {/* Sample stamp */}
               <div style={{
-                position: 'absolute',
-                top: 36,
-                right: -10,
-                background: 'var(--amber)',
-                color: 'var(--paper)',
+                position: 'absolute', top: 20, right: -6,
+                background: 'var(--amber)', color: 'var(--paper)',
                 padding: '4px 8px',
                 fontFamily: 'Geist Mono, monospace',
-                fontSize: '0.5625rem',
-                letterSpacing: '0.15em',
+                fontSize: '0.5rem', letterSpacing: '0.18em',
                 transform: 'rotate(8deg)',
+                zIndex: 2,
               }}>
                 SAMPLE
               </div>
@@ -394,10 +555,7 @@ export default function Home() {
 
           <style>{`
             @media (max-width: 900px) {
-              .passport-grid {
-                grid-template-columns: 1fr !important;
-                gap: 48px !important;
-              }
+              .passport-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
             }
           `}</style>
         </div>
@@ -461,42 +619,152 @@ export default function Home() {
       {/* TESTIMONIALS */}
       <Testimonials />
 
-      {/* FOUNDER STRIP */}
-      <section className="section">
-        <div className="container-medium">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 56, alignItems: 'start' }} className="founder-grid">
+      {/* WHO IS BEHIND THIS — full thought leadership section */}
+      <section className="section" style={{ background: 'var(--paper-soft)', padding: 'clamp(80px, 11vw, 140px) 0' }}>
+        <div className="container">
+
+          {/* Top header */}
+          <div style={{ maxWidth: 720, marginBottom: 64 }}>
+            <p className="eyebrow">Who is behind Upthrust</p>
+            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
+              Built by someone who has done the work.
+              <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Every layer of it.</span>
+            </h2>
+          </div>
+
+          {/* Main grid — photo + credentials left, bio right */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 72, alignItems: 'start' }} className="founder-main-grid">
+
+            {/* Left: photo + credential badges */}
             <div>
-              <FounderImage />
+              <FounderPhoto />
+
+              {/* Name + title */}
+              <div style={{ marginTop: 20 }}>
+                <p style={{
+                  fontFamily: 'Fraunces, serif', fontSize: '1.25rem',
+                  fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--ink)',
+                }}>Genesis Nneji Enwenyeokwu</p>
+                <p style={{ fontSize: '0.875rem', color: 'var(--amber-deep)', marginTop: 4, fontWeight: 500 }}>
+                  Founder, Upthrust · Product Lead, Rova
+                </p>
+              </div>
+
+              {/* Credential badges */}
+              <div style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {['CBAP Certified', 'MBA · UEL', 'Product Lead', 'IIBA Nigeria', '10+ Years'].map((badge) => (
+                  <span key={badge} style={{
+                    fontFamily: 'Geist Mono, monospace',
+                    fontSize: '0.625rem', letterSpacing: '0.1em',
+                    textTransform: 'uppercase', padding: '5px 10px',
+                    border: '1px solid var(--paper-line)',
+                    color: 'var(--ink-muted)', background: 'var(--white)',
+                  }}>
+                    {badge}
+                  </span>
+                ))}
+              </div>
+
+              {/* Expertise domains */}
+              <div style={{ marginTop: 24, padding: 20, background: 'var(--white)', border: '1px solid var(--paper-line)' }}>
+                <p className="eyebrow" style={{ marginBottom: 12, fontSize: '0.625rem' }}>Expertise spans</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {[
+                    { domain: 'Product Management', detail: 'Strategy · Discovery · Delivery' },
+                    { domain: 'Business Analysis', detail: 'Requirements · Process · UAT' },
+                    { domain: 'Fintech', detail: 'Payments · Wallets · Compliance' },
+                    { domain: 'Transformation', detail: 'Digital · Process · Capability' },
+                  ].map(({ domain, detail }) => (
+                    <div key={domain} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--ink)', whiteSpace: 'nowrap' }}>{domain}</span>
+                      <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', color: 'var(--ink-muted)', letterSpacing: '0.06em', textAlign: 'right' }}>{detail}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
+            {/* Right: bio content */}
             <div>
-              <p className="eyebrow">Who is behind this</p>
-              <h2 className="display-s text-balance" style={{ marginTop: 16 }}>
-                Built by a practitioner, not a course-seller.
-              </h2>
-              <p style={{ marginTop: 24, fontSize: '1.0625rem', lineHeight: 1.65, color: 'var(--ink-soft)' }}>
-                Upthrust is led by <strong style={{ color: 'var(--ink)' }}>Genesis Nneji Enwenyeokwu</strong> — a CBAP-certified Business Analyst, Product Lead, and facilitator with over a decade across business analysis, product management, business process automation, and digital product delivery.
-              </p>
-              <p style={{ marginTop: 16, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                Upthrust has trained over 1,000 professionals globally since 2019. Years of running training programs taught us what works — and what does not. The Career Capability Accelerator is the result: a deliberate repositioning of Upthrust around capability and evidence, not certificates and content. It is the program we wish had existed when we started.
-              </p>
-              <Link href="/about" className="btn-ghost btn-arrow" style={{ marginTop: 28, display: 'inline-block' }}>
-                More about Upthrust
+              {/* Opening pull quote */}
+              <blockquote style={{
+                fontFamily: 'Fraunces, serif', fontSize: 'clamp(1.25rem, 2.2vw, 1.625rem)',
+                fontStyle: 'italic', lineHeight: 1.45, letterSpacing: '-0.02em',
+                color: 'var(--ink)', borderLeft: '3px solid var(--amber)',
+                paddingLeft: 24, marginBottom: 36,
+              }}>
+                "Too many talented people were collecting certificates but still struggling to demonstrate real capability. Upthrust is my answer to that problem."
+              </blockquote>
+
+              {/* Bio paragraphs */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <p style={{ fontSize: '1.0625rem', lineHeight: 1.7, color: 'var(--ink-soft)' }}>
+                  Genesis is a Product Lead, CBAP-certified Business Analyst, and MBA graduate from the University of East London — with over a decade of experience across product management, business analysis, digital strategy, process automation, fintech, and technology-enabled transformation. He currently works as a Product Lead at <strong style={{ color: 'var(--ink)' }}>Rova</strong>, building digital financial products for Africans in the diaspora — multi-currency accounts, cross-border payments, remittance journeys, savings products, compliance-led onboarding, and customer engagement improvements.
+                </p>
+
+                <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+                  His career has spanned multiple roles — Business Analyst, Product Owner, Technical Product Manager, Senior Product Manager, Product Lead — across Nigeria, the UK, and the US, supporting organisations in fintech, technology, consulting, NGOs, and digital transformation. This end-to-end experience has given him a rare perspective: not just how to write requirements or manage delivery, but how to connect business strategy, customer needs, technology decisions, regulatory realities, and commercial outcomes into one coherent product direction.
+                </p>
+
+                <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+                  Beyond building products, Genesis has built people. He has trained, mentored, and coached over 1,000 professionals globally, helping career switchers and early-career professionals transition into and grow within business analysis, product management, and digital careers. He also serves within the <strong style={{ color: 'var(--ink)' }}>IIBA Nigeria Chapter</strong>, contributing to the growth of the business analysis profession through leadership, sponsorship, and professional development.
+                </p>
+              </div>
+
+              {/* Journey callout boxes */}
+              <div style={{
+                marginTop: 36,
+                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16,
+              }} className="journey-grid">
+                {[
+                  { label: 'The problem he kept seeing', body: 'Talented professionals collecting credentials but unable to demonstrate real capability when it counted.' },
+                  { label: 'What Upthrust is', body: 'A capability-building ecosystem — not a training platform. Built for professionals who want to become, not just attend.' },
+                ].map(({ label, body }) => (
+                  <div key={label} style={{
+                    padding: '20px 22px',
+                    background: 'var(--white)', border: '1px solid var(--paper-line)',
+                    borderTop: '3px solid var(--amber)',
+                  }}>
+                    <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>{label}</p>
+                    <p style={{ fontSize: '0.9375rem', lineHeight: 1.6, color: 'var(--ink-soft)' }}>{body}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mission statement */}
+              <div style={{
+                marginTop: 24, padding: '20px 24px',
+                background: 'var(--ink)', color: 'var(--paper)',
+              }}>
+                <p className="eyebrow-light" style={{ marginBottom: 12 }}>The mission</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {[
+                    'From learning concepts → to applying them',
+                    'From collecting certificates → to building evidence',
+                    'From career confusion → to professional clarity',
+                    'From potential → to proof',
+                  ].map((item) => (
+                    <p key={item} style={{ fontSize: '0.9375rem', color: 'rgba(250,247,241,0.85)', lineHeight: 1.5 }}>
+                      <span style={{ color: 'var(--amber)', marginRight: 8 }}>—</span>
+                      {item}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              <Link href="/about" className="btn btn-secondary" style={{ marginTop: 28, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                Full story and background →
               </Link>
             </div>
           </div>
-          <style>{`
-            @media (max-width: 760px) {
-              .founder-grid {
-                grid-template-columns: 1fr !important;
-                gap: 32px !important;
-              }
-              .founder-grid > div:first-child {
-                max-width: 280px;
-              }
-            }
-          `}</style>
         </div>
+
+        <style>{`
+          @media (max-width: 900px) {
+            .founder-main-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+            .journey-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </section>
 
       {/* FINAL CTA */}

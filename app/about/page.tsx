@@ -77,53 +77,145 @@ export default function AboutPage() {
       </section>
 
       {/* FOUNDER */}
-      <section className="section" style={{ background: 'var(--paper-soft)' }}>
-        <div className="container-medium">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 64, alignItems: 'center' }} className="founder-grid">
-            <div style={{ position: 'relative' }}>
-              <div style={{
-                width: '100%',
-                aspectRatio: '4/5',
-                position: 'relative',
-                overflow: 'hidden',
-                background: 'var(--ink)',
-              }}>
-                <img
-                  src="/images/founder-genesis.jpg"
-                  alt="Genesis Nneji Enwenyeokwu, founder of Upthrust"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'saturate(1.05) contrast(1.02)' }}
-                />
+      <section className="section" style={{ background: 'var(--paper-soft)', padding: 'clamp(80px, 11vw, 130px) 0' }}>
+        <div className="container">
+
+          {/* Header */}
+          <div style={{ maxWidth: 760, marginBottom: 72 }}>
+            <p className="eyebrow">The founder</p>
+            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
+              Genesis Nneji Enwenyeokwu —
+              <span style={{ fontStyle: 'italic', color: 'var(--amber-deep)' }}> practitioner, builder, mentor.</span>
+            </h2>
+          </div>
+
+          {/* Two-column — photo + credentials / bio */}
+          <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 72, alignItems: 'start' }} className="founder-deep-grid">
+
+            {/* Left column */}
+            <div>
+              <div style={{ position: 'relative' }}>
+                <div style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden', background: 'var(--ink)' }}>
+                  <img
+                    src="/images/founder-genesis.jpg"
+                    alt="Genesis Nneji Enwenyeokwu, founder of Upthrust"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'saturate(1.05) contrast(1.02)' }}
+                  />
+                </div>
+                <div aria-hidden style={{ position: 'absolute', left: -12, top: -12, width: 56, height: 56, borderTop: '2px solid var(--amber)', borderLeft: '2px solid var(--amber)' }} />
+                <div aria-hidden style={{ position: 'absolute', right: -12, bottom: -12, width: 56, height: 56, borderBottom: '2px solid var(--ink)', borderRight: '2px solid var(--ink)' }} />
               </div>
-              <div aria-hidden style={{ position: 'absolute', left: -12, top: -12, width: 64, height: 64, borderTop: '2px solid var(--amber)', borderLeft: '2px solid var(--amber)' }}></div>
-              <div aria-hidden style={{ position: 'absolute', right: -12, bottom: -12, width: 64, height: 64, borderBottom: '2px solid var(--ink)', borderRight: '2px solid var(--ink)' }}></div>
-              <p style={{ marginTop: 20, fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', color: 'var(--ink-muted)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                Genesis N. Enwenyeokwu · Founder
-              </p>
+
+              <div style={{ marginTop: 24 }}>
+                <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.02em' }}>Genesis Nneji Enwenyeokwu</p>
+                <p style={{ fontSize: '0.875rem', color: 'var(--amber-deep)', marginTop: 4, fontWeight: 500 }}>Founder & Program Director, Upthrust</p>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--ink-muted)', marginTop: 2 }}>Product Lead, Rova · IIBA Nigeria Chapter</p>
+              </div>
+
+              {/* Credential badges */}
+              <div style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {['CBAP Certified', 'MBA · University of East London', 'Product Lead', 'IIBA Nigeria', '10+ Years Experience', 'Nigeria · UK · US'].map((b) => (
+                  <span key={b} style={{
+                    fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem',
+                    letterSpacing: '0.1em', textTransform: 'uppercase',
+                    padding: '5px 8px', border: '1px solid var(--paper-line)',
+                    color: 'var(--ink-muted)', background: 'var(--white)',
+                  }}>{b}</span>
+                ))}
+              </div>
+
+              {/* Expertise matrix */}
+              <div style={{ marginTop: 24, border: '1px solid var(--paper-line)', background: 'var(--white)' }}>
+                <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--paper-line)' }}>
+                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>Expertise spans</p>
+                </div>
+                {[
+                  ['Product Management', 'Strategy · Discovery · Delivery'],
+                  ['Business Analysis', 'Requirements · Process · UAT'],
+                  ['Fintech', 'Payments · Wallets · Compliance'],
+                  ['Design Thinking', 'UX · Service Design · Innovation'],
+                  ['Digital Transformation', 'Process · Automation · Change'],
+                ].map(([domain, detail]) => (
+                  <div key={domain} style={{
+                    padding: '10px 16px', borderBottom: '1px solid var(--paper-line)',
+                    display: 'flex', justifyContent: 'space-between', gap: 8,
+                  }}>
+                    <span style={{ fontSize: '0.8125rem', fontWeight: 500 }}>{domain}</span>
+                    <span style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.06em', textAlign: 'right' }}>{detail}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
+            {/* Right column — full bio */}
             <div>
-              <p className="eyebrow">The founder</p>
-              <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-                Built by a practitioner, not a course-seller.
-              </h2>
-              <p style={{ marginTop: 24, fontSize: '1.0625rem', lineHeight: 1.65, color: 'var(--ink-soft)' }}>
-                Upthrust is led by <strong style={{ color: 'var(--ink)' }}>Genesis Nneji Enwenyeokwu</strong> — a CBAP-certified Business Analyst, Product Lead, and facilitator with over a decade across business analysis, product management, business process automation, and digital product delivery.
-              </p>
-              <p style={{ marginTop: 16, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                Genesis has trained, mentored, and coached over 1,000 professionals across Africa, the UK, Canada, Australia, and the global diaspora since 2019. He has shipped real products, written hundreds of BRDs, run countless stakeholder workshops, and learned every lesson the hard way — which is why the Accelerator does not teach theory disconnected from practice.
-              </p>
-              <p style={{ marginTop: 16, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                The reason this exists, in his words: <em>"Too many talented people lose confidence — not because they cannot do the work, but because no one ever made them practise it under real conditions. Upthrust is the program I wish had existed when I was switching careers."</em>
-              </p>
+              {/* Opening quote */}
+              <blockquote style={{
+                fontFamily: 'Fraunces, serif', fontSize: 'clamp(1.25rem, 2.2vw, 1.625rem)',
+                fontStyle: 'italic', lineHeight: 1.45, letterSpacing: '-0.02em',
+                borderLeft: '3px solid var(--amber)', paddingLeft: 28, marginBottom: 40,
+              }}>
+                "Too many talented people were collecting certificates but still struggling to demonstrate real capability. Upthrust is my answer to that problem."
+              </blockquote>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                <div>
+                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The practitioner</p>
+                  <p style={{ fontSize: '1.0625rem', lineHeight: 1.7, color: 'var(--ink-soft)' }}>
+                    Genesis is a Product Lead, CBAP-certified Business Analyst, and MBA graduate from the University of East London — with over a decade of experience across product management, business analysis, digital strategy, process automation, fintech, and technology-enabled transformation. He has built his career helping organisations move from unclear ideas to well-defined strategies, from fragmented processes to scalable systems, and from customer problems to digital products that create measurable business value. His work spans Nigeria, the UK, and the US.
+                  </p>
+                </div>
+
+                <div>
+                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The breadth</p>
+                  <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+                    Over the years, Genesis has operated across multiple roles — Business Analyst, Product Owner, Technical Product Manager, Senior Product Manager, and Product Lead — across fintech, technology, consulting, NGOs, and digital transformation environments. This end-to-end experience has given him a rare perspective: not just how to write requirements or manage delivery, but how to connect business strategy, customer needs, technology decisions, regulatory realities, stakeholder alignment, and commercial outcomes into one coherent product direction.
+                  </p>
+                </div>
+
+                <div>
+                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Current work at Rova</p>
+                  <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+                    Genesis currently works as a Product Lead at <strong style={{ color: 'var(--ink)' }}>Rova</strong>, contributing to the development of digital financial products for Africans in the diaspora — multi-currency accounts, cross-border payments, remittance journeys, savings products, compliance-led onboarding, operational tooling, and customer engagement improvements. This hands-on fintech experience has sharpened his ability to operate where customer experience, regulation, technology, operations, and commercial strategy must work together.
+                  </p>
+                </div>
+
+                <div>
+                  <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Building people</p>
+                  <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+                    Beyond building products, Genesis has built people. He has trained, mentored, and coached over 1,000 professionals globally — helping career switchers and early-career professionals transition into and grow within business analysis, product management, and digital careers. Many came with ambition but lacked structure, confidence, practical exposure, and evidence of capability. Through his teaching and coaching, Genesis has helped them understand how real product work happens, how to think like professionals, how to engage stakeholders, and how to position themselves in competitive markets. He also serves within the <strong style={{ color: 'var(--ink)' }}>IIBA Nigeria Chapter</strong>, contributing to the growth of the business analysis profession.
+                  </p>
+                </div>
+              </div>
+
+              {/* Mission — from potential to proof */}
+              <div style={{ marginTop: 36, background: 'var(--ink)', color: 'var(--paper)', padding: '24px 28px' }}>
+                <p style={{ fontFamily: 'Geist Mono, monospace', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-soft)', marginBottom: 16 }}>
+                  His mission through Upthrust
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {[
+                    'From learning concepts → to applying them',
+                    'From collecting certificates → to building evidence',
+                    'From career confusion → to professional clarity',
+                    'From potential → to proof',
+                    'From ambition → to capability',
+                  ].map((item) => (
+                    <p key={item} style={{ fontSize: '0.9375rem', lineHeight: 1.5, color: 'rgba(250,247,241,0.85)' }}>
+                      <span style={{ color: 'var(--amber)', marginRight: 10 }}>—</span>{item}
+                    </p>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-          <style>{`
-            @media (max-width: 760px) {
-              section .founder-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-              section .founder-grid > div:first-child { max-width: 320px; margin: 0 auto; }
-            }
-          `}</style>
         </div>
+
+        <style>{`
+          @media (max-width: 960px) {
+            section .founder-deep-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+          }
+        `}</style>
       </section>
 
       {/* WHAT WE STAND FOR */}

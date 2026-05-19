@@ -7,7 +7,10 @@ import { getRegionFromRequest } from '@/lib/geoServer';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  title: { default: `${SITE.name} — ${SITE.tagline}`, template: `%s · ${SITE.name}` },
+  title: {
+    default: `${SITE.name} — ${SITE.tagline}`,
+    template: `%s · ${SITE.name}`,
+  },
   description: SITE.description,
   keywords: ['Product Management', 'Business Analysis', 'Career Capability', 'PM Bootcamp', 'BA Bootcamp', 'Nigeria', 'UK', 'Canada'],
   authors: [{ name: 'Upthrust' }],
@@ -20,13 +23,25 @@ export const metadata: Metadata = {
     type: 'website',
     images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: SITE.tagline }],
   },
-  twitter: { card: 'summary_large_image', title: `${SITE.name} — ${SITE.tagline}`, description: SITE.description, images: [SITE.ogImage] },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' } },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${SITE.name} — ${SITE.tagline}`,
+    description: SITE.description,
+    images: [SITE.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' },
+  },
   icons: { icon: '/favicon.svg', shortcut: '/favicon.svg', apple: '/favicon.svg' },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Detect visitor's region server-side using Vercel geo headers.
+  // Passed to <body data-region="..."> so the client Pricing component reads it instantly.
   const region = await getRegionFromRequest();
+
   return (
     <html lang="en">
       <body data-region={region}>

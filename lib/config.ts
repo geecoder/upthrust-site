@@ -147,7 +147,7 @@ export const SITE = {
   tagline: 'Build evidence of capability. Not another certificate.',
   url: 'https://upthrust-site.vercel.app', // UPDATE WHEN CUSTOM DOMAIN IS LIVE
   description: 'A 12-week practical accelerator for Product Management and Business Analysis. Trained over 1,000 professionals globally since 2019.',
-  email: 'hello@upthrust.io', // UPDATE TO YOUR REAL EMAIL
+  email: 'info@upthrustdigital.com', // UPDATE TO YOUR REAL EMAIL
   twitter: '@upthrust',
   ogImage: '/og-image.png',
 } as const;
