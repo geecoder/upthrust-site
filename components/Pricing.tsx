@@ -1,63 +1,84 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { useRegion } from '@/lib/useRegion';
 import { PRICING, formatPrice, getPaymentLink, type Region } from '@/lib/config';
+
+interface Props {
+  initialRegion?: Region;
+}
 
 const REGION_LABELS: Record<Region, string> = {
   NG: 'Nigeria & Africa',
   GB: 'United Kingdom',
   CA: 'Canada',
-  AU: 'Australia',
+  US: 'United States',
   OTHER: 'Other / International',
 };
 
-export default function Pricing() {
+export default function Pricing({ initialRegion = 'NG' }: Props) {
   const [region, setRegion] = useRegion();
+  const [showSelector, setShowSelector] = useState(false);
   const pricing = PRICING[region];
 
   return (
     <div>
-      {/* Region selector */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        gap: 16,
-        marginBottom: 40,
-        padding: '20px 24px',
-        background: 'var(--paper)',
-        border: '1px solid var(--paper-line)',
-      }}>
-        <p style={{
-          fontFamily: 'Geist Mono, monospace',
-          fontSize: '0.75rem',
-          color: 'var(--ink-muted)',
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-        }}>
-          Showing pricing for:
+      {/* Region indicator — subtle, with override option */}
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: 12,
+          marginBottom: 32,
+          fontSize: '0.875rem',
+        }}
+      >
+        <p style={{ color: 'var(--ink-muted)' }}>
+          Showing pricing for <strong style={{ color: 'var(--ink)', fontWeight: 500 }}>{REGION_LABELS[region]}</strong>.
         </p>
-        <select
-          value={region}
-          onChange={(e) => setRegion(e.target.value as Region)}
-          style={{
-            padding: '8px 12px',
-            border: '1.5px solid var(--ink)',
-            background: 'var(--white)',
-            fontSize: '0.9375rem',
-            fontWeight: 500,
-            borderRadius: 2,
-            cursor: 'pointer',
-          }}
-        >
-          {(Object.keys(REGION_LABELS) as Region[]).map((r) => (
-            <option key={r} value={r}>{REGION_LABELS[r]}</option>
-          ))}
-        </select>
-        <p style={{ fontSize: '0.8125rem', color: 'var(--ink-muted)', fontStyle: 'italic' }}>
-          Wrong region? Switch above. Pricing is set regionally to reflect local realities.
-        </p>
+
+        {!showSelector ? (
+          <button
+            type="button"
+            onClick={() => setShowSelector(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              color: 'var(--amber-deep)',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              fontFamily: 'inherit',
+            }}
+          >
+            Wrong region? Change
+          </button>
+        ) : (
+          <select
+            autoFocus
+            value={region}
+            onChange={(e) => {
+              setRegion(e.target.value as Region);
+              setShowSelector(false);
+            }}
+            style={{
+              padding: '4px 8px',
+              border: '1.5px solid var(--ink)',
+              background: 'var(--white)',
+              fontSize: '0.875rem',
+              fontFamily: 'inherit',
+              borderRadius: 2,
+              cursor: 'pointer',
+            }}
+          >
+            {(Object.keys(REGION_LABELS) as Region[]).map((r) => (
+              <option key={r} value={r}>{REGION_LABELS[r]}</option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* Tier cards */}
@@ -224,7 +245,7 @@ export default function Pricing() {
 
       {/* Payment methods note */}
       <p style={{ marginTop: 32, fontSize: '0.875rem', color: 'var(--ink-muted)', textAlign: 'center', lineHeight: 1.6 }}>
-        Payments processed via Paystack (Nigeria & Africa) and Stripe (international). Bank transfer available on request — mention this on your consultation call.
+        Payments processed via Paystack (Nigeria &amp; Africa) and Stripe (international). Bank transfer available on request — mention this on your consultation call.
       </p>
     </div>
   );

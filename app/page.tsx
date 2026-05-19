@@ -1,8 +1,13 @@
 import Link from 'next/link';
+import Testimonials from '@/components/Testimonials';
+import UrgencyBanner from '@/components/UrgencyBanner';
 
 export default function Home() {
   return (
     <>
+      {/* COHORT 1 URGENCY BANNER — dynamic, updates daily */}
+      <UrgencyBanner />
+
       {/* HERO */}
       <section style={{
         position: 'relative',
@@ -199,7 +204,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-3">
+          <div className="pathways-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 0.75fr', gap: 24 }}>
             {/* PM */}
             <div className="card card-hover" style={{ padding: 36, display: 'flex', flexDirection: 'column' }}>
               <div className="badge badge-open" style={{ alignSelf: 'flex-start', marginBottom: 24 }}>
@@ -246,33 +251,52 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Design Cohort 2 */}
-            <div className="card" style={{
-              padding: 36,
+            {/* Design Cohort 2 - smaller and visually deprioritized */}
+            <div className="card design-card" style={{
+              padding: 28,
               display: 'flex',
               flexDirection: 'column',
               background: 'var(--paper)',
               borderStyle: 'dashed',
               borderColor: 'var(--paper-line)',
             }}>
-              <div className="badge badge-waitlist" style={{ alignSelf: 'flex-start', marginBottom: 24 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }}></span>
-                Cohort 2 · Waitlist
+              <div className="badge badge-waitlist" style={{ alignSelf: 'flex-start', marginBottom: 18, fontSize: '0.6875rem' }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'currentColor' }}></span>
+                Cohort 2
               </div>
-              <h3 className="display-s">Product Design</h3>
-              <p className="text-soft" style={{ marginTop: 16, fontSize: '0.9375rem', lineHeight: 1.6, flexGrow: 1 }}>
-                For people who see the world through user journeys, flows, and interface logic. The Design pathway opens in Cohort 2 once we've proven delivery quality with PM and BA first.
+              <h3 className="display-s" style={{ fontSize: '1.5rem' }}>Product Design</h3>
+              <p className="text-soft" style={{ marginTop: 14, fontSize: '0.875rem', lineHeight: 1.55, flexGrow: 1 }}>
+                For people who see the world through user journeys and interface logic. Opens in Cohort 2 once PM and BA delivery is validated.
               </p>
-              <div style={{ marginTop: 28 }}>
-                <p className="caption text-muted" style={{ fontSize: '0.8125rem', marginBottom: 16 }}>
-                  Why we're sequencing this way: <em>quality of a first cohort is a one-shot reputation event. We won't dilute it.</em>
-                </p>
-                <Link href="/assessment" className="btn-ghost btn-arrow" style={{ display: 'inline-block', fontSize: '0.9375rem' }}>
-                  Join the Design waitlist
+              <div style={{ marginTop: 24 }}>
+                <Link href="/assessment" className="btn-ghost btn-arrow" style={{ display: 'inline-block', fontSize: '0.875rem' }}>
+                  Join Cohort 2 waitlist
                 </Link>
               </div>
             </div>
           </div>
+          {/* Responsive: stack on smaller screens */}
+          <style>{`
+            @media (max-width: 1024px) {
+              .pathways-grid {
+                grid-template-columns: 1fr 1fr !important;
+              }
+              .pathways-grid .design-card {
+                grid-column: span 2;
+                max-width: 480px;
+                margin: 0 auto;
+              }
+            }
+            @media (max-width: 700px) {
+              .pathways-grid {
+                grid-template-columns: 1fr !important;
+              }
+              .pathways-grid .design-card {
+                grid-column: auto;
+                max-width: none;
+              }
+            }
+          `}</style>
         </div>
       </section>
 
@@ -436,45 +460,26 @@ export default function Home() {
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
+      <Testimonials />
+
       {/* FOUNDER STRIP */}
       <section className="section">
         <div className="container-medium">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 56, alignItems: 'start' }} className="founder-grid">
             <div>
-              {/* Founder photo placeholder — replace with real image */}
               <div style={{
                 width: '100%',
                 aspectRatio: '4/5',
-                background: 'linear-gradient(180deg, var(--paper-soft) 0%, var(--paper-line) 100%)',
                 position: 'relative',
                 overflow: 'hidden',
+                background: 'var(--ink)',
               }}>
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'Fraunces, serif',
-                  fontSize: '4rem',
-                  color: 'var(--ink-muted)',
-                  fontStyle: 'italic',
-                  opacity: 0.4,
-                }}>
-                  G
-                </div>
-                <div style={{
-                  position: 'absolute',
-                  bottom: 16,
-                  left: 16,
-                  fontFamily: 'Geist Mono, monospace',
-                  fontSize: '0.6875rem',
-                  color: 'var(--ink-muted)',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                }}>
-                  [Founder photo — to add]
-                </div>
+                <img
+                  src="/images/founder-genesis.jpg"
+                  alt="Genesis Nneji Enwenyeokwu — Founder, Upthrust"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
               </div>
             </div>
 
