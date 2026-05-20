@@ -1,10 +1,27 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { TALLY_FORMS, tallyEmbedUrl } from '@/lib/config';
+import { trackEvent } from '@/lib/mixpanel';
+import { TRACKING_EVENTS } from '@/lib/tracking-events';
 
 export default function ConsultationPage() {
+  const tallyIframeRef = useRef<HTMLIFrameElement>(null);
+  const tallyStartedRef = useRef(false);
+
+  function trackTallyFormStarted() {
+    if (tallyStartedRef.current) return;
+
+    tallyStartedRef.current = true;
+    trackEvent(TRACKING_EVENTS.formStarted, {
+      form_name: 'Consultation Booking',
+      source_page: window.location.pathname,
+      number_of_fields: undefined,
+      submission_status: 'started',
+    });
+  }
+
   // Load Tally embed script once
   useEffect(() => {
     const scriptSrc = 'https://tally.so/widgets/embed.js';
@@ -18,6 +35,45 @@ export default function ConsultationPage() {
       // @ts-ignore
       if (typeof Tally !== 'undefined') Tally.loadEmbeds();
     }
+  }, []);
+
+  useEffect(() => {
+    function handleWindowBlur() {
+      if (document.activeElement === tallyIframeRef.current) {
+        trackTallyFormStarted();
+      }
+    }
+
+    function handleTallyMessage(event: MessageEvent) {
+      if (!event.origin.includes('tally.so')) return;
+
+      let payload = '';
+      try {
+        payload = typeof event.data === 'string' ? event.data : JSON.stringify(event.data);
+      } catch {
+        payload = '';
+      }
+
+      if (!/submit|submitted|form_submitted/i.test(payload)) return;
+
+      const properties = {
+        form_name: 'Consultation Booking',
+        source_page: window.location.pathname,
+        number_of_fields: undefined,
+        submission_status: 'submitted',
+      };
+
+      trackEvent(TRACKING_EVENTS.formSubmitted, properties);
+      trackEvent(TRACKING_EVENTS.consultationSubmitted, properties);
+    }
+
+    window.addEventListener('blur', handleWindowBlur);
+    window.addEventListener('message', handleTallyMessage);
+
+    return () => {
+      window.removeEventListener('blur', handleWindowBlur);
+      window.removeEventListener('message', handleTallyMessage);
+    };
   }, []);
 
   return (
@@ -84,6 +140,7 @@ export default function ConsultationPage() {
             overflow: 'hidden',
           }}>
             <iframe
+              ref={tallyIframeRef}
               data-tally-src={tallyEmbedUrl(TALLY_FORMS.consultation, { alignLeft: true, transparentBackground: true })}
               loading="lazy"
               width="100%"
@@ -92,6 +149,7 @@ export default function ConsultationPage() {
               marginHeight={0}
               marginWidth={0}
               title="Upthrust Consultation Booking"
+              onFocus={trackTallyFormStarted}
               style={{ display: 'block', border: 0 }}
             />
           </div>

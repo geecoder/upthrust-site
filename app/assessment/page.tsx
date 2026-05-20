@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { scenarios } from '@/lib/scenarios';
 import { calculateResult, getResultMeta, type Answer } from '@/lib/scoring';
 import { TALLY_FORMS, tallyDirectUrl } from '@/lib/config';
+import { trackEvent } from '@/lib/mixpanel';
+import { TRACKING_EVENTS } from '@/lib/tracking-events';
 
 type Stage = 'intro' | 'lead' | 'scenario' | 'result';
 
@@ -99,6 +101,21 @@ export default function AssessmentPage() {
 
       if (currentIdx + 1 >= total) {
         const finalResult = calculateResult(newAnswers);
+        const safeAssessmentProperties = {
+          form_name: 'Career Assessment',
+          source_page: window.location.pathname,
+          number_of_fields: 4,
+          submission_status: 'submitted',
+          selected_pathway: lead.selfReported || 'Not specified',
+          primary_pathway: finalResult.primary,
+          assessment_result_type: finalResult.resultType,
+          pm_score: finalResult.scores.PM,
+          ba_score: finalResult.scores.BA,
+          design_score: finalResult.scores.Design,
+        };
+
+        trackEvent(TRACKING_EVENTS.formSubmitted, safeAssessmentProperties);
+        trackEvent(TRACKING_EVENTS.careerAssessmentSubmitted, safeAssessmentProperties);
         submitToTally({
           'First Name': lead.firstName,
           'Email': lead.email,
@@ -160,7 +177,17 @@ export default function AssessmentPage() {
                   ))}
                 </div>
 
-                <button onClick={() => setStage('lead')} className="btn btn-primary btn-arrow" style={{ marginTop: 32, fontSize: '1rem', padding: '16px 28px' }}>
+                <button onClick={() => {
+                  trackEvent(TRACKING_EVENTS.careerAssessmentStarted, {
+                    cta_text: 'Begin the Assessment',
+                    source_page: window.location.pathname,
+                    section_name: 'Assessment Hero',
+                    form_name: 'Career Assessment',
+                    button_location: 'page_section',
+                    user_intent: 'career_fit',
+                  });
+                  setStage('lead');
+                }} className="btn btn-primary btn-arrow" style={{ marginTop: 32, fontSize: '1rem', padding: '16px 28px' }}>
                   Begin the Assessment
                 </button>
               </div>
@@ -237,7 +264,24 @@ export default function AssessmentPage() {
             We'll email you the detailed breakdown — your specific answers and what they reveal. No spam, unsubscribe any time.
           </p>
 
-          <form onSubmit={e => { e.preventDefault(); if (canContinue) { setCurrentIdx(0); setAnswers([]); setStage('scenario'); } }} style={{ marginTop: 40 }}>
+          <form data-tracking-name="Career Assessment Lead" onSubmit={e => {
+            e.preventDefault();
+            if (canContinue) {
+              trackEvent(TRACKING_EVENTS.careerAssessmentStarted, {
+                cta_text: 'Start the Assessment',
+                source_page: window.location.pathname,
+                section_name: 'Career Assessment Lead Capture',
+                form_name: 'Career Assessment Lead',
+                number_of_fields: 4,
+                selected_pathway: lead.selfReported || 'Not specified',
+                button_location: 'page_section',
+                user_intent: 'career_fit',
+              });
+              setCurrentIdx(0);
+              setAnswers([]);
+              setStage('scenario');
+            }
+          }} style={{ marginTop: 40 }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }} className="form-row-2">
               <label style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-soft)' }}>First name</span>

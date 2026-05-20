@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MixpanelProvider from '@/components/MixpanelProvider';
 import { SITE } from '@/lib/config';
 import { getRegionFromRequest } from '@/lib/geoServer';
 
@@ -45,9 +46,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body data-region={region}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <MixpanelProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </MixpanelProvider>
       </body>
     </html>
   );

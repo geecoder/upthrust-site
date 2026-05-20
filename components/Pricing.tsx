@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRegion } from '@/lib/useRegion';
 import { PRICING, formatPrice, getPaymentLink, type Region } from '@/lib/config';
+import { trackEvent } from '@/lib/mixpanel';
+import { TRACKING_EVENTS } from '@/lib/tracking-events';
 
 interface Props {
   initialRegion?: Region;
@@ -20,7 +22,21 @@ const REGION_LABELS: Record<Region, string> = {
 export default function Pricing({ initialRegion = 'NG' }: Props) {
   const [region, setRegion] = useRegion(initialRegion);
   const [showSelector, setShowSelector] = useState(false);
+  const pricingViewedRef = useRef(false);
   const pricing = PRICING[region];
+
+  useEffect(() => {
+    if (pricingViewedRef.current) return;
+
+    pricingViewedRef.current = true;
+    trackEvent(TRACKING_EVENTS.pricingViewed, {
+      source_page: window.location.pathname,
+      section_name: 'Cohort 1 tiers',
+      program_name: 'Career Capability Accelerator',
+      region,
+      currency: pricing.currency,
+    });
+  }, [pricing.currency, region]);
 
   return (
     <div>

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useInView, useStagger } from '@/lib/animations';
+import { trackEvent } from '@/lib/mixpanel';
+import { TRACKING_EVENTS } from '@/lib/tracking-events';
 
 const CAPSTONES = [
   {
@@ -196,7 +198,21 @@ export default function CapstonesInteractive() {
               )}
 
               <div style={{ padding: '16px 24px', marginTop: 'auto', borderTop: '1px solid var(--paper-line)' }}>
-                <button onClick={() => setExpanded(isExpanded ? null : cap.id)} style={{
+                <button onClick={() => {
+                  if (!isExpanded) {
+                    trackEvent(TRACKING_EVENTS.resourceViewed, {
+                      resource_type: 'capstone_brief',
+                      capstone_id: cap.id,
+                      capstone_title: cap.title,
+                      pathway_name: pathway === 'PM' ? 'Product Management' : 'Business Analysis',
+                      program_name: 'Career Capability Accelerator',
+                      source_page: window.location.pathname,
+                      section_name: 'Cohort 1 capstone projects',
+                    });
+                  }
+
+                  setExpanded(isExpanded ? null : cap.id);
+                }} style={{
                   background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem',
                   letterSpacing: '0.1em', textTransform: 'uppercase',

@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useInView } from '@/lib/animations';
+import { trackEvent } from '@/lib/mixpanel';
+import { TRACKING_EVENTS } from '@/lib/tracking-events';
 
 interface FAQItem {
   q: string;
@@ -136,7 +138,18 @@ export default function FAQInteractive() {
             item={faq}
             index={i}
             isOpen={openIndex === i}
-            onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+            onToggle={() => {
+              if (openIndex !== i) {
+                trackEvent(TRACKING_EVENTS.faqExpanded, {
+                  faq_question: faq.q,
+                  faq_tag: faq.tag,
+                  source_page: window.location.pathname,
+                  section_name: 'Common questions',
+                });
+              }
+
+              setOpenIndex(openIndex === i ? null : i);
+            }}
           />
         </div>
       ))}
