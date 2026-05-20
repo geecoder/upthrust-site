@@ -2,7 +2,6 @@ import { trackEvent, type MixpanelProperties } from '@/lib/mixpanel';
 
 export const TRACKING_EVENTS = {
   pageViewed: 'Page Viewed',
-  navigationLinkClicked: 'Navigation Link Clicked',
   careerAssessmentStarted: 'Career Assessment Started',
   careerAssessmentSubmitted: 'Career Assessment Submitted',
   consultationClicked: 'Consultation Clicked',
@@ -22,7 +21,9 @@ export const TRACKING_EVENTS = {
   checkoutCompleted: 'Checkout Completed',
   whatsAppClicked: 'WhatsApp Clicked',
   emailClicked: 'Email Clicked',
+  externalLinkClicked: 'External Link Clicked',
   linkedInClicked: 'LinkedIn Clicked',
+  thankYouPageViewed: 'Thank You Page Viewed',
   resourceViewed: 'Resource Viewed',
   downloadClicked: 'Download Clicked',
   faqExpanded: 'FAQ Expanded',
@@ -32,10 +33,6 @@ export const TRACKING_EVENTS = {
 } as const;
 
 export type TrackingEventName = (typeof TRACKING_EVENTS)[keyof typeof TRACKING_EVENTS];
-
-export function trackNavigationLinkClicked(properties: MixpanelProperties) {
-  trackEvent(TRACKING_EVENTS.navigationLinkClicked, properties);
-}
 
 export function trackCtaClick(eventName: TrackingEventName, properties: MixpanelProperties) {
   trackEvent(eventName, properties);

@@ -8,7 +8,6 @@ import {
   trackFormStarted,
   trackFormSubmissionFailed,
   trackFormSubmitted,
-  trackNavigationLinkClicked,
 } from '@/lib/tracking-events';
 
 interface Props {
@@ -171,6 +170,14 @@ function buildPageViewProperties(
 }
 
 function trackPageSpecificEvents(pathname: string, properties: MixpanelProperties) {
+  if (pathname.startsWith('/thank-you/')) {
+    trackEvent(TRACKING_EVENTS.thankYouPageViewed, {
+      ...properties,
+      thank_you_type: getThankYouType(pathname),
+      source_page: pathname,
+    });
+  }
+
   if (pathname === '/accelerator') {
     const programProperties = {
       ...properties,
@@ -237,12 +244,14 @@ function trackLinkClick(link: HTMLAnchorElement) {
   const destinationUrl = link.getAttribute('href') || link.href;
   const commonProperties = getInteractionProperties(link, destinationUrl);
 
-  trackNavigationLinkClicked({
-    ...commonProperties,
-    link_text: commonProperties.cta_text,
-    link_type: getLinkType(destinationUrl),
-    is_external: isExternalDestination(destinationUrl),
-  });
+  if (isHttpExternalDestination(destinationUrl)) {
+    trackEvent(TRACKING_EVENTS.externalLinkClicked, {
+      ...commonProperties,
+      link_text: commonProperties.cta_text,
+      link_type: getLinkType(destinationUrl),
+      is_external: true,
+    });
+  }
 
   const eventNames = classifyLink(destinationUrl, String(commonProperties.cta_text || ''));
   eventNames.forEach((eventName) => {
@@ -459,6 +468,23 @@ function isExternalDestination(destinationUrl: string) {
   }
 }
 
+function isHttpExternalDestination(destinationUrl: string) {
+  try {
+    const url = new URL(destinationUrl, window.location.origin);
+    return (url.protocol === 'http:' || url.protocol === 'https:') && url.origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
 function isDownload(destinationUrl: string) {
   return /\.(pdf|doc|docx|xls|xlsx|csv|zip)(\?|#|$)/i.test(destinationUrl);
+}
+
+function getThankYouType(pathname: string) {
+  if (pathname.includes('assessment')) return 'assessment';
+  if (pathname.includes('consultation')) return 'consultation';
+  if (pathname.includes('design-cohort-2')) return 'design_cohort_2_waitlist';
+  if (pathname.includes('waitlist')) return 'waitlist';
+  return 'thank_you';
 }

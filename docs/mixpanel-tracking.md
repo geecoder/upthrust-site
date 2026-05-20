@@ -33,7 +33,6 @@ The site does not crash if the token is missing. Tracking simply no-ops.
 ## Events Implemented
 
 - `Page Viewed`
-- `Navigation Link Clicked`
 - `Career Assessment Started`
 - `Career Assessment Submitted`
 - `Consultation Clicked`
@@ -53,7 +52,9 @@ The site does not crash if the token is missing. Tracking simply no-ops.
 - `Checkout Completed`
 - `WhatsApp Clicked`
 - `Email Clicked`
+- `External Link Clicked`
 - `LinkedIn Clicked`
+- `Thank You Page Viewed`
 - `Resource Viewed`
 - `Download Clicked`
 - `FAQ Expanded`
@@ -154,9 +155,10 @@ https://upthrust-site.vercel.app/?utm_source=test&utm_medium=qa&utm_campaign=mix
 ```
 
 4. Navigate between pages and click CTAs.
-5. Confirm `Page Viewed`, `Navigation Link Clicked`, and the matching CTA events appear.
+5. Confirm `Page Viewed`, `External Link Clicked` for outbound links, and the matching CTA events appear.
 6. Start the assessment and submit it without entering sensitive test data.
 7. Confirm `Form Started`, `Form Submitted`, `Career Assessment Started`, and `Career Assessment Submitted` appear.
+8. Visit a thank-you URL and confirm `Thank You Page Viewed` appears.
 
 ## Adding Future Events
 
