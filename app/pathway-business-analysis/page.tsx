@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import BAWeeklyWork from '@/components/BAWeeklyWork';
+import { DocumentStackWrapper } from '@/components/Scene3D';
 
 export default function BAPathwayPage() {
   return (
@@ -8,27 +9,46 @@ export default function BAPathwayPage() {
       <section style={{
         paddingTop: 'clamp(80px, 12vw, 140px)',
         paddingBottom: 'clamp(64px, 8vw, 100px)',
+        position: 'relative', overflow: 'hidden',
       }}>
-        <div className="container">
-          <div style={{ maxWidth: 880 }}>
-            <div className="badge badge-open" style={{ marginBottom: 24 }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }}></span>
-              Cohort 1 · Open
+        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.35 }} />
+        <div className="container" style={{ position: 'relative' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="ba-hero-grid">
+            {/* Left: copy */}
+            <div>
+              <div className="badge badge-open" style={{ marginBottom: 24 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }} />
+                Cohort 1 · Open
+              </div>
+              <p className="eyebrow">The Business Analysis Pathway</p>
+              <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
+                Make the ambiguous
+                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> actionable.</span>
+              </h1>
+              <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 540 }}>
+                The BA pathway is for people who turn chaos into something a team can ship — eliciting requirements, mapping processes, writing BRDs that engineers actually use, and running UAT that catches what others miss.
+              </p>
+              <div style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+                <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Assessment First</Link>
+                <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
+              </div>
             </div>
-            <p className="eyebrow">The Business Analysis Pathway</p>
-            <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
-              Make the ambiguous
-              <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> actionable.</span>
-            </h1>
-            <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 620 }}>
-              The BA pathway is for people who turn chaos into something a team can ship. You'll learn to elicit requirements from stakeholders who do not know what they want, write BRDs that engineers actually use, map processes that surface hidden complexity, and run UAT that catches what others miss. The BA is the spine of every well-functioning product team.
-            </p>
-            <div style={{ marginTop: 40, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-              <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Assessment First</Link>
-              <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
+
+            {/* Right: 3D Document Stack */}
+            <div className="ba-hero-3d">
+              <DocumentStackWrapper height={380} />
+              <p style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+                Your BA artefact stack — what you'll build
+              </p>
             </div>
           </div>
         </div>
+        <style>{`
+          @media (max-width: 900px) {
+            .ba-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+            .ba-hero-3d { max-width: 480px; margin: 0 auto; }
+          }
+        `}</style>
       </section>
 
       {/* WHO IT'S FOR */}
@@ -199,87 +219,25 @@ export default function BAPathwayPage() {
         </div>
       </section>
 
-      {/* CTA — human touch */}
+      {/* CTA */}
       <section style={{ background: 'var(--ink)', padding: 'clamp(72px, 10vw, 120px) 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="ba-cta-grid">
-            {/* SVG illustration — process map + clipboard person */}
-            <div>
-              <svg viewBox="0 0 480 340" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', maxHeight: 280 }}>
-                <pattern id="ba-cta-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(250,247,241,0.06)" strokeWidth="0.5"/>
-                </pattern>
-                <rect width="480" height="340" fill="url(#ba-cta-grid)"/>
-
-                {/* Clipboard */}
-                <rect x="40" y="60" width="160" height="210" rx="3" fill="rgba(250,247,241,0.06)" stroke="rgba(250,247,241,0.18)" strokeWidth="1.5"/>
-                <rect x="80" y="50" width="80" height="20" rx="3" fill="rgba(250,247,241,0.15)" stroke="rgba(250,247,241,0.25)" strokeWidth="1"/>
-                {/* Clipboard lines */}
-                <rect x="60" y="90" width="120" height="7" rx="2" fill="rgba(250,247,241,0.3)"/>
-                <rect x="60" y="106" width="90" height="5" rx="2" fill="rgba(250,247,241,0.15)"/>
-                <rect x="60" y="118" width="110" height="5" rx="2" fill="rgba(250,247,241,0.15)"/>
-                {/* Checklist items */}
-                <rect x="60" y="140" width="10" height="10" rx="1" stroke="rgba(197,116,58,0.6)" strokeWidth="1.5"/>
-                <path d="M62 145 l3 3 l5-5" stroke="rgba(197,116,58,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <rect x="78" y="142" width="80" height="5" rx="2" fill="rgba(250,247,241,0.2)"/>
-                <rect x="60" y="162" width="10" height="10" rx="1" stroke="rgba(197,116,58,0.6)" strokeWidth="1.5"/>
-                <path d="M62 167 l3 3 l5-5" stroke="rgba(197,116,58,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <rect x="78" y="164" width="65" height="5" rx="2" fill="rgba(250,247,241,0.2)"/>
-                <rect x="60" y="184" width="10" height="10" rx="1" stroke="rgba(250,247,241,0.2)" strokeWidth="1.5"/>
-                <rect x="78" y="186" width="95" height="5" rx="2" fill="rgba(250,247,241,0.1)"/>
-
-                {/* Process flow map (right side) */}
-                {/* Node 1 */}
-                <rect x="260" y="50" width="80" height="36" rx="3" fill="rgba(197,116,58,0.15)" stroke="rgba(197,116,58,0.4)" strokeWidth="1.5"/>
-                <text x="300" y="73" fill="rgba(197,116,58,0.9)" fontFamily="sans-serif" fontSize="9" textAnchor="middle" fontWeight="600">REQUIREMENTS</text>
-                {/* Arrow down */}
-                <line x1="300" y1="86" x2="300" y2="108" stroke="rgba(250,247,241,0.25)" strokeWidth="1.5"/>
-                <path d="M295 106 l5 6 l5-6" stroke="rgba(250,247,241,0.25)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                {/* Node 2 */}
-                <rect x="260" y="110" width="80" height="36" rx="3" fill="rgba(250,247,241,0.06)" stroke="rgba(250,247,241,0.2)" strokeWidth="1.5"/>
-                <text x="300" y="133" fill="rgba(250,247,241,0.7)" fontFamily="sans-serif" fontSize="9" textAnchor="middle">ANALYSIS</text>
-                {/* Arrow down */}
-                <line x1="300" y1="146" x2="300" y2="168" stroke="rgba(250,247,241,0.25)" strokeWidth="1.5"/>
-                <path d="M295 166 l5 6 l5-6" stroke="rgba(250,247,241,0.25)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                {/* Node 3 */}
-                <rect x="260" y="170" width="80" height="36" rx="3" fill="rgba(250,247,241,0.06)" stroke="rgba(250,247,241,0.2)" strokeWidth="1.5"/>
-                <text x="300" y="193" fill="rgba(250,247,241,0.7)" fontFamily="sans-serif" fontSize="9" textAnchor="middle">DESIGN</text>
-                {/* Arrow down */}
-                <line x1="300" y1="206" x2="300" y2="228" stroke="rgba(250,247,241,0.25)" strokeWidth="1.5"/>
-                <path d="M295 226 l5 6 l5-6" stroke="rgba(250,247,241,0.25)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                {/* Node 4 */}
-                <rect x="260" y="230" width="80" height="36" rx="3" fill="rgba(250,247,241,0.06)" stroke="rgba(250,247,241,0.2)" strokeWidth="1.5"/>
-                <text x="300" y="253" fill="rgba(250,247,241,0.7)" fontFamily="sans-serif" fontSize="9" textAnchor="middle">UAT</text>
-
-                {/* Person silhouette on far right */}
-                <circle cx="430" cy="160" r="22" fill="rgba(250,247,241,0.85)"/>
-                <path d="M408 210 Q430 197 452 210 L458 280 L402 280 Z" fill="rgba(250,247,241,0.75)"/>
-                {/* Connection line from person to flow */}
-                <path d="M408 170 Q380 170 360 170" stroke="rgba(197,116,58,0.4)" strokeWidth="1" strokeDasharray="4 3"/>
-              </svg>
-            </div>
-
-            {/* Content */}
-            <div>
-              <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--amber-soft)', marginBottom: 20 }}>
-                Not sure yet?
-              </p>
-              <h2 className="display-m text-balance" style={{ color: 'var(--paper)', marginBottom: 20, fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}>
-                Is BA actually your fit? Let's find out.
-              </h2>
-              <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'rgba(250,247,241,0.75)', marginBottom: 32 }}>
-                Before committing, take the 8-minute Career Assessment. It compares your reflexes against PM, BA, and Design — and tells you, with evidence from your own answers, where you actually fit. The best BA practitioners often discover their instincts in the assessment before they can name them.
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-                <Link href="/assessment" className="btn btn-amber btn-arrow">Take the Assessment — 8 min</Link>
-                <Link href="/pathway-product-management" className="btn btn-secondary" style={{ background: 'transparent', color: 'var(--paper)', borderColor: 'rgba(250,247,241,0.3)' }}>
-                  Compare with PM →
-                </Link>
-              </div>
+          <div style={{ maxWidth: 640 }}>
+            <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--amber-soft)', marginBottom: 20 }}>Not sure yet?</p>
+            <h2 className="display-m text-balance" style={{ color: 'var(--paper)', marginBottom: 20, fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}>
+              Is BA actually your fit? Let's find out.
+            </h2>
+            <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'rgba(250,247,241,0.75)', marginBottom: 32 }}>
+              Before committing, take the 8-minute Career Assessment. It compares your reflexes against PM, BA, and Design — and tells you, with evidence from your own answers, where you actually fit. The best BA practitioners often discover their instincts in the assessment before they can name them.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+              <Link href="/assessment" className="btn btn-amber btn-arrow">Take the Assessment — 8 min</Link>
+              <Link href="/pathway-product-management" className="btn btn-secondary" style={{ background: 'transparent', color: 'var(--paper)', borderColor: 'rgba(250,247,241,0.3)' }}>
+                Compare with PM →
+              </Link>
             </div>
           </div>
         </div>
-        <style>{`@media (max-width: 860px) { section .ba-cta-grid { grid-template-columns: 1fr !important; } section .ba-cta-grid > div:first-child { display: none; } }`}</style>
       </section>
     </>
   );

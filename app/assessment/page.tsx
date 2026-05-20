@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { scenarios } from '@/lib/scenarios';
 import { calculateResult, getResultMeta, type Answer } from '@/lib/scoring';
 import { TALLY_FORMS, tallyDirectUrl } from '@/lib/config';
+import { AssessmentBrainWrapper } from '@/components/Scene3D';
 
 type Stage = 'intro' | 'lead' | 'scenario' | 'result';
 
@@ -135,44 +136,51 @@ export default function AssessmentPage() {
         {/* Hero */}
         <section style={{ paddingTop: 'clamp(80px, 12vw, 140px)', paddingBottom: 'clamp(60px, 8vw, 100px)', position: 'relative', overflow: 'hidden' }}>
           <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.4 }} />
-          <div className="container-narrow" style={{ position: 'relative' }}>
-            <p className="eyebrow">The Upthrust Career Assessment</p>
-            <h1 className="display-l text-balance" style={{ marginTop: 16 }}>
-              Discover how you actually
-              <span style={{ fontStyle: 'italic', color: 'var(--amber-deep)' }}> think about product work.</span>
-            </h1>
-            <p className="lede" style={{ marginTop: 24 }}>
-              Twelve scenarios. Real product situations — vague stakeholders, conflicting priorities, launches that didn't land. Each one reveals something about how you reason under pressure.
-            </p>
-            <p style={{ marginTop: 16, fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-              At the end you'll get a result that quotes your own answers back to you — not a generic personality type. Whether your reflexes point to PM, BA, or Design, you'll know exactly why.
-            </p>
+          <div className="container" style={{ position: 'relative' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="assessment-hero-grid">
+              {/* Left: copy */}
+              <div>
+                <p className="eyebrow">The Upthrust Career Assessment</p>
+                <h1 className="display-l text-balance" style={{ marginTop: 16 }}>
+                  Discover how you actually
+                  <span style={{ fontStyle: 'italic', color: 'var(--amber-deep)' }}> think about product work.</span>
+                </h1>
+                <p className="lede" style={{ marginTop: 24 }}>
+                  Twelve scenarios. Real product situations — vague stakeholders, conflicting priorities, launches that didn't land. Each one reveals something about how you reason under pressure.
+                </p>
+                <p style={{ marginTop: 16, fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+                  At the end you'll get a result that quotes your own answers back — not a generic type. Whether your reflexes point to PM, BA, or Design, you'll know exactly why.
+                </p>
 
-            {/* Stats row */}
-            <div style={{ marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, padding: '24px', background: 'var(--paper-soft)', border: '1px solid var(--paper-line)' }}>
-              {[
-                { value: '12', label: 'Scenarios' },
-                { value: '~8', label: 'Minutes' },
-                { value: '7', label: 'Result types' },
-              ].map(stat => (
-                <div key={stat.label} style={{ textAlign: 'center' }}>
-                  <p style={{ fontFamily: 'Fraunces, serif', fontSize: '2rem', fontWeight: 500, letterSpacing: '-0.03em', color: 'var(--ink)' }}>{stat.value}</p>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 4 }}>{stat.label}</p>
+                <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, padding: '20px', background: 'var(--paper-soft)', border: '1px solid var(--paper-line)' }}>
+                  {[{ value: '12', label: 'Scenarios' }, { value: '~8', label: 'Minutes' }, { value: '7', label: 'Result types' }].map(stat => (
+                    <div key={stat.label} style={{ textAlign: 'center' }}>
+                      <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.875rem', fontWeight: 500, letterSpacing: '-0.03em' }}>{stat.value}</p>
+                      <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 4 }}>{stat.label}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            <button onClick={() => setStage('lead')} className="btn btn-primary btn-arrow" style={{ marginTop: 36, fontSize: '1rem', padding: '16px 28px' }}>
-              Begin the Assessment
-            </button>
+                <button onClick={() => setStage('lead')} className="btn btn-primary btn-arrow" style={{ marginTop: 32, fontSize: '1rem', padding: '16px 28px' }}>
+                  Begin the Assessment
+                </button>
+              </div>
 
-            <div style={{ marginTop: 48, paddingTop: 32, borderTop: '1px solid var(--paper-line)' }}>
-              <p className="eyebrow" style={{ marginBottom: 10 }}>A note on honesty</p>
-              <p style={{ fontSize: '0.9375rem', color: 'var(--ink-soft)', lineHeight: 1.65, fontStyle: 'italic' }}>
-                Each scenario has three options that all sound smart. There is no obviously wrong answer — the differentiation is in <em>which</em> smart move you reach for first. Answer instinctively. The result is only useful if you don't game it.
-              </p>
+              {/* Right: 3D brain */}
+              <div className="assessment-3d">
+                <AssessmentBrainWrapper height={440} />
+                <p style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+                  PM · BA · Design — which is your fit?
+                </p>
+              </div>
             </div>
           </div>
+          <style>{`
+            @media (max-width: 860px) {
+              .assessment-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+              .assessment-3d { max-width: 420px; margin: 0 auto; }
+            }
+          `}</style>
         </section>
 
         {/* What to expect */}

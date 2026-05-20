@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import PMWeeklyWork from '@/components/PMWeeklyWork';
+import { RoadmapWrapper } from '@/components/Scene3D';
 
 export default function PMPathwayPage() {
   return (
@@ -8,27 +9,46 @@ export default function PMPathwayPage() {
       <section style={{
         paddingTop: 'clamp(80px, 12vw, 140px)',
         paddingBottom: 'clamp(64px, 8vw, 100px)',
+        position: 'relative', overflow: 'hidden',
       }}>
-        <div className="container">
-          <div style={{ maxWidth: 880 }}>
-            <div className="badge badge-open" style={{ marginBottom: 24 }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }}></span>
-              Cohort 1 · Open
+        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.35 }} />
+        <div className="container" style={{ position: 'relative' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="pm-hero-grid">
+            {/* Left: copy */}
+            <div>
+              <div className="badge badge-open" style={{ marginBottom: 24 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }} />
+                Cohort 1 · Open
+              </div>
+              <p className="eyebrow">The Product Management Pathway</p>
+              <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
+                Learn to decide what to build,
+                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> and why.</span>
+              </h1>
+              <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 540 }}>
+                The PM pathway is for people who want to own the outcome of product work — not just the requirements, not just the design, but the decision itself. PRDs, roadmaps, and trade-offs.
+              </p>
+              <div style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+                <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Assessment First</Link>
+                <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
+              </div>
             </div>
-            <p className="eyebrow">The Product Management Pathway</p>
-            <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
-              Learn to decide what to build,
-              <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> and why.</span>
-            </h1>
-            <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 620 }}>
-              The PM pathway is for people who want to own the outcome of product work — not just the requirements, not just the design, but the decision itself. You'll learn to write PRDs that teams actually use, set success metrics that mean something, and defend trade-offs that protect what matters most.
-            </p>
-            <div style={{ marginTop: 40, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-              <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Assessment First</Link>
-              <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
+
+            {/* Right: 3D Roadmap */}
+            <div className="pm-hero-3d">
+              <RoadmapWrapper height={380} />
+              <p style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+                A real product roadmap — what you'll produce
+              </p>
             </div>
           </div>
         </div>
+        <style>{`
+          @media (max-width: 900px) {
+            .pm-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+            .pm-hero-3d { max-width: 480px; margin: 0 auto; }
+          }
+        `}</style>
       </section>
 
       {/* WHO IT'S FOR */}
@@ -229,32 +249,9 @@ export default function PMPathwayPage() {
       <section style={{ background: 'var(--ink)', padding: 'clamp(72px, 10vw, 120px) 0' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="pm-cta-grid">
-            {/* SVG illustration */}
-            <div>
-              <svg viewBox="0 0 480 340" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', maxHeight: 280 }}>
-                <pattern id="cta-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(250,247,241,0.06)" strokeWidth="0.5"/>
-                </pattern>
-                <rect width="480" height="340" fill="url(#cta-grid)"/>
-                {/* Person at laptop */}
-                <rect x="60" y="140" width="240" height="160" rx="4" fill="rgba(250,247,241,0.06)" stroke="rgba(250,247,241,0.15)" strokeWidth="1"/>
-                <rect x="60" y="140" width="240" height="20" rx="4" fill="rgba(250,247,241,0.1)"/>
-                {/* Screen content */}
-                <rect x="80" y="172" width="80" height="8" rx="2" fill="rgba(250,247,241,0.3)"/>
-                <rect x="80" y="186" width="120" height="5" rx="2" fill="rgba(250,247,241,0.15)"/>
-                <rect x="80" y="196" width="100" height="5" rx="2" fill="rgba(250,247,241,0.15)"/>
-                <rect x="80" y="216" width="160" height="40" rx="2" fill="rgba(197,116,58,0.15)" stroke="rgba(197,116,58,0.3)" strokeWidth="1"/>
-                <text x="160" y="241" fill="rgba(197,116,58,0.9)" fontFamily="serif" fontSize="11" fontStyle="italic" textAnchor="middle">PRD · v2.0</text>
-                {/* Person silhouette */}
-                <circle cx="360" cy="180" r="28" fill="rgba(250,247,241,0.2)"/>
-                <circle cx="360" cy="180" r="22" fill="rgba(250,247,241,0.9)"/>
-                <path d="M336 230 Q360 215 384 230 L392 300 L328 300 Z" fill="rgba(250,247,241,0.8)"/>
-                {/* Thinking lines */}
-                <circle cx="400" cy="140" r="4" fill="rgba(197,116,58,0.5)"/>
-                <circle cx="416" cy="120" r="6" fill="rgba(197,116,58,0.4)"/>
-                <circle cx="438" cy="96" r="10" fill="rgba(197,116,58,0.3)" stroke="rgba(197,116,58,0.5)" strokeWidth="1"/>
-                <text x="438" y="101" fill="rgba(197,116,58,0.9)" fontFamily="serif" fontSize="10" fontStyle="italic" textAnchor="middle">?</text>
-              </svg>
+            {/* Right: 3D */}
+            <div className="pm-cta-3d">
+              <RoadmapWrapper height={340} />
             </div>
 
             {/* Content */}

@@ -6,6 +6,7 @@ import WhyNowVisual from '@/components/WhyNowVisual';
 import WhoIsForSection from '@/components/WhoIsForSection';
 import CapstonesInteractive from '@/components/CapstonesInteractive';
 import FAQInteractive from '@/components/FAQInteractive';
+import { AcceleratorHeroWrapper } from '@/components/Scene3D';
 
 export default function AcceleratorPage() {
   return (
@@ -15,32 +16,42 @@ export default function AcceleratorPage() {
         paddingTop: 'clamp(80px, 12vw, 140px)',
         paddingBottom: 'clamp(64px, 8vw, 100px)',
         background: 'var(--paper)',
-        position: 'relative',
-        overflow: 'hidden',
+        position: 'relative', overflow: 'hidden',
       }}>
-        {/* Decorative grid */}
-        <div aria-hidden style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)',
-          backgroundSize: '120px 100%',
-          opacity: 0.4, pointerEvents: 'none',
-        }} />
+        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.4, pointerEvents: 'none' }} />
         <div className="container" style={{ position: 'relative' }}>
-          <div style={{ maxWidth: 880 }}>
-            <p className="eyebrow">The Upthrust Career Capability Accelerator</p>
-            <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
-              Twelve weeks. Real product work.
-              <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Evidence at the end.</span>
-            </h1>
-            <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 640 }}>
-              Cohort 1 is the first cohort of the new Upthrust capability-based program. Work through realistic product scenarios, build portfolio-grade deliverables, defend your decisions, and earn a Capability Passport that shows what you can actually do — not just what you attended.
-            </p>
-            <div style={{ marginTop: 40, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-              <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Career Assessment</Link>
-              <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="accel-hero-grid">
+            {/* Left: copy */}
+            <div>
+              <p className="eyebrow">The Upthrust Career Capability Accelerator</p>
+              <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
+                Twelve weeks. Real product work.
+                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Evidence at the end.</span>
+              </h1>
+              <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 560 }}>
+                Cohort 1 is the first cohort of the new Upthrust capability-based program. Work through realistic scenarios, build portfolio-grade deliverables, defend your decisions, and earn a Capability Passport that shows what you can actually do.
+              </p>
+              <div style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+                <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Career Assessment</Link>
+                <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
+              </div>
+            </div>
+
+            {/* Right: 3D orbiting capability illustration */}
+            <div className="accel-hero-3d">
+              <AcceleratorHeroWrapper height={460} />
+              <p style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+                PM · BA · UX — the capabilities you'll build
+              </p>
             </div>
           </div>
         </div>
+        <style>{`
+          @media (max-width: 900px) {
+            .accel-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+            .accel-hero-3d { max-width: 480px; margin: 0 auto; }
+          }
+        `}</style>
       </section>
 
       {/* AT A GLANCE */}

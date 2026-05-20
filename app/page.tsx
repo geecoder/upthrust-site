@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Testimonials from '@/components/Testimonials';
 import AnimatedHeritage from '@/components/AnimatedHeritage';
 import OperatingModelInteractive from '@/components/OperatingModelInteractive';
+import { PassportHeroWrapper } from '@/components/Scene3D';
 import FounderPhoto from '@/components/FounderPhoto';
 
 export default function Home() {
@@ -15,49 +16,70 @@ export default function Home() {
         paddingBottom: 'clamp(80px, 10vw, 140px)',
         overflow: 'hidden',
       }}>
-        {/* Decorative grid lines */}
         <div aria-hidden style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `linear-gradient(to right, var(--paper-line) 1px, transparent 1px)`,
+          position: 'absolute', inset: 0,
+          backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)',
           backgroundSize: '120px 100%',
-          opacity: 0.5,
-          pointerEvents: 'none',
+          opacity: 0.5, pointerEvents: 'none',
         }} />
 
         <div className="container" style={{ position: 'relative' }}>
-          <div style={{ maxWidth: 920 }}>
-            <p className="eyebrow rise-in">A Career Capability Platform · Cohort 1 opens this quarter</p>
-            <h1 className="display-xl rise-in delay-1 text-balance" style={{ marginTop: 20 }}>
-              Build evidence of what you can do.
-              <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Not another certificate.</span>
-            </h1>
-            <p className="lede rise-in delay-2 text-pretty" style={{ marginTop: 28, maxWidth: 620 }}>
-              Upthrust is a 12-week practical accelerator for ambitious professionals in Product Management and Business Analysis. You'll work through real product problems, build portfolio-grade deliverables, and earn a Capability Passport that shows employers what you can actually do.
-            </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="hero-grid">
+            {/* Left: copy */}
+            <div>
+              <p className="eyebrow rise-in">A Career Capability Platform · Cohort 1 opens this quarter</p>
+              <h1 className="display-xl rise-in delay-1 text-balance" style={{ marginTop: 20 }}>
+                Build evidence of what you can do.
+                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Not another certificate.</span>
+              </h1>
+              <p className="lede rise-in delay-2 text-pretty" style={{ marginTop: 28, maxWidth: 560 }}>
+                Upthrust is a 12-week practical accelerator for ambitious professionals in Product Management and Business Analysis. Real product work. Portfolio-grade deliverables. A Capability Passport at the end.
+              </p>
 
-            <div className="rise-in delay-3" style={{ marginTop: 40, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-              <Link href="/assessment" className="btn btn-primary btn-arrow">
-                Take the Career Assessment
-              </Link>
-              <Link href="/accelerator" className="btn btn-secondary">
-                Explore the Accelerator
-              </Link>
+              <div className="rise-in delay-3" style={{ marginTop: 40, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+                <Link href="/assessment" className="btn btn-primary btn-arrow">
+                  Take the Career Assessment
+                </Link>
+                <Link href="/accelerator" className="btn btn-secondary">
+                  Explore the Accelerator
+                </Link>
+              </div>
+
+              <div className="rise-in delay-4" style={{ marginTop: 48, display: 'flex', flexWrap: 'wrap', gap: 24, fontSize: '0.8125rem', color: 'var(--ink-muted)' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--moss)', flexShrink: 0 }} />
+                  Africa · UK · Canada · Global Diaspora
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--amber)', flexShrink: 0 }} />
+                  15–25 learners · Cohort 1
+                </span>
+              </div>
             </div>
 
-            <div className="rise-in delay-4" style={{ marginTop: 56, display: 'flex', flexWrap: 'wrap', gap: 32, alignItems: 'center', fontSize: '0.875rem', color: 'var(--ink-muted)' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--moss)' }}></span>
-                Built for Africa, the UK, Canada, Australia & global diaspora
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--amber)' }}></span>
-                15–25 learners · The first cohort of the new Accelerator
-              </span>
+            {/* Right: 3D Capability Passport */}
+            <div className="hero-3d" style={{ position: 'relative' }}>
+              <PassportHeroWrapper height={540} />
+              {/* Caption below */}
+              <p style={{
+                marginTop: 12, textAlign: 'center',
+                fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+                fontSize: '0.5625rem', letterSpacing: '0.16em', textTransform: 'uppercase',
+                color: 'var(--ink-muted)',
+              }}>
+                The Capability Passport — earned, not issued
+              </p>
             </div>
           </div>
         </div>
       </section>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .hero-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .hero-3d { max-width: 480px; margin: 0 auto; }
+        }
+      `}</style>
 
       {/* HERITAGE STRIP — animated count-up */}
       <AnimatedHeritage />
