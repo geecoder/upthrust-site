@@ -5,21 +5,50 @@ export default function AboutPage() {
     <>
       {/* HERO */}
       <section style={{
-        paddingTop: 'clamp(80px, 12vw, 140px)',
-        paddingBottom: 'clamp(64px, 8vw, 100px)',
+        paddingTop: 'clamp(72px, 10vw, 120px)',
+        paddingBottom: 0,
+        position: 'relative', overflow: 'hidden',
       }}>
-        <div className="container">
-          <div style={{ maxWidth: 880 }}>
-            <p className="eyebrow">About Upthrust</p>
-            <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
-              Trained over 1,000 professionals.
-              <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Repositioned around what actually works.</span>
-            </h1>
-            <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 640 }}>
-              Upthrust has been training digital professionals globally since 2019. Cohort 1 of the new Career Capability Accelerator is the result of everything those years taught us about what learners actually need — and what the certificate model can't deliver.
-            </p>
+        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.4 }} />
+        <div className="container" style={{ position: 'relative' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="about-hero-grid">
+            <div style={{ paddingBottom: 'clamp(56px, 7vw, 90px)' }}>
+              <p className="eyebrow">About Upthrust</p>
+              <h1 className="display-xl text-balance" style={{ marginTop: 16 }}>
+                Trained 1,000+ professionals.
+                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Repositioned around what works.</span>
+              </h1>
+              <p className="lede" style={{ marginTop: 24, maxWidth: 500 }}>
+                Since 2019. Now rebuilt around capability and evidence — not certificates and content.
+              </p>
+            </div>
+
+            {/* Human image — Genesis or team moment */}
+            <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 400 }}>
+              <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
+                <img
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80&auto=format&fit=crop&crop=top"
+                  alt="Genesis Nneji Enwenyeokwu — founder of Upthrust, product leader and capability builder"
+                  className="hero-img"
+                  style={{ height: '100%', minHeight: 400 }}
+                />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,26,46,0.65) 0%, transparent 60%)' }} />
+                <div style={{ position: 'absolute', bottom: 20, left: 20, padding: '6px 14px', background: 'rgba(15,26,46,0.85)', backdropFilter: 'blur(8px)' }}>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-soft)' }}>
+                    Est. 2019 · 1,000+ trained globally
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        <style>{`
+          @media (max-width: 900px) {
+            .about-hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+            .about-hero-grid > div:last-child { min-height: 260px !important; height: 260px !important; }
+            .about-hero-grid > div:last-child > div { position: relative !important; height: 260px !important; border-radius: 0 !important; }
+          }
+        `}</style>
       </section>
 
       {/* HERITAGE STRIP */}

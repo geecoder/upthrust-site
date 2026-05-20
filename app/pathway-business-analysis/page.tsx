@@ -1,52 +1,63 @@
 import Link from 'next/link';
 import BAWeeklyWork from '@/components/BAWeeklyWork';
-import { DocumentStackWrapper } from '@/components/Scene3D';
 
 export default function BAPathwayPage() {
   return (
     <>
       {/* HERO */}
       <section style={{
-        paddingTop: 'clamp(80px, 12vw, 140px)',
-        paddingBottom: 'clamp(64px, 8vw, 100px)',
+        paddingTop: 'clamp(72px, 10vw, 120px)',
+        paddingBottom: 0,
         position: 'relative', overflow: 'hidden',
+        background: 'var(--paper)',
       }}>
         <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.35 }} />
         <div className="container" style={{ position: 'relative' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="ba-hero-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="ba-hero-grid">
             {/* Left: copy */}
-            <div>
-              <div className="badge badge-open" style={{ marginBottom: 24 }}>
+            <div style={{ paddingBottom: 'clamp(56px, 7vw, 90px)' }}>
+              <div className="badge badge-open" style={{ marginBottom: 20 }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }} />
                 Cohort 1 · Open
               </div>
               <p className="eyebrow">The Business Analysis Pathway</p>
-              <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
+              <h1 className="display-xl text-balance" style={{ marginTop: 16 }}>
                 Make the ambiguous
                 <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> actionable.</span>
               </h1>
-              <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 540 }}>
-                The BA pathway is for people who turn chaos into something a team can ship — eliciting requirements, mapping processes, writing BRDs that engineers actually use, and running UAT that catches what others miss.
+              <p className="lede" style={{ marginTop: 24, maxWidth: 520 }}>
+                Turn chaos into clarity. Elicit requirements, map processes, write BRDs that ship, and run UAT that catches what others miss. The BA is the spine of every well-functioning product team.
               </p>
-              <div style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+              <div className="btn-row-mobile" style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
                 <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Assessment First</Link>
                 <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
               </div>
             </div>
 
-            {/* Right: 3D Document Stack */}
-            <div className="ba-hero-3d">
-              <DocumentStackWrapper height={380} />
-              <p style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
-                Your BA artefact stack — what you'll build
-              </p>
+            {/* Right: human image — BA professional mapping a process */}
+            <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 440 }} className="ba-hero-3d">
+              <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
+                <img
+                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80&auto=format&fit=crop"
+                  alt="Business analyst facilitating a requirements workshop with stakeholders"
+                  className="hero-img"
+                  style={{ height: '100%', minHeight: 440 }}
+                />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,26,46,0.65) 0%, transparent 60%)', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', bottom: 20, left: 20, padding: '6px 14px', background: 'rgba(15,26,46,0.85)', backdropFilter: 'blur(8px)' }}>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-soft)' }}>
+                    From ambiguity to clarity
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <style>{`
           @media (max-width: 900px) {
-            .ba-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-            .ba-hero-3d { max-width: 480px; margin: 0 auto; }
+            .ba-hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+            .ba-hero-3d { min-height: 280px !important; height: 280px !important; }
+            .ba-hero-3d > div { position: relative !important; height: 280px !important; border-radius: 0 !important; }
           }
         `}</style>
       </section>

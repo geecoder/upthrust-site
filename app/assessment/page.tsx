@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { scenarios } from '@/lib/scenarios';
 import { calculateResult, getResultMeta, type Answer } from '@/lib/scoring';
 import { TALLY_FORMS, tallyDirectUrl } from '@/lib/config';
-import { AssessmentBrainWrapper } from '@/components/Scene3D';
 
 type Stage = 'intro' | 'lead' | 'scenario' | 'result';
 
@@ -166,12 +165,31 @@ export default function AssessmentPage() {
                 </button>
               </div>
 
-              {/* Right: 3D brain */}
-              <div className="assessment-3d">
-                <AssessmentBrainWrapper height={440} />
-                <p style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
-                  PM · BA · Design — which is your fit?
-                </p>
+              {/* Right: human image — person thinking/reflecting on career */}
+              <div className="assessment-3d" style={{ position: 'relative', height: 440, overflow: 'hidden', borderRadius: 4 }}>
+                <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0 }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=80&auto=format&fit=crop&crop=top"
+                    alt="Professional reflecting on their product career direction"
+                    className="hero-img"
+                    style={{ height: '100%' }}
+                  />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,26,46,0.7) 0%, transparent 60%)' }} />
+                  {/* PM / BA / Design label cards */}
+                  <div style={{ position: 'absolute', bottom: 20, left: 0, right: 0, display: 'flex', gap: 8, justifyContent: 'center' }}>
+                    {['Product Management', 'Business Analysis', 'Product Design'].map((label, i) => (
+                      <div key={label} style={{
+                        padding: '5px 10px',
+                        background: i === 0 ? 'var(--ink)' : i === 1 ? 'var(--amber)' : 'rgba(15,26,46,0.6)',
+                        backdropFilter: 'blur(8px)',
+                      }}>
+                        <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--paper)', whiteSpace: 'nowrap' }}>
+                          {label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

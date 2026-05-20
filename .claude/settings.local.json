@@ -22,7 +22,10 @@
       "Bash(git push *)",
       "Bash(gh pr *)",
       "Bash(git checkout *)",
-      "Bash(git pull *)"
+      "Bash(git pull *)",
+      "Bash(Remove-Item -Recurse -Force \"c:\\\\Users\\\\genes\\\\upthrust-site\\\\components\\\\three\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item -Force \"c:\\\\Users\\\\genes\\\\upthrust-site\\\\components\\\\Scene3D.tsx\" -ErrorAction SilentlyContinue)",
+      "Bash(Write-Host \"Done\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\genes\\upthrust-site"

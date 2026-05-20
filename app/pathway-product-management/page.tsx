@@ -1,52 +1,63 @@
 import Link from 'next/link';
 import PMWeeklyWork from '@/components/PMWeeklyWork';
-import { RoadmapWrapper } from '@/components/Scene3D';
 
 export default function PMPathwayPage() {
   return (
     <>
       {/* HERO */}
       <section style={{
-        paddingTop: 'clamp(80px, 12vw, 140px)',
-        paddingBottom: 'clamp(64px, 8vw, 100px)',
+        paddingTop: 'clamp(72px, 10vw, 120px)',
+        paddingBottom: 0,
         position: 'relative', overflow: 'hidden',
+        background: 'var(--paper)',
       }}>
         <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.35 }} />
         <div className="container" style={{ position: 'relative' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="pm-hero-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="pm-hero-grid">
             {/* Left: copy */}
-            <div>
-              <div className="badge badge-open" style={{ marginBottom: 24 }}>
+            <div style={{ paddingBottom: 'clamp(56px, 7vw, 90px)' }}>
+              <div className="badge badge-open" style={{ marginBottom: 20 }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }} />
                 Cohort 1 · Open
               </div>
               <p className="eyebrow">The Product Management Pathway</p>
-              <h1 className="display-xl text-balance" style={{ marginTop: 20 }}>
+              <h1 className="display-xl text-balance" style={{ marginTop: 16 }}>
                 Learn to decide what to build,
                 <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> and why.</span>
               </h1>
-              <p className="lede text-pretty" style={{ marginTop: 28, maxWidth: 540 }}>
-                The PM pathway is for people who want to own the outcome of product work — not just the requirements, not just the design, but the decision itself. PRDs, roadmaps, and trade-offs.
+              <p className="lede" style={{ marginTop: 24, maxWidth: 520 }}>
+                Own the product direction. Write PRDs that teams ship from. Set strategy. Manage trade-offs. The PM pathway builds practitioners, not attendees.
               </p>
-              <div style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+              <div className="btn-row-mobile" style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
                 <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Assessment First</Link>
                 <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
               </div>
             </div>
 
-            {/* Right: 3D Roadmap */}
-            <div className="pm-hero-3d">
-              <RoadmapWrapper height={380} />
-              <p style={{ marginTop: 8, textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
-                A real product roadmap — what you'll produce
-              </p>
+            {/* Right: human image — professional in a product strategy session */}
+            <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 440 }} className="pm-hero-3d">
+              <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
+                <img
+                  src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80&auto=format&fit=crop"
+                  alt="Product manager leading a strategy session with a team"
+                  className="hero-img"
+                  style={{ height: '100%', minHeight: 440 }}
+                />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,26,46,0.65) 0%, transparent 60%)', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', bottom: 20, left: 20, padding: '6px 14px', background: 'rgba(15,26,46,0.85)', backdropFilter: 'blur(8px)' }}>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-soft)' }}>
+                    Own the roadmap
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <style>{`
           @media (max-width: 900px) {
-            .pm-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-            .pm-hero-3d { max-width: 480px; margin: 0 auto; }
+            .pm-hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+            .pm-hero-3d { min-height: 280px !important; height: 280px !important; }
+            .pm-hero-3d > div { position: relative !important; height: 280px !important; border-radius: 0 !important; }
           }
         `}</style>
       </section>
@@ -249,9 +260,24 @@ export default function PMPathwayPage() {
       <section style={{ background: 'var(--ink)', padding: 'clamp(72px, 10vw, 120px) 0' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="pm-cta-grid">
-            {/* Right: 3D */}
-            <div className="pm-cta-3d">
-              <RoadmapWrapper height={340} />
+            {/* Right: human moment — professional at work */}
+            <div className="pm-cta-3d" style={{ position: 'relative', height: 340, overflow: 'hidden' }}>
+              <img
+                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&q=80&auto=format&fit=crop"
+                alt="Professional reviewing product work on a laptop"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'brightness(0.7) saturate(0.8)' }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(15,26,46,0.4) 0%, transparent 100%)' }} />
+              <div style={{
+                position: 'absolute', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                textAlign: 'center', padding: '20px 28px',
+                background: 'rgba(15,26,46,0.7)', backdropFilter: 'blur(12px)',
+                minWidth: 220,
+              }}>
+                <p style={{ fontFamily: 'Fraunces, serif', fontSize: '2.5rem', fontWeight: 500, letterSpacing: '-0.03em', color: 'var(--paper)', lineHeight: 1 }}>8</p>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-soft)', marginTop: 6 }}>Minutes to find out</p>
+              </div>
             </div>
 
             {/* Content */}

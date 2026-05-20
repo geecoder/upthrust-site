@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Testimonials from '@/components/Testimonials';
 import AnimatedHeritage from '@/components/AnimatedHeritage';
 import OperatingModelInteractive from '@/components/OperatingModelInteractive';
-import { PassportHeroWrapper } from '@/components/Scene3D';
 import FounderPhoto from '@/components/FounderPhoto';
 
 export default function Home() {
@@ -12,111 +11,87 @@ export default function Home() {
       {/* HERO */}
       <section style={{
         position: 'relative',
-        paddingTop: 'clamp(80px, 12vw, 160px)',
-        paddingBottom: 'clamp(80px, 10vw, 140px)',
+        paddingTop: 'clamp(72px, 10vw, 130px)',
+        paddingBottom: 0,
         overflow: 'hidden',
+        background: 'var(--paper)',
       }}>
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
           backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)',
           backgroundSize: '120px 100%',
-          opacity: 0.5, pointerEvents: 'none',
+          opacity: 0.4, pointerEvents: 'none',
         }} />
 
         <div className="container" style={{ position: 'relative' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="hero-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="hero-grid">
+
             {/* Left: copy */}
-            <div>
-              <p className="eyebrow rise-in">A Career Capability Platform · Cohort 1 opens this quarter</p>
-              <h1 className="display-xl rise-in delay-1 text-balance" style={{ marginTop: 20 }}>
-                Build evidence of what you can do.
-                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Not another certificate.</span>
+            <div style={{ paddingBottom: 'clamp(64px, 8vw, 100px)' }}>
+              <p className="eyebrow rise-in">Career Capability Platform · Cohort 1 · Starts June 6, 2026</p>
+              <h1 className="display-xl rise-in delay-1 text-balance" style={{ marginTop: 16 }}>
+                Build evidence.<br/>
+                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}>Not just credentials.</span>
               </h1>
-              <p className="lede rise-in delay-2 text-pretty" style={{ marginTop: 28, maxWidth: 560 }}>
-                Upthrust is a 12-week practical accelerator for ambitious professionals in Product Management and Business Analysis. Real product work. Portfolio-grade deliverables. A Capability Passport at the end.
+              <p className="lede rise-in delay-2" style={{ marginTop: 24, maxWidth: 480 }}>
+                A 12-week practical accelerator for Product Management and Business Analysis. Real work. Real portfolio. A Capability Passport employers can verify.
               </p>
 
-              <div className="rise-in delay-3" style={{ marginTop: 40, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+              <div className="rise-in delay-3 btn-row-mobile" style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
                 <Link href="/assessment" className="btn btn-primary btn-arrow">
-                  Take the Career Assessment
+                  Take the Assessment
                 </Link>
                 <Link href="/accelerator" className="btn btn-secondary">
-                  Explore the Accelerator
+                  Explore the Program
                 </Link>
               </div>
 
-              <div className="rise-in delay-4" style={{ marginTop: 48, display: 'flex', flexWrap: 'wrap', gap: 24, fontSize: '0.8125rem', color: 'var(--ink-muted)' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--moss)', flexShrink: 0 }} />
-                  Africa · UK · Canada · Global Diaspora
-                </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--amber)', flexShrink: 0 }} />
-                  15–25 learners · Cohort 1
-                </span>
-              </div>
-            </div>
-
-            {/* Right: 3D Capability Passport */}
-            <div className="hero-3d" style={{ position: 'relative' }}>
-              <PassportHeroWrapper height={540} />
-              {/* Caption below */}
-              <p style={{
-                marginTop: 12, textAlign: 'center',
-                fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-                fontSize: '0.5625rem', letterSpacing: '0.16em', textTransform: 'uppercase',
-                color: 'var(--ink-muted)',
+              {/* Trust row */}
+              <div className="rise-in delay-4" style={{
+                marginTop: 40,
+                display: 'flex', flexWrap: 'wrap', gap: 20,
+                paddingTop: 28, borderTop: '1px solid var(--paper-line)',
               }}>
-                The Capability Passport — earned, not issued
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .hero-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
-          .hero-3d { max-width: 480px; margin: 0 auto; }
-        }
-      `}</style>
-
-      {/* HERITAGE STRIP — animated count-up */}
-      <AnimatedHeritage />
-
-      {/* PROBLEM SECTION */}
-      <section style={{
-        background: 'var(--ink)',
-        color: 'var(--paper)',
-        padding: 'clamp(80px, 11vw, 140px) 0',
-      }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 80, alignItems: 'start' }} className="problem-grid">
-            <div>
-              <p className="eyebrow-light">The Premise</p>
-              <h2 className="display-l text-balance" style={{ marginTop: 20, color: 'var(--paper)' }}>
-                Most people don't have a learning problem.
-              </h2>
-              <h2 className="display-l text-balance" style={{ marginTop: 4, color: 'var(--amber-soft)', fontStyle: 'italic' }}>
-                They have a proof problem.
-              </h2>
+                {[
+                  { value: '1,000+', label: 'Trained globally' },
+                  { value: 'Since 2019', label: 'Heritage' },
+                  { value: 'PM + BA', label: 'Pathways open' },
+                ].map(item => (
+                  <div key={item.label}>
+                    <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--ink)' }}>{item.value}</p>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 2 }}>{item.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div style={{ paddingTop: 12 }}>
-              <p className="lede" style={{ color: 'rgba(250, 247, 241, 0.82)', fontSize: '1.1875rem' }}>
-                You've watched the videos. You've finished the courses. You have certificates. And yet, when an employer asks <em style={{ color: 'var(--amber-soft)' }}>"can you show me something you've built?"</em> — you hesitate.
-              </p>
-              <p style={{ marginTop: 20, color: 'rgba(250, 247, 241, 0.7)', fontSize: '1.0625rem', lineHeight: 1.65 }}>
-                That hesitation isn't because you're not smart enough. It's because nothing you've done so far required you to <em>practise the work</em>. Watching a product manager explain their process is not the same as facing a vague stakeholder request and having to figure out what they really want.
-              </p>
-              <p style={{ marginTop: 20, color: 'rgba(250, 247, 241, 0.7)', fontSize: '1.0625rem', lineHeight: 1.65 }}>
-                Upthrust closes that gap. You won't just learn what product roles do. You'll do the work, defend your decisions, and walk out with evidence.
-              </p>
-
-              <div style={{ marginTop: 40, display: 'inline-flex', alignItems: 'center', gap: 12, paddingBottom: 4, borderBottom: '1.5px solid var(--amber-soft)' }}>
-                <Link href="/accelerator" style={{ color: 'var(--amber-soft)', fontWeight: 500 }}>
-                  See how the accelerator works →
-                </Link>
+            {/* Right: human image */}
+            <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 480 }} className="hero-img-side">
+              <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
+                {/* Unsplash — Black professional woman presenting/leading, Lagos/London context */}
+                <img
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80&auto=format&fit=crop"
+                  alt="A professional presenting her product work — the kind of capability Upthrust builds"
+                  className="hero-img"
+                  style={{ height: '100%', minHeight: 480 }}
+                />
+                {/* Amber overlay gradient at bottom */}
+                <div style={{
+                  position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
+                  background: 'linear-gradient(to top, rgba(15,26,46,0.7) 0%, transparent 100%)',
+                  pointerEvents: 'none',
+                }} />
+                {/* Caption tag */}
+                <div style={{
+                  position: 'absolute', bottom: 20, left: 20,
+                  padding: '6px 12px',
+                  background: 'rgba(15,26,46,0.85)',
+                  backdropFilter: 'blur(8px)',
+                }}>
+                  <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-soft)' }}>
+                    From potential → to proof
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -124,12 +99,67 @@ export default function Home() {
 
         <style>{`
           @media (max-width: 900px) {
-            section .problem-grid {
-              grid-template-columns: 1fr !important;
-              gap: 40px !important;
-            }
+            .hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+            .hero-img-side { min-height: 300px !important; height: 300px !important; position: relative !important; }
+            .hero-img-side > div { position: relative !important; height: 300px !important; border-radius: 0 !important; }
           }
         `}</style>
+      </section>
+
+      {/* HERITAGE STRIP — animated count-up */}
+      <AnimatedHeritage />
+
+      {/* PROBLEM SECTION — visual with quote cards, not text wall */}
+      <section style={{
+        background: 'var(--ink)', color: 'var(--paper)',
+        padding: 'clamp(72px, 10vw, 120px) 0',
+      }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="problem-grid">
+
+            {/* Left: big statement */}
+            <div>
+              <p className="eyebrow-light">The problem we solve</p>
+              <h2 className="display-l text-balance" style={{ marginTop: 16, color: 'var(--paper)' }}>
+                Most people don't have a learning problem.
+              </h2>
+              <h2 className="display-l text-balance" style={{ marginTop: 4, color: 'var(--amber-soft)', fontStyle: 'italic' }}>
+                They have a proof problem.
+              </h2>
+              <p className="lede" style={{ marginTop: 24, color: 'rgba(250,247,241,0.75)' }}>
+                Certificates say you attended. A Capability Passport shows what you can do.
+              </p>
+              <Link href="/accelerator" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                marginTop: 32, color: 'var(--amber-soft)', fontWeight: 600,
+                fontSize: '0.9375rem', borderBottom: '1px solid rgba(241,222,196,0.4)', paddingBottom: 2,
+              }}>
+                See how it works →
+              </Link>
+            </div>
+
+            {/* Right: visual quote cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {[
+                { before: '"I have 3 certificates but no one calls me back"', after: 'Portfolio + Capability Passport', icon: '📄' },
+                { before: '"I finished the course but can\'t explain what I built"', after: '12 artefacts defended under review', icon: '🛠️' },
+                { before: '"I don\'t know how to show my value in interviews"', after: '10 interview stories from real work', icon: '💬' },
+              ].map((item, i) => (
+                <div key={i} style={{
+                  background: 'rgba(250,247,241,0.05)',
+                  border: '1px solid rgba(250,247,241,0.1)',
+                  padding: '18px 20px',
+                  display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 12, alignItems: 'center',
+                }}>
+                  <p style={{ fontSize: '0.875rem', color: 'rgba(250,247,241,0.55)', fontStyle: 'italic', lineHeight: 1.5 }}>{item.before}</p>
+                  <span style={{ color: 'var(--amber)', fontSize: '1rem', flexShrink: 0 }}>→</span>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--amber-soft)', fontWeight: 600, lineHeight: 1.5 }}>{item.after}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <style>{`@media (max-width: 900px) { section .problem-grid { grid-template-columns: 1fr !important; gap: 40px !important; } }`}</style>
       </section>
 
       {/* OPERATING MODEL — interactive step-through */}
