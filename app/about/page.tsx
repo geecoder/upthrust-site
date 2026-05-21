@@ -24,7 +24,7 @@ export default function AboutPage() {
             </div>
 
             {/* Human image — Genesis or team moment */}
-            <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 400 }}>
+            <div className="about-hero-image" style={{ position: 'relative', alignSelf: 'stretch', minHeight: 400 }}>
               <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
                 <img
                   src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80&auto=format&fit=crop&crop=top"
@@ -45,8 +45,8 @@ export default function AboutPage() {
         <style>{`
           @media (max-width: 900px) {
             .about-hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
-            .about-hero-grid > div:last-child { min-height: 260px !important; height: 260px !important; }
-            .about-hero-grid > div:last-child > div { position: relative !important; height: 260px !important; border-radius: 0 !important; }
+            .about-hero-image { min-height: 260px !important; height: 260px !important; }
+            .about-hero-image .hero-img-wrap { position: relative !important; height: 260px !important; border-radius: 0 !important; }
           }
         `}</style>
       </section>

@@ -59,7 +59,7 @@ export default function AcceleratorPage() {
           @media (max-width: 900px) {
             .accel-hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
             .accel-hero-3d { min-height: 280px !important; height: 280px !important; }
-            .accel-hero-3d > div { position: relative !important; height: 280px !important; border-radius: 0 !important; }
+            .accel-hero-3d .hero-img-wrap { position: relative !important; height: 280px !important; border-radius: 0 !important; }
           }
         `}</style>
       </section>

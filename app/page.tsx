@@ -38,10 +38,10 @@ export default function Home() {
               </p>
 
               <div className="rise-in delay-3 btn-row-mobile" style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-                <Link href="/assessment" className="btn btn-primary btn-arrow">
+                <Link href="/assessment" className="btn btn-primary btn-arrow" data-analytics-event="Hero CTA Clicked">
                   Take the Assessment
                 </Link>
-                <Link href="/accelerator" className="btn btn-secondary">
+                <Link href="/accelerator" className="btn btn-secondary" data-analytics-event="Hero CTA Clicked">
                   Explore the Program
                 </Link>
               </div>
@@ -101,7 +101,7 @@ export default function Home() {
           @media (max-width: 900px) {
             .hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
             .hero-img-side { min-height: 300px !important; height: 300px !important; position: relative !important; }
-            .hero-img-side > div { position: relative !important; height: 300px !important; border-radius: 0 !important; }
+            .hero-img-side .hero-img-wrap { position: relative !important; height: 300px !important; border-radius: 0 !important; }
           }
         `}</style>
       </section>

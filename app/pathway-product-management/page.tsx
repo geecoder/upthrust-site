@@ -57,7 +57,7 @@ export default function PMPathwayPage() {
           @media (max-width: 900px) {
             .pm-hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
             .pm-hero-3d { min-height: 280px !important; height: 280px !important; }
-            .pm-hero-3d > div { position: relative !important; height: 280px !important; border-radius: 0 !important; }
+            .pm-hero-3d .hero-img-wrap { position: relative !important; height: 280px !important; border-radius: 0 !important; }
           }
         `}</style>
       </section>
@@ -300,7 +300,7 @@ export default function PMPathwayPage() {
             </div>
           </div>
         </div>
-        <style>{`@media (max-width: 860px) { section .pm-cta-grid { grid-template-columns: 1fr !important; } section .pm-cta-grid > div:first-child { display: none; } }`}</style>
+        <style>{`@media (max-width: 860px) { section .pm-cta-grid { grid-template-columns: 1fr !important; } section .pm-cta-grid .pm-cta-3d { display: none; } }`}</style>
       </section>
     </>
   );

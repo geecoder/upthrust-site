@@ -3,8 +3,9 @@
 ## What Was Installed
 
 - `mixpanel-browser`
-- A browser-only Mixpanel utility in `lib/mixpanel.ts`
-- A route, CTA, link, form, and conversion provider in `components/MixpanelProvider.tsx`
+- A browser-safe Mixpanel utility in `lib/analytics.ts`
+- A compatibility export for existing callers in `lib/mixpanel.ts`
+- A route, CTA, link, form, debug, and conversion provider in `components/AnalyticsProvider.tsx`
 
 ## Environment Variable
 
@@ -23,7 +24,10 @@ The site does not crash if the token is missing. Tracking simply no-ops.
 - `app/consultation/page.tsx`
 - `components/CapstonesInteractive.tsx`
 - `components/FAQInteractive.tsx`
+- `components/AnalyticsProvider.tsx`
 - `components/MixpanelProvider.tsx`
+- `docs/mixpanel-debug-checklist.md`
+- `lib/analytics.ts`
 - `components/Pricing.tsx`
 - `lib/mixpanel.ts`
 - `lib/tracking-events.ts`
@@ -33,25 +37,40 @@ The site does not crash if the token is missing. Tracking simply no-ops.
 ## Events Implemented
 
 - `Page Viewed`
-- `Career Assessment Started`
+- `Navigation Link Clicked`
+- `CTA Clicked`
+- `Mixpanel Debug Test Event`
+- `Hero CTA Clicked`
+- `Career Assessment CTA Clicked`
+- `Accelerator CTA Clicked`
+- `Consultation CTA Clicked`
+- `Accelerator Page Viewed`
+- `Accelerator Apply CTA Clicked`
+- `Accelerator Form Link Clicked`
+- `Assessment Page Viewed`
+- `Assessment Started`
+- `Assessment CTA Clicked`
+- `Consultation Page Viewed`
+- `Consultation Booking CTA Clicked`
+- `Pathway Page Viewed`
+- `Pathway Interest Clicked`
+- `External Form Opened`
+- `Calendly Opened`
 - `Career Assessment Submitted`
-- `Consultation Clicked`
 - `Consultation Submitted`
 - `Application Started`
 - `Application Submitted`
 - `Waitlist Joined`
 - `Contact Form Submitted`
-- `Accelerator Viewed`
 - `Program Viewed`
 - `Program Interest Clicked`
-- `Pathway Viewed`
 - `Pathway CTA Clicked`
 - `Pricing Viewed`
 - `Payment Intent Clicked`
 - `Checkout Started`
 - `Checkout Completed`
 - `WhatsApp Clicked`
-- `Email Clicked`
+- `Email Link Clicked`
 - `External Link Clicked`
 - `LinkedIn Clicked`
 - `Thank You Page Viewed`
@@ -109,13 +128,11 @@ CTA and link events include relevant context when available:
 
 UTM values are captured from the landing URL and persisted in `localStorage`:
 
-- `initial_utm_source`
-- `initial_utm_medium`
-- `initial_utm_campaign`
-- `initial_utm_content`
-- `initial_utm_term`
-- `initial_referrer`
-- `landing_page`
+- `first_utm_source`
+- `first_utm_medium`
+- `first_utm_campaign`
+- `first_utm_content`
+- `first_utm_term`
 
 Later events include this attribution even after the visitor navigates away from the landing page.
 
@@ -157,7 +174,7 @@ https://upthrust-site.vercel.app/?utm_source=test&utm_medium=qa&utm_campaign=mix
 4. Navigate between pages and click CTAs.
 5. Confirm `Page Viewed`, `External Link Clicked` for outbound links, and the matching CTA events appear.
 6. Start the assessment and submit it without entering sensitive test data.
-7. Confirm `Form Started`, `Form Submitted`, `Career Assessment Started`, and `Career Assessment Submitted` appear.
+7. Confirm `Form Started`, `Form Submitted`, `Assessment Started`, and `Career Assessment Submitted` appear.
 8. Visit a thank-you URL and confirm `Thank You Page Viewed` appears.
 
 ## Adding Future Events
@@ -165,7 +182,7 @@ https://upthrust-site.vercel.app/?utm_source=test&utm_medium=qa&utm_campaign=mix
 Use the shared helper:
 
 ```ts
-import { trackEvent } from '@/lib/mixpanel';
+import { trackEvent } from '@/lib/analytics';
 import { TRACKING_EVENTS } from '@/lib/tracking-events';
 
 trackEvent(TRACKING_EVENTS.programInterestClicked, {
