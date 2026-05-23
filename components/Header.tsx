@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 
 const ENROLLMENT_CLOSE = new Date('2026-06-03T23:59:00');
@@ -221,13 +222,26 @@ export default function Header() {
         justifyContent: 'space-between', height: 68,
       }}>
         {/* Logo */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
-            <path d="M4 22 L14 6 L24 22 M9 18 L19 18" stroke="var(--ink)" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter"/>
-          </svg>
-          <span style={{ fontFamily: 'Fraunces, serif', fontSize: '1.3125rem', fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--ink)' }}>
-            Upthrust
-          </span>
+        <Link
+          href="/"
+          onClick={() => setMobileOpen(false)}
+          style={{
+            display: 'block',
+            width: 'clamp(132px, 15vw, 152px)',
+            height: 60,
+            position: 'relative',
+            textDecoration: 'none',
+            flexShrink: 0,
+          }}
+        >
+          <Image
+            src="/brand/upthrust-logo.png"
+            alt="Upthrust"
+            fill
+            priority
+            sizes="(max-width: 980px) 132px, 152px"
+            style={{ objectFit: 'contain' }}
+          />
         </Link>
 
         {/* Desktop nav */}
