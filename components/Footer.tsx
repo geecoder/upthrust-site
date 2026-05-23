@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -70,15 +71,23 @@ export default function Footer() {
 
           {/* Brand column */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-              <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
-                <path d="M4 22 L14 6 L24 22 M9 18 L19 18"
-                  stroke="var(--paper)" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter"/>
-              </svg>
-              <span style={{
-                fontFamily: 'Fraunces, serif', fontSize: '1.3125rem',
-                fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--paper)',
-              }}>Upthrust</span>
+            <div style={{
+              width: 'clamp(132px, 15vw, 152px)',
+              height: 60,
+              position: 'relative',
+              marginBottom: 20,
+            }}>
+              <Image
+                src="/brand/upthrust-logo.png"
+                alt="Upthrust"
+                fill
+                sizes="(max-width: 560px) 132px, 152px"
+                style={{
+                  objectFit: 'contain',
+                  filter: 'brightness(0) invert(1)',
+                  opacity: 0.94,
+                }}
+              />
             </div>
             <p style={{ fontSize: '0.9375rem', lineHeight: 1.6, color: 'rgba(250,247,241,0.65)', maxWidth: 320 }}>
               A career capability platform for ambitious professionals in Product Management and Business Analysis. Built for global product careers.
