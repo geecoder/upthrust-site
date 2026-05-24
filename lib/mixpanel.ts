@@ -1,3 +1,5 @@
+'use client';
+
 import mixpanel from 'mixpanel-browser';
 import { initAnalytics } from '@/lib/analytics';
 
@@ -14,7 +16,10 @@ export {
   trackEvent,
   trackExternalLinkClick,
   trackPageView,
+  trackDebugEvent,
   trackTestEvent,
+  getAnalyticsDiagnostics,
+  sendMixpanelHttpFallbackTest,
 } from '@/lib/analytics';
 
 export function identifyUser(userId: string, properties = {}) {

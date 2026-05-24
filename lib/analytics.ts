@@ -1,3 +1,5 @@
+'use client';
+
 import mixpanel from 'mixpanel-browser';
 
 export type AnalyticsValue =
@@ -11,14 +13,41 @@ export type AnalyticsValue =
 
 export type AnalyticsProperties = Record<string, AnalyticsValue>;
 
-const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
-const MIXPANEL_DEBUG_FLAG = process.env.NEXT_PUBLIC_MIXPANEL_DEBUG;
-const WEBSITE_URL = 'https://upthrust-site.vercel.app';
-const FIRST_TOUCH_UTM_STORAGE_KEY = 'upthrust_first_touch_utm';
-const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+type MixpanelResidency = 'US' | 'EU' | 'IN';
 
-let initialized = false;
-let warnedMissingToken = false;
+export type AnalyticsDiagnostics = {
+  is_browser: boolean;
+  token_present: boolean;
+  token_prefix: string;
+  residency: MixpanelResidency;
+  api_host: string;
+  has_initialised: boolean;
+  current_url: string;
+};
+
+export type MixpanelHttpFallbackResult = {
+  ok: boolean;
+  status: number;
+  body: string;
+};
+
+declare global {
+  interface Window {
+    upthrustAnalyticsDiagnostics?: () => AnalyticsDiagnostics;
+    upthrustTrackTestEvent?: () => boolean;
+  }
+}
+
+const API_HOST_BY_RESIDENCY: Record<MixpanelResidency, string> = {
+  US: 'https://api-js.mixpanel.com',
+  EU: 'https://api-eu.mixpanel.com',
+  IN: 'https://api-in.mixpanel.com',
+};
+
+const FALLBACK_DISTINCT_ID_KEY = 'upthrust_mixpanel_debug_distinct_id';
+
+let hasInitialised = false;
+let hasWarnedMissingToken = false;
 
 function isBrowser() {
   return typeof window !== 'undefined';
@@ -28,90 +57,41 @@ function isDevelopment() {
   return process.env.NODE_ENV !== 'production';
 }
 
-function isMixpanelDebugEnabled() {
-  return isDevelopment() || MIXPANEL_DEBUG_FLAG === 'true' || MIXPANEL_DEBUG_FLAG === '1';
+function getToken() {
+  return process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || '';
 }
 
-function getEnvironment() {
-  return process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV || 'production';
+function getResidency(): MixpanelResidency {
+  const residency = (process.env.NEXT_PUBLIC_MIXPANEL_RESIDENCY || 'US').toUpperCase();
+
+  if (residency === 'EU') return 'EU';
+  if (residency === 'IN') return 'IN';
+  return 'US';
 }
 
-function getLocalStorage() {
-  if (!isBrowser()) return null;
-
-  try {
-    return window.localStorage;
-  } catch {
-    return null;
-  }
+function getApiHost() {
+  return API_HOST_BY_RESIDENCY[getResidency()];
 }
 
-function readFirstTouchUtm(): AnalyticsProperties {
-  const storage = getLocalStorage();
-  if (!storage) return {};
+function exposeDevelopmentHelpers() {
+  if (!isBrowser() || !isDevelopment()) return;
 
-  try {
-    const stored = storage.getItem(FIRST_TOUCH_UTM_STORAGE_KEY);
-    if (!stored) return {};
-
-    const parsed = JSON.parse(stored);
-    return parsed && typeof parsed === 'object' ? parsed : {};
-  } catch {
-    return {};
-  }
+  window.upthrustAnalyticsDiagnostics = getAnalyticsDiagnostics;
+  window.upthrustTrackTestEvent = trackDebugEvent;
 }
 
-function writeFirstTouchUtm(properties: AnalyticsProperties) {
-  const storage = getLocalStorage();
-  if (!storage) return;
+function logDevelopmentDiagnostics(label: string) {
+  if (!isDevelopment()) return;
 
-  try {
-    storage.setItem(FIRST_TOUCH_UTM_STORAGE_KEY, JSON.stringify(properties));
-  } catch {
-    // Analytics should never interrupt the website if storage is unavailable.
-  }
+  console.info(`[analytics] ${label}`);
+  console.table(getAnalyticsDiagnostics());
 }
 
-function readCurrentUtm(): AnalyticsProperties {
-  if (!isBrowser()) return {};
+function warnMissingToken() {
+  if (!isDevelopment() || hasWarnedMissingToken) return;
 
-  const params = new URLSearchParams(window.location.search);
-
-  return UTM_KEYS.reduce<AnalyticsProperties>((properties, key) => {
-    const value = params.get(key);
-    if (value) {
-      properties[key] = value;
-    }
-
-    return properties;
-  }, {});
-}
-
-export function captureUtmAttribution(): AnalyticsProperties {
-  if (!isBrowser()) return {};
-
-  const currentUtm = readCurrentUtm();
-  const firstTouchUtm = readFirstTouchUtm();
-  let changed = false;
-
-  UTM_KEYS.forEach((key) => {
-    const firstTouchKey = `first_${key}`;
-    const currentValue = currentUtm[key];
-
-    if (currentValue && !firstTouchUtm[firstTouchKey]) {
-      firstTouchUtm[firstTouchKey] = currentValue;
-      changed = true;
-    }
-  });
-
-  if (changed) {
-    writeFirstTouchUtm(firstTouchUtm);
-  }
-
-  return {
-    ...currentUtm,
-    ...firstTouchUtm,
-  };
+  hasWarnedMissingToken = true;
+  console.warn('[analytics] NEXT_PUBLIC_MIXPANEL_TOKEN is missing. Mixpanel tracking is disabled.');
 }
 
 function getDefaultProperties(): AnalyticsProperties {
@@ -119,69 +99,87 @@ function getDefaultProperties(): AnalyticsProperties {
 
   return {
     app_name: 'Upthrust',
-    website_url: WEBSITE_URL,
-    environment: getEnvironment(),
-    page_path: window.location.pathname,
     page_url: window.location.href,
+    page_path: window.location.pathname,
     page_title: document.title,
-    search: window.location.search,
     referrer: document.referrer || '',
     timestamp: new Date().toISOString(),
-    ...captureUtmAttribution(),
+    residency: getResidency(),
+    api_host: getApiHost(),
   };
 }
 
-function warnMissingToken() {
-  if (!isDevelopment() || warnedMissingToken) return;
+function getFallbackDistinctId() {
+  if (!isBrowser()) return 'server';
 
-  warnedMissingToken = true;
-  console.warn('[analytics] Mixpanel token missing. Set NEXT_PUBLIC_MIXPANEL_TOKEN to enable tracking.');
+  try {
+    if (hasInitialised) {
+      return mixpanel.get_distinct_id();
+    }
+  } catch {
+    // Fall back to a local debug id below.
+  }
+
+  try {
+    const existingId = window.localStorage.getItem(FALLBACK_DISTINCT_ID_KEY);
+    if (existingId) return existingId;
+
+    const newId = window.crypto?.randomUUID?.() || `debug_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    window.localStorage.setItem(FALLBACK_DISTINCT_ID_KEY, newId);
+    return newId;
+  } catch {
+    return `debug_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+  }
 }
 
-function logTrackedEvent(eventName: string, properties: AnalyticsProperties) {
-  if (!isDevelopment()) return;
+function toBase64(value: string) {
+  const bytes = new TextEncoder().encode(value);
+  let binary = '';
 
-  console.info('[analytics] Mixpanel event attempted', {
-    event_name: eventName,
-    properties,
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
   });
+
+  return window.btoa(binary);
 }
 
 export function initAnalytics() {
   if (!isBrowser()) return false;
-  if (initialized) return true;
 
-  if (!MIXPANEL_TOKEN) {
+  exposeDevelopmentHelpers();
+
+  if (hasInitialised) return true;
+
+  const token = getToken();
+  if (!token) {
     warnMissingToken();
     return false;
   }
 
   try {
-    captureUtmAttribution();
-    mixpanel.init(MIXPANEL_TOKEN, {
-      debug: isMixpanelDebugEnabled(),
+    mixpanel.init(token, {
+      debug: process.env.NODE_ENV !== 'production',
       track_pageview: false,
       persistence: 'localStorage',
+      api_host: getApiHost(),
       ignore_dnt: false,
     });
-    initialized = true;
+
+    hasInitialised = true;
+    logDevelopmentDiagnostics('Mixpanel initialised');
+    return true;
   } catch (error) {
     if (isDevelopment()) {
       console.warn('[analytics] Mixpanel failed to initialise.', error);
+      console.table(getAnalyticsDiagnostics());
     }
 
     return false;
   }
-
-  return true;
 }
 
-export function isAnalyticsEnabled() {
-  return isBrowser() && Boolean(MIXPANEL_TOKEN) && initialized;
-}
-
-export function trackEvent(eventName: string, properties: AnalyticsProperties = {}) {
-  if (!isBrowser() || !eventName) return false;
+export function trackEvent(name: string, properties: AnalyticsProperties = {}) {
+  if (!isBrowser() || !name) return false;
   if (!initAnalytics()) return false;
 
   const eventProperties = {
@@ -189,9 +187,30 @@ export function trackEvent(eventName: string, properties: AnalyticsProperties = 
     ...properties,
   };
 
-  logTrackedEvent(eventName, eventProperties);
-  mixpanel.track(eventName, eventProperties);
-  return true;
+  try {
+    mixpanel.track(name, eventProperties);
+
+    if (isDevelopment()) {
+      console.info('[analytics] Mixpanel event sent', {
+        event_name: name,
+        api_host: getApiHost(),
+        residency: getResidency(),
+      });
+    }
+
+    return true;
+  } catch (error) {
+    if (isDevelopment()) {
+      console.warn('[analytics] Mixpanel event failed.', {
+        event_name: name,
+        api_host: getApiHost(),
+        residency: getResidency(),
+        error,
+      });
+    }
+
+    return false;
+  }
 }
 
 export function trackPageView(pathname: string, properties: AnalyticsProperties = {}) {
@@ -199,6 +218,90 @@ export function trackPageView(pathname: string, properties: AnalyticsProperties 
     page_path: pathname,
     ...properties,
   });
+}
+
+export function trackDebugEvent() {
+  if (!isBrowser()) return false;
+
+  return trackEvent('Mixpanel Debug Test Event', {
+    source: 'debug_page',
+    page_path: window.location.pathname,
+    timestamp: new Date().toISOString(),
+    api_host: getApiHost(),
+    residency: getResidency(),
+  });
+}
+
+export function getAnalyticsDiagnostics(): AnalyticsDiagnostics {
+  const token = getToken();
+
+  return {
+    is_browser: isBrowser(),
+    token_present: Boolean(token),
+    token_prefix: token ? token.slice(0, 4) : '',
+    residency: getResidency(),
+    api_host: getApiHost(),
+    has_initialised: hasInitialised,
+    current_url: isBrowser() ? window.location.href : '',
+  };
+}
+
+export async function sendMixpanelHttpFallbackTest(): Promise<MixpanelHttpFallbackResult> {
+  if (!isBrowser()) {
+    return { ok: false, status: 0, body: 'Not running in a browser.' };
+  }
+
+  const token = getToken();
+  if (!token) {
+    warnMissingToken();
+    return { ok: false, status: 0, body: 'NEXT_PUBLIC_MIXPANEL_TOKEN is missing.' };
+  }
+
+  const apiHost = getApiHost();
+  const payload = {
+    event: 'Mixpanel HTTP Fallback Test',
+    properties: {
+      token,
+      distinct_id: getFallbackDistinctId(),
+      source: 'http_fallback',
+      time: Math.floor(Date.now() / 1000),
+      page_url: window.location.href,
+      residency: getResidency(),
+      api_host: apiHost,
+    },
+  };
+
+  try {
+    const response = await fetch(`${apiHost}/track`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+      body: new URLSearchParams({
+        data: toBase64(JSON.stringify(payload)),
+      }).toString(),
+    });
+
+    return {
+      ok: response.ok,
+      status: response.status,
+      body: await response.text(),
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      status: 0,
+      body: error instanceof Error ? error.message : 'HTTP fallback request failed.',
+    };
+  }
+}
+
+export function isAnalyticsEnabled() {
+  return isBrowser() && hasInitialised;
+}
+
+export function captureUtmAttribution(): AnalyticsProperties {
+  return {};
 }
 
 export function trackCTAClick(properties: AnalyticsProperties = {}) {
@@ -210,11 +313,5 @@ export function trackExternalLinkClick(properties: AnalyticsProperties = {}) {
 }
 
 export function trackTestEvent() {
-  if (!isBrowser()) return false;
-
-  return trackEvent('Mixpanel Debug Test Event', {
-    source: 'manual_debug',
-    page_path: window.location.pathname,
-    timestamp: new Date().toISOString(),
-  });
+  return trackDebugEvent();
 }
