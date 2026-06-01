@@ -6,142 +6,120 @@ export default function AboutPage() {
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative min-h-[60vh] bg-navy flex items-center py-24 overflow-hidden">
-        <HeroSwirl variant="subtle" />
+      <section className="relative min-h-[55vh] bg-navy overflow-hidden flex items-center py-24">
+        <HeroSwirl />
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-6">About Upthrust</p>
-          <h1
-            className="font-serif text-white max-w-3xl text-balance"
-            style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', lineHeight: 1.08, letterSpacing: '-0.035em' }}
-          >
-            Built on a simple observation:
-            <br />
-            <span className="text-amber italic">
-              Professionals can do the work. They just can&rsquo;t prove it.
-            </span>
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-6">About Upthrust</p>
+          <h1 className="font-serif text-hero-md lg:text-hero text-white max-w-3xl leading-tight max-[768px]:text-hero-md">
+            Building a better way to<br />
+            <span className="text-amber">prove product career capability.</span>
           </h1>
+          <p className="text-paper/60 text-xl max-w-xl mt-6">
+            Upthrust exists to help ambitious professionals move from learning concepts to proving practical capability.
+          </p>
         </div>
       </section>
 
-      {/* ─── STATS STRIP ──────────────────────────────────────── */}
-      <section className="bg-navy border-t border-white/10 py-16">
+      {/* ─── STATS ────────────────────────────────────────────── */}
+      <section className="bg-white py-20 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-y-2 md:divide-y-0 md:divide-x divide-gray-100">
             {[
-              { num: '2019', label: 'Year Upthrust founded' },
-              { num: '1,000+', label: 'Professionals trained' },
-              { num: '4', label: 'Continents represented' },
-              { num: '2026', label: 'Strategic repositioning' },
-            ].map(stat => (
-              <div key={stat.label} className="text-center py-6 px-4">
-                <p className="font-serif text-4xl text-amber font-light tracking-tight">{stat.num}</p>
-                <p className="text-paper/50 text-xs mt-2 uppercase tracking-widest font-bold">{stat.label}</p>
+              ['1,000+', 'Professionals trained'],
+              ['Est. 2019', 'Years of experience'],
+              ['3', 'Continents served'],
+              ['2', 'Career pathways'],
+            ].map(([val, label]) => (
+              <div key={label} className="text-center py-6 md:py-0 px-4">
+                <p className="font-serif text-5xl text-navy mb-2 font-light tracking-tight">{val}</p>
+                <p className="text-ink/50 text-sm font-medium uppercase tracking-widest">{label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* DIVIDER */}
-      <div className="section-divider" />
-
       {/* ─── WHY REPOSITIONING ────────────────────────────────── */}
-      <section className="bg-paper py-24 lg:py-32">
+      <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-16">
             <div>
-              <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-4">Why now</p>
-              <h2 className="font-serif text-navy tracking-tight" style={{ fontSize: 'clamp(1.75rem, 3vw, 2rem)' }}>
-                The honest reason we&rsquo;re repositioning.
-              </h2>
+              <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">Why now</p>
+              <h2 className="font-serif text-h2 text-navy">The honest reason we&rsquo;re repositioning.</h2>
             </div>
             <div className="flex flex-col gap-5">
-              <p className="text-ink/80 text-lg leading-relaxed">
-                For years, we ran training programs the way most of the industry does — content delivery, projects, certificates.
-                People learned. Many got roles. Many did not.
+              <p className="text-ink-soft text-lg leading-relaxed">
+                For years, we ran training programs the way most of the industry does — content delivery, projects, certificates. People learned. Many got roles. Many did not.
               </p>
-              <p className="text-ink/60 text-base leading-relaxed">
-                The pattern we kept seeing: capable people with our certificate still struggled to show employers what they could do —
-                not because they hadn&rsquo;t learned, but because they&rsquo;d never been forced to practise under real conditions.
-                Meanwhile, employers stopped trusting certificates. The bar moved from &ldquo;what did you study?&rdquo; to
-                &ldquo;show me what you can do.&rdquo;
+              <p className="text-ink-soft text-base leading-relaxed">
+                The pattern we kept seeing: capable people with our certificate still struggled to show employers what they could do — not because they hadn&rsquo;t learned, but because they&rsquo;d never been forced to practise under real conditions.
               </p>
-              <p className="text-ink/60 text-base leading-relaxed">
-                So we rebuilt. The Career Capability Accelerator is the result — same team, same care for learners,
-                redesigned around what employers now reward.
+              <p className="text-ink-soft text-base leading-relaxed">
+                So we rebuilt. The Career Capability Accelerator is the result — same team, same care for learners, redesigned around what employers now reward.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* DIVIDER */}
-      <div className="section-divider" />
-
       {/* ─── FOUNDER FULL BIO ─────────────────────────────────── */}
-      <section className="bg-white py-24 lg:py-32">
+      <section className="bg-white py-24 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
 
-            {/* Photo column */}
-            <div>
-              <div className="relative inline-block w-full max-w-sm">
-                <div className="absolute -inset-3 bg-amber/10 rounded-3xl blur-xl" />
+            {/* Photo + credentials */}
+            <div className="flex justify-center lg:justify-start">
+              <div className="relative">
                 <Image
                   src="/images/founder-genesis.jpg"
                   alt="Genesis Nneji Enwenyeokwu — Founder, Upthrust"
                   width={480}
-                  height={600}
-                  className="relative rounded-2xl shadow-2xl object-cover ring-1 ring-amber/20 w-full"
-                  style={{ height: 560 }}
+                  height={580}
+                  className="rounded-2xl object-cover shadow-xl ring-1 ring-gray-100 max-w-sm w-full"
+                  style={{ height: 540 }}
                 />
                 <div className="absolute -bottom-5 -right-5 bg-navy rounded-2xl p-5 shadow-2xl border border-white/10">
                   <p className="text-amber text-xs font-bold tracking-widest uppercase mb-2">Credentials</p>
                   <p className="text-paper text-sm font-semibold">CBAP Certified</p>
                   <p className="text-paper text-sm font-semibold">MBA — UEL London</p>
-                  <p className="text-paper/50 text-xs mt-1">Product Lead · Est. 2019</p>
+                  <p className="text-paper/40 text-xs mt-1">Product Lead · Est. 2019</p>
                 </div>
               </div>
             </div>
 
-            {/* Bio column */}
+            {/* Bio */}
             <div>
-              <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-4">The Founder</p>
-              <h2 className="font-serif text-4xl text-navy mb-2 leading-tight tracking-tight">
-                Genesis Nneji Enwenyeokwu
-              </h2>
-              <p className="text-amber font-bold text-sm mb-8">CBAP · MBA · Product Lead · Facilitator</p>
+              <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">The Founder</p>
+              <h2 className="font-serif text-h2 text-navy mb-2">Genesis Nneji Enwenyeokwu</h2>
+              <p className="text-amber font-semibold text-sm mb-8">CBAP · MBA · Product Lead · Facilitator</p>
 
-              <div className="space-y-5 text-ink/75 text-base leading-relaxed">
+              <div className="space-y-5 text-ink-soft text-base leading-relaxed">
                 <p>
                   Genesis Nneji Enwenyeokwu is a CBAP-certified Business Analyst, Product Lead, facilitator, and digital
                   product practitioner with over a decade of experience across business analysis, product management,
                   business process automation, and digital product delivery.
                 </p>
                 <p>
-                  He has helped hundreds of professionals transition into business analysis and product careers, while also
-                  building and supporting B2B and B2C digital products across Nigeria, the UK, and the US.
+                  He has helped hundreds of professionals transition into business analysis and product careers, while
+                  building and supporting B2B and B2C digital products across Nigeria, the UK, and the US. His work
+                  spans financial services, fintech, government, NGOs, and consulting.
                 </p>
                 <p>
                   Upthrust was built from a pattern he kept seeing: talented professionals finishing courses, collecting
-                  certificates, and still struggling to show credible evidence of what they could actually do.
-                  The Career Capability Accelerator is the answer to that gap.
+                  certificates, and still struggling to show credible evidence of what they could actually do. The Career
+                  Capability Accelerator is the answer to that gap.
                 </p>
               </div>
 
-              <blockquote className="border-l-4 border-amber pl-6 mt-8 italic text-ink/60 text-lg leading-relaxed">
+              <blockquote className="border-l-4 border-amber pl-5 my-8 text-ink/65 italic text-lg leading-relaxed">
                 &ldquo;Capability that cannot be shown is capability that cannot be used.&rdquo;
               </blockquote>
 
-              <div className="grid grid-cols-3 gap-6 mt-10 pt-10 border-t border-ink/10">
-                {[
-                  ['10+', 'Years experience'],
-                  ['1,000+', 'Professionals trained'],
-                  ['3', 'Continents'],
-                ].map(([val, label]) => (
-                  <div key={label}>
-                    <p className="font-serif text-3xl text-navy mb-1">{val}</p>
-                    <p className="text-ink/50 text-xs font-medium uppercase tracking-wide">{label}</p>
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gray-100">
+                {[['10+', 'Years exp.'], ['1,000+', 'Trained'], ['3', 'Continents']].map(([v, l]) => (
+                  <div key={l}>
+                    <p className="font-serif text-3xl text-navy mb-1">{v}</p>
+                    <p className="text-ink/40 text-xs uppercase tracking-wider">{l}</p>
                   </div>
                 ))}
               </div>
@@ -150,63 +128,58 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ─── WHAT WE STAND FOR ────────────────────────────────── */}
-      <section className="bg-paper py-24 lg:py-32">
+      {/* ─── WHAT WE BELIEVE ──────────────────────────────────── */}
+      <section className="bg-paper py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-4">What we stand for</p>
-          <h2 className="font-serif text-navy mb-12 tracking-tight" style={{ fontSize: 'clamp(1.75rem, 3vw, 2rem)' }}>
-            Three things we will not do.
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4 text-center">What sets us apart</p>
+          <h2 className="font-serif text-h2 text-navy text-center mb-12">Why Upthrust works.</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { num: '01', title: 'We are not a certificate factory.', body: 'Capability is the product. Evidence is the proof.' },
-              { num: '02', title: 'We are not an AI-only tool.', body: 'Human mentorship and judgement are central to Upthrust.' },
-              { num: '03', title: 'We are not a course marketplace.', body: 'PM, BA, and Design only — until each is proven.' },
-            ].map(p => (
-              <div key={p.num} className="bg-white rounded-2xl p-8 border border-paper/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <p className="text-amber font-bold text-sm mb-3">{p.num}</p>
-                <h3 className="font-serif text-xl text-navy mb-3 leading-tight tracking-tight">{p.title}</h3>
-                <p className="text-ink/60 text-sm leading-relaxed">{p.body}</p>
+              ['🎯', '100% Practical',           'No passive learning. Every week you build a real artefact.'],
+              ['👥', 'Small cohorts',             'Max 25 learners. Direct access to Genesis every session.'],
+              ['⚡', 'AI + human review',         'Instant AI feedback, then expert review within 48 hours.'],
+              ['📋', 'Portfolio-first',            'You graduate with 12 artefacts, not a participation certificate.'],
+              ['🌍', 'Global community',           'Learners across Africa, UK, Canada, Australia, and diaspora markets.'],
+              ['🏆', 'Verifiable credential',      'The Capability Passport has a unique ID employers can check.'],
+            ].map(([icon, title, desc]) => (
+              <div key={title} className="bg-white rounded-2xl p-7 border border-gray-100 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+                <span className="text-3xl mb-4 block">{icon}</span>
+                <p className="font-bold text-navy text-base mb-2">{title}</p>
+                <p className="text-ink-soft text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* DIVIDER */}
-      <div className="section-divider" />
+      {/* ─── MISSION STRIP ────────────────────────────────────── */}
+      <section className="bg-amber py-16 text-center">
+        <div className="max-w-3xl mx-auto px-6">
+          <p className="font-serif text-3xl text-white mb-4 leading-tight">
+            &ldquo;The future of work will reward people for what they can prove they can do — not just what they studied.&rdquo;
+          </p>
+          <p className="text-white/70 text-sm font-medium">The Upthrust Premise</p>
+        </div>
+      </section>
 
-      {/* ─── MISSION ──────────────────────────────────────────── */}
-      <section className="relative bg-navy py-24 lg:py-32 overflow-hidden">
-        <HeroSwirl variant="subtle" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-4">Our Mission</p>
-            <h2 className="font-serif text-4xl text-white mb-6 leading-tight tracking-tight">
-              To help professionals build capability, prove it, and open doors.
-            </h2>
-            <p className="text-paper/70 text-lg leading-relaxed mb-4">
-              Too many ambitious professionals are stuck between learning and opportunity. They have taken courses,
-              watched videos, and earned certificates, but still cannot show credible evidence of what they can do.
-            </p>
-            <p className="text-paper/70 text-lg leading-relaxed mb-10">
-              Upthrust was created to close that gap — for professionals across Africa, the UK, Canada, and the global diaspora.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                href="/assessment"
-                className="group inline-flex items-center gap-2 bg-amber hover:bg-amber-dark text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 shadow-lg shadow-amber/20"
-              >
-                Take the Assessment
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </Link>
-              <Link
-                href="/consultation"
-                className="inline-flex items-center border-2 border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200"
-              >
-                Book a Consultation
-              </Link>
-            </div>
+      {/* ─── CTA ──────────────────────────────────────────────── */}
+      <section className="bg-navy py-24">
+        <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">Our promise</p>
+          <h2 className="font-serif text-h2 text-white mb-6">
+            We don&rsquo;t guarantee jobs.<br />
+            <span className="text-amber">We guarantee readiness.</span>
+          </h2>
+          <p className="text-paper/60 text-lg mb-10 max-w-xl mx-auto">
+            What you can show, what you can defend, and the evidence that backs your story in any interview.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/assessment" className="bg-amber hover:bg-amber-dark text-white font-bold px-8 py-4 rounded-2xl transition-all text-base min-h-[44px] inline-flex items-center justify-center shadow-amber">
+              Take the Assessment →
+            </Link>
+            <Link href="/consultation" className="border-2 border-white/30 hover:border-white/60 text-white font-bold px-8 py-4 rounded-2xl transition-all text-base min-h-[44px] inline-flex items-center justify-center">
+              Book a Consultation
+            </Link>
           </div>
         </div>
       </section>

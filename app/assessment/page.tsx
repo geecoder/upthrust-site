@@ -215,16 +215,16 @@ export default function AssessmentPage() {
         </section>
 
         {/* How it works */}
-        <section className="bg-paper py-24">
+        <section className="bg-white py-24 border-t border-gray-100">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-8 text-center">What happens next</p>
+            <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-8 text-center">What happens next</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { num: '01', title: 'Tell us where to send your result', body: 'Name, email, and country. That\'s it.' },
                 { num: '02', title: 'Work through 12 real scenarios', body: 'Pick the response that feels most instinctive to you.' },
                 { num: '03', title: 'Get a personalised result', body: 'Your specific answers quoted back — with what each reveals.' },
               ].map(step => (
-                <div key={step.num} className="bg-white rounded-2xl p-8 border border-paper/50">
+                <div key={step.num} className="bg-white rounded-2xl p-8 border border-gray-100 shadow-card hover:shadow-card-hover transition-all duration-300">
                   <p className="font-serif text-4xl text-amber mb-4 leading-none">{step.num}</p>
                   <h3 className="font-bold text-navy text-lg mb-2">{step.title}</h3>
                   <p className="text-ink/70 text-sm leading-relaxed">{step.body}</p>

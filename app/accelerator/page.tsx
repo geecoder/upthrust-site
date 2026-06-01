@@ -1,33 +1,31 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { SectionLabel } from '@/components/ui/SectionLabel';
 import { HeroSwirl } from '@/components/HeroSwirl';
+import { FAQAccordion } from '@/components/ui/FAQAccordion';
 import Pricing from '@/components/Pricing';
 import CapstonesInteractive from '@/components/CapstonesInteractive';
 
 const WEEKS = [
-  { wk: 'Week 0',  title: 'Onboarding & Diagnostic',              desc: 'Baseline assessment, tool setup, pathway confirmation' },
-  { wk: 'Week 1',  title: 'Digital Product Foundations',           desc: 'How real product teams work across all roles' },
-  { wk: 'Week 2',  title: 'Problem Discovery',                     desc: 'Define user and business problems before jumping to solutions' },
-  { wk: 'Week 3',  title: 'Product Strategy & Business Context',   desc: 'Connect problems to goals, MVP scope, and success measures' },
-  { wk: 'Week 4',  title: 'Requirements & Scope',                  desc: 'Turn ideas into clear requirements and user stories' },
-  { wk: 'Week 5',  title: 'Journey, Workflow & Process Design',    desc: 'Map journeys, processes, workflows, and edge cases' },
-  { wk: 'Week 6',  title: 'UX & Product Design Foundations',       desc: 'Personas, journey maps, information architecture' },
-  { wk: 'Week 7',  title: 'Prototyping & Design Systems',          desc: 'Figma workflows, handoff norms, design system thinking' },
-  { wk: 'Week 8',  title: 'Agile Delivery & Backlog',              desc: 'Epics, stories, sprint flow, DoR and DoD' },
-  { wk: 'Week 9',  title: 'Stakeholder Management',                desc: 'Vague requests, scope pressure, trade-off conversations' },
-  { wk: 'Week 10', title: 'Testing, UAT & Launch Readiness',       desc: 'UAT scenarios, release checklists, go-live controls' },
-  { wk: 'Week 11', title: 'Metrics & Continuous Improvement',      desc: 'Define success, funnels, activation, feedback loops' },
-  { wk: 'Week 12', title: 'Capstone Defence & Portfolio Review',   desc: 'Present and defend. Capability Passport. Demo Day.' },
+  { wk: 'Week 0',  title: 'Onboarding & Diagnostic',            desc: 'Baseline assessment, tool setup, pathway confirmation' },
+  { wk: 'Week 1',  title: 'Digital Product Foundations',         desc: 'How real product teams work across all roles' },
+  { wk: 'Week 2',  title: 'Problem Discovery',                   desc: 'Define user and business problems before solutions' },
+  { wk: 'Week 3',  title: 'Product Strategy & Business Context', desc: 'Connect problems to goals, MVP scope, and measures' },
+  { wk: 'Week 4',  title: 'Requirements & Scope',                desc: 'Turn ideas into clear requirements and user stories' },
+  { wk: 'Week 5',  title: 'Journey, Workflow & Process Design',  desc: 'Map journeys, processes, workflows, and edge cases' },
+  { wk: 'Week 6',  title: 'UX & Product Design Foundations',     desc: 'Personas, journey maps, information architecture' },
+  { wk: 'Week 7',  title: 'Prototyping & Design Systems',        desc: 'Figma workflows, handoff norms, design system thinking' },
+  { wk: 'Week 8',  title: 'Agile Delivery & Backlog',            desc: 'Epics, stories, sprint flow, DoR and DoD' },
+  { wk: 'Week 9',  title: 'Stakeholder Management',              desc: 'Vague requests, scope pressure, trade-off conversations' },
+  { wk: 'Week 10', title: 'Testing, UAT & Launch Readiness',     desc: 'UAT scenarios, release checklists, go-live controls' },
+  { wk: 'Week 11', title: 'Metrics & Continuous Improvement',    desc: 'Define success, funnels, activation, feedback loops' },
+  { wk: 'Week 12', title: 'Capstone Defence & Portfolio Review', desc: 'Present and defend. Capability Passport. Demo Day.' },
 ];
 
-const RHYTHM = [
-  { n: '01', title: 'Concept Class',      meta: '90 min · Live',        desc: 'The weekly idea explained by a practitioner who has done the work.' },
-  { n: '02', title: 'Real-World Case',    meta: '30 min · Live',        desc: 'A realistic product scenario showing the concept in action.' },
-  { n: '03', title: 'Practical Lab',      meta: '60 min · Live',        desc: 'Guided hands-on session. You practise with a facilitator watching.' },
-  { n: '04', title: 'Weekly Assignment',  meta: 'Self-paced · 3–4 hrs', desc: 'A tangible deliverable that goes straight into your portfolio.' },
-  { n: '05', title: 'Feedback Review',    meta: 'Async · 1 hr',         desc: 'Structured feedback on your submission from facilitators.' },
-  { n: '06', title: 'Reflection & Prep',  meta: 'Self-paced · 30 min',  desc: 'Review what you learned and prepare for the next week.' },
+const ACCEL_FAQ = [
+  { q: 'What exactly is the Career Capability Accelerator?', a: 'A 12-week practical program for PM or BA — live sessions, weekly portfolio assignments, AI feedback, and expert review. Eligible learners earn a Capability Passport: a verifiable record of what you produced.' },
+  { q: 'How much time per week does this take?', a: 'Plan for 8–10 hours: 2 hrs live, 1 hr lab, 3–4 hrs assignment, 1 hr feedback. People doing less than 6 hours tend to fall behind by Week 3.' },
+  { q: 'What is the difference between Standard and Premium?', a: 'Standard: full program, templates, community, certificate. Premium adds: 1:1 portfolio review, mock interview, enhanced feedback, Capability Passport eligibility, Demo Day spotlight.' },
+  { q: 'Can I switch pathways mid-program?', a: 'In rare cases yes — within the first 2 weeks. After that, pathway-specific work has diverged. Take the assessment and consultation before enrolling.' },
+  { q: 'Do you offer payment plans?', a: 'Yes. Both Standard and Premium can be paid in two installments. Discuss your plan on the consultation call.' },
 ];
 
 export default function AcceleratorPage() {
@@ -35,78 +33,73 @@ export default function AcceleratorPage() {
     <>
       {/* ─── HERO ─────────────────────────────────────────────── */}
       <section className="relative bg-navy min-h-[80vh] flex items-center overflow-hidden">
-        <HeroSwirl variant="subtle" />
+        <HeroSwirl />
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12 lg:gap-16 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 bg-amber/10 border border-amber/20 rounded-full px-4 py-1.5 mb-6">
-                <span className="w-2 h-2 bg-amber rounded-full animate-pulse inline-block flex-shrink-0" />
-                <span className="text-amber text-xs font-bold tracking-widest uppercase">Career Capability Accelerator · Cohort 1</span>
+              <div className="inline-flex items-center gap-2 bg-amber/12 border border-amber/25 rounded-full px-4 py-1.5 mb-8">
+                <span className="w-2 h-2 bg-amber rounded-full animate-pulse flex-shrink-0" />
+                <span className="text-amber text-xs font-bold tracking-[0.15em] uppercase">Career Capability Accelerator · Cohort 1</span>
               </div>
-              <h1
-                className="font-serif text-white text-balance"
-                style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.08, letterSpacing: '-0.035em' }}
-              >
-                Twelve weeks. Real work.
-                <br />
-                <span className="text-amber italic">Evidence at the end.</span>
+              <h1 className="font-serif text-hero-md lg:text-hero text-white mb-5 max-[768px]:text-hero-md">
+                Twelve weeks. Real work.<br />
+                <span className="text-amber">Evidence at the end.</span>
               </h1>
-              <p className="text-paper/70 text-xl mt-5 max-w-lg leading-relaxed">
-                Build portfolio-grade deliverables. Earn a Capability Passport.
+              <p className="text-paper/65 text-xl leading-relaxed max-w-lg mb-8">
+                Build portfolio-grade deliverables. Defend your decisions. Earn a Capability Passport employers can verify.
               </p>
-              {/* Stat pills */}
-              <div className="flex flex-wrap gap-2 mt-6">
+              <div className="flex flex-wrap gap-2 mb-8">
                 {['12 weeks', '15–25 learners', '8–10 hrs/week', 'Live + async'].map(p => (
-                  <span key={p} className="bg-white/10 text-paper/80 px-4 py-2 rounded-full text-sm font-medium">
-                    {p}
-                  </span>
+                  <span key={p} className="bg-white/8 text-paper/70 text-xs font-medium px-3 py-1.5 rounded-full">{p}</span>
                 ))}
               </div>
-              <div className="flex flex-wrap gap-4 mt-8">
-                <Link href="/assessment"
-                  className="bg-amber hover:bg-amber-dark text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-                  Take the Assessment
+              <div className="flex flex-wrap gap-4">
+                <Link href="/assessment" className="group inline-flex items-center gap-2 bg-amber hover:bg-amber-dark text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-amber hover:shadow-lg hover:shadow-amber/30 text-base min-h-[44px]">
+                  Take the Assessment <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
-                <Link href="/consultation"
-                  className="border-2 border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-                  Book a Consultation
+                <Link href="/consultation" className="border-2 border-white/20 hover:border-white/50 text-white font-bold px-8 py-4 rounded-2xl transition-all min-h-[44px] inline-flex items-center">
+                  Book a Call
                 </Link>
               </div>
             </div>
 
             <div className="hidden lg:block">
-              <Image
-                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1000&q=85"
-                alt="Cohort learning session"
-                width={520}
-                height={480}
-                className="rounded-2xl object-cover shadow-2xl w-full"
-                style={{ height: 480 }}
-                priority
-              />
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                <p className="text-paper/40 text-xs font-bold tracking-widest uppercase mb-5">At a glance</p>
+                {[
+                  ['12', 'Weeks'],
+                  ['15–25', 'Learners per cohort'],
+                  ['8–10 hrs', 'Per week'],
+                  ['PM + BA', 'Pathways available'],
+                  ['Live + async', 'Format'],
+                ].map(([v, l]) => (
+                  <div key={l} className="flex justify-between items-center py-3 border-b border-white/8 last:border-0">
+                    <span className="text-paper/50 text-sm">{l}</span>
+                    <span className="text-paper font-semibold text-sm">{v}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── MARKET STATS ─────────────────────────────────────── */}
-      <section className="bg-paper py-24 lg:py-32">
+      {/* ─── WHY NOW ──────────────────────────────────────────── */}
+      <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel>Why now</SectionLabel>
-          <h2 className="font-serif text-display-sm text-navy mb-12">
-            The market is moving from credentials to capability.
-          </h2>
-          <div className="divide-y divide-ink/10">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-5">Why now</p>
+          <h2 className="font-serif text-h2 text-navy mb-12">The market is moving from credentials to capability.</h2>
+          <div className="divide-y divide-gray-100">
             {[
-              { pct: '85%', label: 'Employers prioritise portfolio over CV',    quote: '"Show me what you built"' },
-              { pct: '78%', label: 'Value capability demo over certification',   quote: '"Not what you studied"' },
-              { pct: '91%', label: 'Prefer capstone to course completion',       quote: '"Show me your capstone"' },
-              { pct: '83%', label: 'Want active builders not passive learners',  quote: '"Show me what you did"' },
+              { pct: '85%', label: 'Employers prioritise portfolio over CV',       quote: '"Show me what you built"' },
+              { pct: '78%', label: 'Value capability demo over certification',      quote: '"Not what you studied"' },
+              { pct: '91%', label: 'Prefer capstone to course completion',          quote: '"Show me your capstone"' },
+              { pct: '83%', label: 'Want active builders, not passive learners',    quote: '"Show me what you did"' },
             ].map(({ pct, label, quote }) => (
               <div key={pct} className="flex items-center gap-8 py-6">
-                <p className="font-serif text-5xl text-amber flex-shrink-0 w-28 leading-none">{pct}</p>
-                <p className="font-bold text-navy text-lg flex-1">{label}</p>
-                <p className="text-ink/50 text-sm italic hidden md:block">{quote}</p>
+                <p className="font-serif text-5xl text-amber font-light flex-shrink-0 w-28">{pct}</p>
+                <p className="font-semibold text-navy text-lg flex-1">{label}</p>
+                <p className="text-ink-soft text-sm italic hidden md:block">{quote}</p>
               </div>
             ))}
           </div>
@@ -114,22 +107,26 @@ export default function AcceleratorPage() {
       </section>
 
       {/* ─── WEEKLY RHYTHM ────────────────────────────────────── */}
-      <section className="relative bg-navy py-24 lg:py-32 overflow-hidden">
-        <HeroSwirl variant="subtle" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel light>How the accelerator works</SectionLabel>
-          <h2 className="font-serif text-display-sm text-white mb-12">
-            The weekly rhythm that turns concept into capability.
-          </h2>
-          <div className="divide-y divide-white/10">
-            {RHYTHM.map(({ n, title, meta, desc }) => (
+      <section className="bg-paper py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">How the accelerator works</p>
+          <h2 className="font-serif text-h2 text-navy mb-12">The weekly rhythm that turns concept into capability.</h2>
+          <div className="divide-y divide-gray-100">
+            {[
+              { n: '01', title: 'Concept Class',     meta: '90 min · Live',        desc: 'The weekly idea explained by a practitioner who has done the work.' },
+              { n: '02', title: 'Real-World Case',   meta: '30 min · Live',        desc: 'A realistic product scenario showing the concept in context.' },
+              { n: '03', title: 'Practical Lab',     meta: '60 min · Live',        desc: 'Guided hands-on session. You practise with a facilitator watching.' },
+              { n: '04', title: 'Weekly Assignment', meta: 'Self-paced · 3–4 hrs', desc: 'A tangible deliverable that goes straight into your portfolio.' },
+              { n: '05', title: 'Feedback Review',   meta: 'Async · 1 hr',         desc: 'Structured feedback from facilitators on your submission.' },
+              { n: '06', title: 'Reflection & Prep', meta: 'Self-paced · 30 min',  desc: 'Consolidate what you learned and prepare for next week.' },
+            ].map(({ n, title, meta, desc }) => (
               <div key={n} className="flex gap-6 py-5 items-start">
-                <p className="font-serif text-3xl text-amber/40 w-12 flex-shrink-0 leading-none">{n}</p>
+                <p className="font-serif text-3xl text-amber/50 w-10 flex-shrink-0 leading-none">{n}</p>
                 <div className="flex-1">
-                  <p className="font-bold text-white text-base">{title}</p>
-                  <p className="text-paper/60 text-sm mt-1">{desc}</p>
+                  <p className="font-bold text-navy text-base">{title}</p>
+                  <p className="text-ink-soft text-sm mt-1">{desc}</p>
                 </div>
-                <p className="text-paper/30 text-xs font-medium hidden sm:block flex-shrink-0">{meta}</p>
+                <p className="text-ink/30 text-xs font-medium hidden sm:block flex-shrink-0">{meta}</p>
               </div>
             ))}
           </div>
@@ -137,17 +134,19 @@ export default function AcceleratorPage() {
       </section>
 
       {/* ─── CURRICULUM ───────────────────────────────────────── */}
-      <section className="bg-paper py-24 lg:py-32">
+      <section className="bg-white py-24 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel>12-week curriculum</SectionLabel>
-          <h2 className="font-serif text-display-sm text-navy mb-12">Each week builds on the last.</h2>
-          <div className="rounded-2xl overflow-hidden border border-ink/10">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">12-week curriculum</p>
+          <h2 className="font-serif text-h2 text-navy mb-12">Each week builds on the last.</h2>
+          <div className="rounded-2xl overflow-hidden border border-gray-100">
             {WEEKS.map(({ wk, title, desc }, i) => (
-              <div key={wk}
-                className={`flex items-center gap-6 px-6 py-4 border-b border-ink/5 last:border-0 ${i % 2 === 0 ? 'bg-white' : 'bg-paper'}`}>
+              <div
+                key={wk}
+                className={`flex items-center gap-6 px-6 py-4 border-b border-gray-50 last:border-0 ${i % 2 === 0 ? 'bg-white' : 'bg-paper/40'}`}
+              >
                 <span className="text-xs font-bold text-amber uppercase tracking-widest w-16 flex-shrink-0">{wk}</span>
-                <p className="font-bold text-navy text-sm flex-1">{title}</p>
-                <p className="text-ink/50 text-xs text-right ml-auto hidden md:block max-w-xs">{desc}</p>
+                <p className="font-semibold text-navy text-sm flex-1">{title}</p>
+                <p className="text-ink/40 text-xs text-right ml-auto hidden md:block max-w-xs">{desc}</p>
               </div>
             ))}
           </div>
@@ -155,11 +154,10 @@ export default function AcceleratorPage() {
       </section>
 
       {/* ─── DELIVERABLES ─────────────────────────────────────── */}
-      <section className="relative bg-navy py-24 lg:py-32 overflow-hidden">
-        <HeroSwirl variant="subtle" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel light>What you walk out with</SectionLabel>
-          <h2 className="font-serif text-display-sm text-white mb-12">Evidence, not attendance.</h2>
+      <section className="bg-navy py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">What you walk out with</p>
+          <h2 className="font-serif text-h2 text-white mb-12">Evidence, not attendance.</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
@@ -188,40 +186,44 @@ export default function AcceleratorPage() {
       </section>
 
       {/* ─── PRICING ──────────────────────────────────────────── */}
-      <section className="bg-paper py-24 lg:py-32">
+      <section className="bg-white py-24 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel>Investment</SectionLabel>
-          <h2 className="font-serif text-display-sm text-navy mb-12">Choose your experience.</h2>
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">Investment</p>
+          <h2 className="font-serif text-h2 text-navy mb-12">Choose your experience.</h2>
           <Pricing />
         </div>
       </section>
 
       {/* ─── CAPSTONES ────────────────────────────────────────── */}
-      <section className="relative bg-navy py-24 lg:py-32 overflow-hidden">
-        <HeroSwirl variant="subtle" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel light>Cohort 1 capstone projects</SectionLabel>
-          <h2 className="font-serif text-display-sm text-white mb-4">Real briefs. Real industries.</h2>
-          <p className="text-paper/60 text-lg mb-12">Eight product briefs across fintech, health tech, logistics, and more.</p>
+      <section className="bg-paper py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">Cohort 1 capstone projects</p>
+          <h2 className="font-serif text-h2 text-navy mb-4">Real briefs. Real industries.</h2>
+          <p className="text-ink-soft text-lg mb-12">Eight product briefs across fintech, health tech, logistics, and more. You pick one.</p>
           <CapstonesInteractive />
         </div>
       </section>
 
-      {/* ─── FINAL CTA ────────────────────────────────────────── */}
+      {/* ─── FAQ ──────────────────────────────────────────────── */}
+      <section className="bg-white py-24 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-6 lg:px-8">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-3 text-center">FAQ</p>
+          <h2 className="font-serif text-h2 text-navy text-center mb-12">Common questions</h2>
+          <FAQAccordion items={ACCEL_FAQ} />
+        </div>
+      </section>
+
+      {/* ─── CTA ──────────────────────────────────────────────── */}
       <section className="bg-amber py-24">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="font-serif text-display-sm text-white mb-4">
-            Twelve weeks from now, you&rsquo;ll have something to show.
-          </h2>
-          <p className="text-white/80 text-lg mb-8">The first step is the Career Assessment — 8 minutes.</p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/assessment"
-              className="bg-white text-amber hover:bg-paper px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-              Take the Assessment
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h2 className="font-serif text-h2 text-white mb-4">Twelve weeks from now, you&rsquo;ll have something to show.</h2>
+          <p className="text-white/75 text-lg mb-10">The first step is the 8-minute Career Assessment.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/assessment" className="bg-white text-amber font-bold px-8 py-4 rounded-2xl hover:bg-amber-light transition-colors text-base min-h-[44px] inline-flex items-center justify-center">
+              Take the Assessment →
             </Link>
-            <Link href="/consultation"
-              className="border-2 border-white/40 hover:border-white text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-              Book a Consultation
+            <Link href="/consultation" className="border-2 border-white/30 text-white font-bold px-8 py-4 rounded-2xl hover:border-white/60 transition-colors text-base min-h-[44px] inline-flex items-center justify-center">
+              Book a Free Call
             </Link>
           </div>
         </div>

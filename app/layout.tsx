@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import HeaderStack from '@/components/HeaderStack';
+import { Navbar } from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AnalyticsProvider from '@/components/AnalyticsProvider';
 import { SITE } from '@/lib/config';
@@ -50,13 +50,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const region = await getRegionFromRequest();
 
   return (
-    <html lang="en" style={{ '--header-h': '108px' } as React.CSSProperties}>
+    <html lang="en" style={{ '--nav-offset': '108px' } as React.CSSProperties}>
       <body data-region={region}>
         <AnalyticsProvider />
-        {/* Fixed banner + navbar stack */}
-        <HeaderStack />
-        {/* Main content offset by banner (40px) + navbar (68px) = 108px */}
-        <main style={{ paddingTop: 'var(--header-h)' }}>
+        <Navbar />
+        {/* offset = banner (40px) + navbar (68px) = 108px; JS updates to 68px on banner dismiss */}
+        <main style={{ paddingTop: 'var(--nav-offset, 108px)' }}>
           {children}
         </main>
         <Footer />

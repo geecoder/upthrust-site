@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function AnnouncementBanner({ onDismiss }: Props) {
-  const [dismissed, setDismissed] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [daysLeft, setDaysLeft] = useState<number | null>(null);
   const [phase, setPhase] = useState<'enrolling' | 'closed' | 'started'>('enrolling');
 
@@ -22,52 +22,49 @@ export function AnnouncementBanner({ onDismiss }: Props) {
       if (now >= ENROLLMENT_CLOSE) { setPhase('closed'); return; }
       const diff = ENROLLMENT_CLOSE.getTime() - now.getTime();
       setDaysLeft(Math.ceil(diff / (1000 * 60 * 60 * 24)));
-      setPhase('enrolling');
     }
     update();
-    const interval = setInterval(update, 60000);
-    return () => clearInterval(interval);
+    const id = setInterval(update, 60000);
+    return () => clearInterval(id);
   }, []);
 
-  if (dismissed || phase === 'started') return null;
+  if (!visible || phase === 'started') return null;
 
-  function handleDismiss() {
-    setDismissed(true);
+  function dismiss() {
+    setVisible(false);
+    document.documentElement.style.setProperty('--nav-offset', '68px');
     onDismiss?.();
-    document.documentElement.style.setProperty('--header-h', '68px');
   }
 
   return (
-    <div className="relative bg-amber text-white py-2.5 px-4 text-center text-sm font-medium">
-      <span className="w-2 h-2 bg-white/80 rounded-full animate-pulse inline-block mr-2 align-middle" />
-      {phase === 'closed' ? (
-        <>
-          Cohort 1 enrollment closed · Starts <strong>June 6, 2026</strong>
-          <Link
-            href="/consultation"
-            className="ml-2 bg-white text-amber px-3 py-0.5 rounded-full text-xs font-bold hover:bg-white/90 transition-colors whitespace-nowrap"
-          >
-            Join Cohort 2 Waitlist →
-          </Link>
-        </>
-      ) : (
-        <>
-          Cohort 1 is open · Starts June 6, 2026
-          {daysLeft !== null && (
-            <> · <strong>{daysLeft === 1 ? '1 day' : `${daysLeft} days`}</strong> left</>
-          )}
-          <Link
-            href="/assessment"
-            className="ml-2 bg-white text-amber px-3 py-0.5 rounded-full text-xs font-bold hover:bg-white/90 transition-colors whitespace-nowrap"
-          >
-            Take the Assessment →
-          </Link>
-        </>
-      )}
+    <div className="bg-amber text-white text-sm font-medium py-2.5 px-4 text-center relative">
+      <span className="inline-flex items-center gap-2 flex-wrap justify-center">
+        <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse" />
+        {phase === 'closed' ? (
+          <>
+            <strong>Cohort 1 enrollment closed</strong>
+            <span className="text-white/80">· Starts June 6, 2026</span>
+          </>
+        ) : (
+          <>
+            <strong>Cohort 1 is open</strong>
+            <span className="text-white/80">
+              · Starts June 6, 2026
+              {daysLeft !== null && ` · ${daysLeft === 1 ? '1 day' : `${daysLeft} days`} left`}
+            </span>
+          </>
+        )}
+        <Link
+          href="/assessment"
+          className="ml-1 bg-white text-amber text-xs font-bold px-3 py-1 rounded-full hover:bg-amber-light transition-colors whitespace-nowrap"
+        >
+          Take the Assessment →
+        </Link>
+      </span>
       <button
-        onClick={handleDismiss}
-        aria-label="Dismiss banner"
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-xl leading-none w-8 h-8 flex items-center justify-center"
+        aria-label="Dismiss"
+        onClick={dismiss}
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-xl leading-none w-8 h-8 flex items-center justify-center"
       >
         ×
       </button>

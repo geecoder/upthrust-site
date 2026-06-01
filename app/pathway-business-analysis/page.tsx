@@ -1,74 +1,64 @@
 import Link from 'next/link';
-import { SectionLabel } from '@/components/ui/SectionLabel';
+import { HeroSwirl } from '@/components/HeroSwirl';
+import { FAQAccordion } from '@/components/ui/FAQAccordion';
+import { LottiePlayer } from '@/components/ui/LottiePlayer';
 
-const BA_WEEKS = [
-  { wk: 'Week 1',  title: 'Business Problem Framing',      desc: 'Scope a business problem from a vague brief' },
-  { wk: 'Week 2',  title: 'Stakeholder Analysis',          desc: 'Stakeholder map and RACI matrix' },
-  { wk: 'Week 3',  title: 'Business Case',                 desc: 'Justify the initiative with a structured business case' },
-  { wk: 'Week 4',  title: 'Requirements Elicitation',      desc: 'Structured elicitation notes from a stakeholder session' },
-  { wk: 'Week 5',  title: 'As-Is Process Map',             desc: 'Document the current state with all exceptions' },
-  { wk: 'Week 6',  title: 'To-Be Process Design',          desc: 'Redesigned future state with rationale' },
-  { wk: 'Week 7',  title: 'BRD — Part 1',                  desc: 'Functional requirements and business rules' },
-  { wk: 'Week 8',  title: 'BRD — Part 2 + User Stories',   desc: 'Non-functional requirements and INVEST user stories' },
-  { wk: 'Week 9',  title: 'Stakeholder Facilitation Sim',  desc: 'Handle conflicting requirements under pressure live' },
-  { wk: 'Week 10', title: 'UAT Planning',                   desc: 'UAT scenarios, test cases, and acceptance criteria' },
-  { wk: 'Week 11', title: 'Reporting Framework',           desc: 'Post-launch reporting and continuous improvement plan' },
-  { wk: 'Week 12', title: 'Capstone Defence',              desc: 'Present and defend your full BA case study' },
+const BA_FAQ = [
+  { q: 'Do I need a technical background?', a: 'No. You need to be comfortable with computers, able to write clearly, and willing to learn product vocabulary. Most successful learners come from operations, support, or analytical roles.' },
+  { q: 'How is this different from BA courses I\'ve seen?', a: 'You practise real BA work every week: elicitation sessions, writing BRDs, mapping processes, running UAT. By Week 12 you have 12 documented artefacts, not a certificate.' },
+  { q: 'I\'m already a junior BA — will this help me?', a: 'Yes. If your title says BA but your portfolio doesn\'t reflect it, this program will give you the documented evidence to grow into senior roles.' },
+  { q: 'What\'s the difference between Standard and Premium?', a: 'Standard gives you the full program, templates, and community. Premium adds 1:1 portfolio review, mock interview, enhanced feedback, and Capability Passport eligibility.' },
 ];
 
 export default function BAPathwayPage() {
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative bg-navy min-h-[80vh] flex items-center overflow-hidden">
-        <div aria-hidden className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
-          <div style={{ position:'absolute', width:'70vw', height:'70vw', maxWidth:900, maxHeight:900, top:'-20%', right:'-15%', background:'radial-gradient(ellipse at center, rgba(197,116,58,0.10) 0%, transparent 70%)', borderRadius:'40% 60% 70% 30% / 40% 50% 60% 50%', filter:'blur(40px)', animation:'swirlFloat1 12s ease-in-out infinite alternate' }} />
-          <div style={{ position:'absolute', width:'50vw', height:'50vw', maxWidth:700, maxHeight:700, bottom:'-10%', left:'-10%', background:'radial-gradient(ellipse at center, rgba(79,106,74,0.07) 0%, transparent 65%)', filter:'blur(50px)', animation:'swirlFloat2 16s ease-in-out infinite alternate' }} />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12 lg:gap-16 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-amber/10 border border-amber/20 rounded-full px-4 py-1.5 mb-6">
-                <span className="w-2 h-2 bg-amber rounded-full animate-pulse inline-block flex-shrink-0" />
-                <span className="text-amber text-xs font-bold tracking-widest uppercase">BA Pathway · Cohort 1 Open</span>
-              </div>
-              <h1
-                className="font-serif text-white text-balance"
-                style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.08, letterSpacing: '-0.035em' }}
-              >
-                Build evidence as a
-                <br />
-                <span className="text-amber italic">Business Analyst.</span>
-              </h1>
-              <p className="text-paper/70 text-xl mt-5 max-w-lg leading-relaxed">
-                Elicit requirements, map processes, and write BRDs that ship.
-              </p>
-              <div className="flex flex-wrap gap-4 mt-8">
-                <Link href="/assessment"
-                  className="bg-amber hover:bg-amber-dark text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-                  Take the Assessment First
-                </Link>
-                <Link href="/consultation"
-                  className="border-2 border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-                  Book a Consultation
-                </Link>
-              </div>
+      <section className="relative min-h-[75vh] bg-navy overflow-hidden flex items-center">
+        <HeroSwirl />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 bg-amber/12 border border-amber/25 rounded-full px-4 py-1.5 mb-8">
+              <span className="w-2 h-2 bg-amber rounded-full animate-pulse flex-shrink-0" />
+              <span className="text-amber text-xs font-bold tracking-[0.15em] uppercase">BA Pathway · Cohort 1 Open</span>
             </div>
+            <h1 className="font-serif text-hero-md lg:text-hero text-white mb-5 max-[768px]:text-hero-md">
+              Build evidence as a<br />
+              <span className="text-amber">Business Analyst.</span>
+            </h1>
+            <p className="text-paper/65 text-xl leading-relaxed max-w-lg mb-8">
+              Gain the skills, documentation discipline, and portfolio to land your first BA role or advance to senior level.
+            </p>
+            <div className="flex flex-wrap gap-4 mb-8">
+              <Link href="/assessment" className="group inline-flex items-center gap-2 bg-amber hover:bg-amber-dark text-white font-bold px-8 py-4 rounded-2xl transition-all text-base shadow-amber hover:shadow-lg hover:shadow-amber/30 min-h-[44px]">
+                Take the Assessment <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </Link>
+              <Link href="/consultation" className="border-2 border-white/20 hover:border-white/50 text-white font-bold px-8 py-4 rounded-2xl transition-all min-h-[44px] inline-flex items-center">
+                Book a Call
+              </Link>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {['12 weeks', '15–25 learners', '8–10 hrs/week', 'Live + async'].map(p => (
+                <span key={p} className="bg-white/8 text-paper/70 text-xs font-medium px-3 py-1.5 rounded-full">{p}</span>
+              ))}
+            </div>
+          </div>
 
-            {/* Deliverable preview card */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hidden lg:block">
-              <p className="text-paper/40 text-xs tracking-widest uppercase mb-6">What you&rsquo;ll build</p>
+          {/* Deliverable preview card */}
+          <div className="hidden lg:block">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
+              <p className="text-paper/40 text-xs font-bold tracking-widest uppercase mb-6">You&rsquo;ll build</p>
               {[
-                { icon: '📋', label: 'Full Business Requirements Doc' },
-                { icon: '🔄', label: 'As-Is & To-Be Process Maps' },
-                { icon: '✅', label: 'UAT Pack & Test Scenarios' },
-                { icon: '👥', label: 'User Stories with Acceptance Criteria' },
-                { icon: '🎯', label: 'BA Case Study' },
-                { icon: '🏆', label: 'Capability Passport (Premium)' },
-              ].map(({ icon, label }) => (
-                <div key={label} className="flex items-center gap-3 py-3 border-b border-white/10 last:border-0">
-                  <span className="text-xl flex-shrink-0">{icon}</span>
-                  <p className="text-paper/80 text-sm font-medium">{label}</p>
+                { icon: '📄', label: 'Full BRD',           desc: 'Functional + non-functional' },
+                { icon: '🔄', label: 'Process Maps',       desc: 'As-Is & To-Be' },
+                { icon: '✅', label: 'UAT Pack',            desc: 'Test scenarios & edge cases' },
+                { icon: '👥', label: 'Stakeholder Map',    desc: 'RACI & influence map' },
+                { icon: '🏆', label: 'Capstone Case Study', desc: 'Demo Day' },
+              ].map(item => (
+                <div key={item.label} className="flex items-center gap-3 py-3 border-b border-white/8 last:border-0">
+                  <span className="text-lg">{item.icon}</span>
+                  <span className="text-paper text-sm font-medium flex-1">{item.label}</span>
+                  <span className="text-paper/30 text-xs">{item.desc}</span>
                 </div>
               ))}
             </div>
@@ -76,106 +66,134 @@ export default function BAPathwayPage() {
         </div>
       </section>
 
-      {/* ─── WHO IT'S FOR ─────────────────────────────────────── */}
-      <section className="bg-paper py-24 lg:py-32">
+      {/* ─── WHAT YOU'LL LEARN ────────────────────────────────── */}
+      <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel>Who chooses BA</SectionLabel>
-          <h2 className="font-serif text-display-sm text-navy mb-12">You probably belong here if&hellip;</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              'You ask "what do you actually mean by that?" when given a vague requirement.',
-              'You believe the act of documenting reveals where the thinking is unfinished.',
-              'You see edge cases where most people only see the happy path.',
-              'You enjoy being the bridge between business and engineering.',
-              'You take satisfaction from a process map that captures every handoff.',
-            ].map((item, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 border border-paper/50">
-                <span className="text-amber font-bold text-sm">0{i + 1}</span>
-                <p className="text-ink/70 text-sm mt-2 leading-relaxed">{item}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div>
+              <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-5">What you&rsquo;ll learn</p>
+              <h2 className="font-serif text-h2 text-navy mb-10">Build the core BA skills that employers need.</h2>
+              <div>
+                {[
+                  ['Requirements Elicitation',    'Structure and run discovery sessions with vague stakeholders.'],
+                  ['Business Requirements Docs',   'Write BRDs that engineers and PMs can actually act on.'],
+                  ['Process Mapping & Analysis',   'Document current and future state with all exceptions captured.'],
+                  ['Stakeholder Management',       'Navigate conflicting priorities and build stakeholder buy-in.'],
+                  ['UAT & Quality Assurance',      'Design test scenarios that catch what others miss before go-live.'],
+                  ['Business Case Development',    'Justify initiatives with structured business cases that hold up to scrutiny.'],
+                ].map(([title, desc]) => (
+                  <div key={title} className="flex gap-5 py-5 border-b border-gray-100 last:border-0">
+                    <div className="w-6 h-6 rounded-full bg-amber/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-amber text-sm font-bold">✓</span>
+                    </div>
+                    <div>
+                      <p className="font-bold text-navy text-base mb-1">{title}</p>
+                      <p className="text-ink-soft text-sm leading-relaxed">{desc}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            <div className="hidden lg:flex justify-center items-start pt-16">
+              <LottiePlayer
+                src="https://lottie.host/e6f96dad-66bb-4e90-b3d8-b3b0cbf27e09/KBnXBWcXSd.lottie"
+                loop={true}
+                width={360}
+                height={360}
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ─── CURRICULUM ───────────────────────────────────────── */}
-      <section className="bg-navy py-24 lg:py-32">
+      {/* ─── WHAT'S INCLUDED ──────────────────────────────────── */}
+      <section className="bg-paper py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel light>BA-specific work</SectionLabel>
-          <h2 className="font-serif text-display-sm text-white mb-12">What you&rsquo;ll actually do — week by week.</h2>
-          <div className="rounded-2xl overflow-hidden border border-white/10">
-            {BA_WEEKS.map(({ wk, title, desc }, i) => (
-              <div key={wk}
-                className={`flex items-center gap-6 px-6 py-4 border-b border-white/5 last:border-0 ${i % 2 === 0 ? 'bg-white/5' : 'bg-white/3'}`}>
-                <span className="text-xs font-bold text-amber uppercase tracking-widest w-16 flex-shrink-0">{wk}</span>
-                <p className="font-bold text-paper text-sm flex-1">{title}</p>
-                <p className="text-paper/40 text-xs text-right ml-auto hidden md:block max-w-xs">{desc}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-5">What&rsquo;s included</p>
+              <h2 className="font-serif text-h2 text-navy mb-8">Everything you need to graduate job-ready.</h2>
+              <div className="space-y-0">
+                {[
+                  'Live sessions with Genesis — every week',
+                  'Weekly BA assignments with rubric scoring',
+                  'AI-powered instant feedback on submissions',
+                  'Expert human review within 48 hours',
+                  'Capability Passport (Premium tier)',
+                  'Cohort community access',
+                  'Career positioning support',
+                ].map(item => (
+                  <div key={item} className="flex gap-4 py-3.5 border-b border-ink/8 last:border-0">
+                    <span className="text-moss mt-0.5 flex-shrink-0">✓</span>
+                    <span className="text-ink-soft text-base">{item}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            <div className="bg-navy rounded-2xl p-8 text-paper">
+              <p className="text-amber text-xs font-bold tracking-widest uppercase mb-6">Program format</p>
+              <div className="space-y-4">
+                {[
+                  ['Duration',    '12 weeks'],
+                  ['Cohort size', '15–25 learners'],
+                  ['Weekly time', '8–10 hrs/week'],
+                  ['Format',      'Live + async'],
+                  ['Start date',  'June 6, 2026'],
+                ].map(([label, value]) => (
+                  <div key={label} className="flex justify-between border-b border-white/10 pb-4 last:border-0 last:pb-0">
+                    <span className="text-paper/50 text-sm">{label}</span>
+                    <span className="text-paper font-semibold text-sm">{value}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/assessment" className="mt-8 block w-full text-center bg-amber hover:bg-amber-dark text-white font-bold py-3.5 rounded-xl transition-all text-sm">
+                Take the Assessment First →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ─── DELIVERABLES GRID ────────────────────────────────── */}
-      <section className="bg-paper py-24 lg:py-32">
+      {/* ─── WHO IS THIS FOR ──────────────────────────────────── */}
+      <section className="bg-white py-24 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel>By Week 12</SectionLabel>
-          <h2 className="font-serif text-display-sm text-navy mb-12">
-            A BA portfolio that proves you can deliver from day one.
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[
-              { icon: '📋', title: 'Full BRD', desc: 'That another BA would respect' },
-              { icon: '🔄', title: 'Process Maps', desc: 'As-Is & To-Be documented' },
-              { icon: '✅', title: 'UAT Pack', desc: 'Test scenarios & edge cases' },
-              { icon: '👥', title: 'User Stories', desc: 'INVEST-grade with AC' },
-              { icon: '💬', title: 'Story Bank', desc: '8–10 interview stories' },
-              { icon: '🏆', title: 'Capability Passport', desc: 'Premium tier only' },
-            ].map(({ icon, title, desc }) => (
-              <div key={title} className="bg-white rounded-xl p-6 border border-paper/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <span className="text-3xl block mb-3">{icon}</span>
-                <p className="font-bold text-navy text-sm mb-1">{title}</p>
-                <p className="text-ink/50 text-xs">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── ROLES ────────────────────────────────────────────── */}
-      <section className="bg-navy py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel light>After Cohort 1</SectionLabel>
-          <h2 className="font-serif text-display-sm text-white mb-12">Where this can take you.</h2>
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">Is this for you?</p>
+          <h2 className="font-serif text-h2 text-navy mb-12">Three people who belong here.</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { level: 'Entry level', role: 'Junior / Associate BA', salary: '₦500K–1M / £30K–42K', body: 'BA roles in banks, fintechs, SaaS, and consultancies. Your BRD proves you can produce on day one.' },
-              { level: 'Entry–Mid', role: 'Product Operations / BA', salary: '₦800K–1.8M / £35K–50K', body: 'Hybrid product-BA role. Requirements, traceability, UAT, and process design.' },
-              { level: 'Internal move', role: 'Ops → Business Analyst', salary: '+25–50% salary lift typical', body: 'Formalising from ops or support into a defined BA role. The portfolio makes it credible.' },
-            ].map(r => (
-              <div key={r.role} className="bg-white/5 border border-white/10 rounded-2xl p-8">
-                <span className="text-xs font-bold text-amber uppercase tracking-widest">{r.level}</span>
-                <h3 className="font-serif text-xl text-white mt-3 mb-3">{r.role}</h3>
-                <p className="text-paper/60 text-sm leading-relaxed mb-4">{r.body}</p>
-                <p className="text-paper/40 text-xs font-medium">{r.salary}</p>
+              { icon: '📊', title: 'Ops Professionals → BA', body: 'You\'ve been doing BA work without the title. Formalise what you already do with documented evidence that makes the transition explicit.' },
+              { icon: '📍', title: 'Early-Career BAs', body: 'You have the role but not the portfolio. Build BRDs, stakeholder maps, and UAT packs that prove you can produce on day one.' },
+              { icon: '🌍', title: 'International Repositioners', body: 'Your work history doesn\'t translate cleanly to UK or Canadian BA norms. Build portfolio evidence that reads to Western teams.' },
+            ].map(card => (
+              <div key={card.title} className="bg-white border border-gray-100 rounded-2xl p-7 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+                <span className="text-3xl mb-4 block">{card.icon}</span>
+                <p className="font-bold text-navy text-base mb-2">{card.title}</p>
+                <p className="text-ink-soft text-sm leading-relaxed">{card.body}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ ──────────────────────────────────────────────── */}
+      <section className="bg-white py-24 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-6 lg:px-8">
+          <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-3 text-center">FAQ</p>
+          <h2 className="font-serif text-h2 text-navy text-center mb-12">Common questions</h2>
+          <FAQAccordion items={BA_FAQ} />
         </div>
       </section>
 
       {/* ─── CTA ──────────────────────────────────────────────── */}
       <section className="bg-amber py-24">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="font-serif text-display-sm text-white mb-4">Is BA actually your fit?</h2>
-          <p className="text-white/80 text-lg mb-8">Many people discover they&rsquo;re a natural BA before they can name it.</p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/assessment"
-              className="bg-white text-amber hover:bg-paper px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-              Take the Assessment — 8 min
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h2 className="font-serif text-h2 text-white mb-4">Ready to build your BA evidence?</h2>
+          <p className="text-white/75 text-lg mb-10">Start with the 8-minute Career Assessment.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/assessment" className="bg-white text-amber font-bold px-8 py-4 rounded-2xl hover:bg-amber-light transition-colors text-base min-h-[44px] inline-flex items-center justify-center">
+              Take the Assessment →
             </Link>
-            <Link href="/pathway-product-management"
-              className="border-2 border-white/40 hover:border-white text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
+            <Link href="/pathway-product-management" className="border-2 border-white/30 text-white font-bold px-8 py-4 rounded-2xl hover:border-white/60 transition-colors text-base min-h-[44px] inline-flex items-center justify-center">
               Compare with PM →
             </Link>
           </div>
