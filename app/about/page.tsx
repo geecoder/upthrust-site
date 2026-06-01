@@ -9,7 +9,7 @@ export default function AboutPage() {
         paddingBottom: 0,
         position: 'relative', overflow: 'hidden',
       }}>
-        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.4 }} />
+        <div aria-hidden className="hero-bg-accent" />
         <div className="container" style={{ position: 'relative' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="about-hero-grid">
             <div style={{ paddingBottom: 'clamp(56px, 7vw, 90px)' }}>
@@ -84,16 +84,13 @@ export default function AboutPage() {
             </div>
             <div>
               <p className="lede" style={{ color: 'var(--ink-soft)' }}>
-                For years, we ran training programs the way most of the industry runs them — content delivery, projects, certificates. People learned. People graduated. Many got roles. Many did not.
-              </p>
-              <p style={{ marginTop: 20, fontSize: '1.0625rem', lineHeight: 1.65, color: 'var(--ink-soft)' }}>
-                But the pattern we kept seeing was uncomfortable: capable people with our certificate still struggled to show employers what they could do. Not because they hadn't learned — but because they'd never been forced to <em>practise the work under real conditions</em>. Watching a PM explain their process is not the same as facing a vague stakeholder request and figuring out what they really mean.
+                For years, we ran training programs the way most of the industry does — content delivery, projects, certificates. People learned. Many got roles. Many did not.
               </p>
               <p style={{ marginTop: 20, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                Meanwhile, the market shifted. Employers stopped trusting certificates. They started asking for portfolios, case studies, evidence. The bar moved from "what did you study?" to "show me what you can do."
+                The pattern we kept seeing was uncomfortable: capable people with our certificate still struggled to show employers what they could do — not because they hadn't learned, but because they'd never been forced to <em>practise under real conditions</em>. Meanwhile, employers stopped trusting certificates. The bar moved from "what did you study?" to "show me what you can do."
               </p>
               <p style={{ marginTop: 20, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                So we rebuilt. The Career Capability Accelerator is the result. Same team, same standards, same care for learners — but redesigned around what employers now reward and what learners actually need.
+                So we rebuilt. The Career Capability Accelerator is the result — same team, same care for learners, redesigned around what employers now reward.
               </p>
             </div>
           </div>
@@ -191,28 +188,21 @@ export default function AboutPage() {
                 <div>
                   <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The practitioner</p>
                   <p style={{ fontSize: '1.0625rem', lineHeight: 1.7, color: 'var(--ink-soft)' }}>
-                    Genesis is a Product Lead, CBAP-certified Business Analyst, and MBA graduate from the University of East London — with over a decade of experience across product management, business analysis, digital strategy, process automation, fintech, and technology-enabled transformation. He has built his career helping organisations move from unclear ideas to well-defined strategies, from fragmented processes to scalable systems, and from customer problems to digital products that create measurable business value. His work spans Nigeria, the UK, and the US.
-                  </p>
-                </div>
-
-                <div>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The breadth</p>
-                  <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-                    Over the years, Genesis has operated across multiple roles — Business Analyst, Product Owner, Technical Product Manager, Senior Product Manager, and Product Lead — across fintech, technology, consulting, NGOs, and digital transformation environments. This end-to-end experience has given him a rare perspective: not just how to write requirements or manage delivery, but how to connect business strategy, customer needs, technology decisions, regulatory realities, stakeholder alignment, and commercial outcomes into one coherent product direction.
+                    Genesis is a CBAP-certified Product Lead and MBA graduate from the University of East London, with over a decade across product management, business analysis, fintech, and digital transformation in Nigeria, the UK, and the US. He has operated in roles from Business Analyst through Senior PM to Product Lead — giving him end-to-end perspective on how strategy, requirements, delivery, and commercial outcomes connect.
                   </p>
                 </div>
 
                 <div>
                   <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Current work at Rova</p>
                   <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-                    Genesis currently works as a Product Lead at <strong style={{ color: 'var(--ink)' }}>Rova</strong>, contributing to the development of digital financial products for Africans in the diaspora — multi-currency accounts, cross-border payments, remittance journeys, savings products, compliance-led onboarding, operational tooling, and customer engagement improvements. This hands-on fintech experience has sharpened his ability to operate where customer experience, regulation, technology, operations, and commercial strategy must work together.
+                    Genesis currently works as Product Lead at <strong style={{ color: 'var(--ink)' }}>Rova</strong>, building digital financial products for Africans in the diaspora — multi-currency accounts, cross-border payments, compliance-led onboarding, and remittance journeys. This live fintech environment shapes how Upthrust is designed: real decisions, real trade-offs, real constraints.
                   </p>
                 </div>
 
                 <div>
                   <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Building people</p>
                   <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-                    Beyond building products, Genesis has built people. He has trained, mentored, and coached over 1,000 professionals globally — helping career switchers and early-career professionals transition into and grow within business analysis, product management, and digital careers. Many came with ambition but lacked structure, confidence, practical exposure, and evidence of capability. Through his teaching and coaching, Genesis has helped them understand how real product work happens, how to think like professionals, how to engage stakeholders, and how to position themselves in competitive markets. He also serves within the <strong style={{ color: 'var(--ink)' }}>IIBA Nigeria Chapter</strong>, contributing to the growth of the business analysis profession.
+                    He has trained, mentored, and coached over 1,000 professionals globally — helping career switchers and early-career professionals move into product and BA roles. He also serves within the <strong style={{ color: 'var(--ink)' }}>IIBA Nigeria Chapter</strong>, contributing to the growth of the business analysis profession through leadership and professional development.
                   </p>
                 </div>
               </div>

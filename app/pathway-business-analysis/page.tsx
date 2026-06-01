@@ -11,7 +11,7 @@ export default function BAPathwayPage() {
         position: 'relative', overflow: 'hidden',
         background: 'var(--paper)',
       }}>
-        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.35 }} />
+        <div aria-hidden className="hero-bg-accent" />
         <div className="container" style={{ position: 'relative' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="ba-hero-grid">
             {/* Left: copy */}
@@ -25,8 +25,8 @@ export default function BAPathwayPage() {
                 Make the ambiguous
                 <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> actionable.</span>
               </h1>
-              <p className="lede" style={{ marginTop: 24, maxWidth: 520 }}>
-                Turn chaos into clarity. Elicit requirements, map processes, write BRDs that ship, and run UAT that catches what others miss. The BA is the spine of every well-functioning product team.
+              <p className="lede" style={{ marginTop: 20, maxWidth: 520 }}>
+                Elicit requirements, map processes, write BRDs that ship, and run UAT that catches what others miss.
               </p>
               <div className="btn-row-mobile" style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
                 <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Assessment First</Link>
@@ -106,7 +106,7 @@ export default function BAPathwayPage() {
               What you'll actually do — week by week.
             </h2>
             <p className="lede" style={{ marginTop: 20 }}>
-              On top of the shared 12-week curriculum, here's where the BA pathway diverges. Each week produces a tangible BA artefact that lives in your portfolio.
+              Each week produces a tangible BA artefact that goes straight into your portfolio.
             </p>
           </div>
           <BAWeeklyWork />
@@ -123,7 +123,7 @@ export default function BAPathwayPage() {
                 A BA portfolio that proves you can deliver from day one.
               </h2>
               <p className="lede" style={{ marginTop: 24, color: 'rgba(250,247,241,0.78)' }}>
-                Hiring managers for BA roles screen for one thing above all: <em>can you produce documentation a team can actually act on?</em> Most candidates cannot, so they fall back on generic templates. Yours will be specific, contextual, and traceable to real decisions.
+                Hiring managers screen for one thing: <em>can you produce documentation a team can act on?</em> Yours will be specific, contextual, and traceable to real decisions.
               </p>
               <ul style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.9375rem' }}>
                 {[
@@ -176,7 +176,7 @@ export default function BAPathwayPage() {
               Where this can take you.
             </h2>
             <p className="lede" style={{ marginTop: 20 }}>
-              Cohort 1 BA graduates are positioned to compete for the following roles. We don't guarantee any specific outcome — but we make sure your evidence holds up against what these roles actually screen for.
+              We don't guarantee outcomes — we make sure your evidence holds up against what these roles actually screen for.
             </p>
           </div>
 
@@ -239,7 +239,7 @@ export default function BAPathwayPage() {
               Is BA actually your fit? Let's find out.
             </h2>
             <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'rgba(250,247,241,0.75)', marginBottom: 32 }}>
-              Before committing, take the 8-minute Career Assessment. It compares your reflexes against PM, BA, and Design — and tells you, with evidence from your own answers, where you actually fit. The best BA practitioners often discover their instincts in the assessment before they can name them.
+              The 8-minute Career Assessment compares your reflexes against PM, BA, and Design. Many people discover they're a natural BA before they can even name it.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
               <Link href="/assessment" className="btn btn-amber btn-arrow">Take the Assessment — 8 min</Link>

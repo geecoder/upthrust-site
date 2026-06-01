@@ -332,6 +332,36 @@ section h1, section h2, section h3 { text-align: left; }
   pointer-events: none;
 }
 
+/* ── Hero background accent — subtle warm radial gradient ─── */
+.hero-bg-accent {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 90% at 105% 0%, rgba(197, 116, 58, 0.09) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 0% 100%, rgba(197, 116, 58, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Hero stat strip — clean horizontal stats bar */
+.hero-stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--paper-line);
+}
+.hero-stat-item {
+  padding-right: 28px;
+  margin-right: 28px;
+  border-right: 1px solid var(--paper-line);
+}
+.hero-stat-item:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
 /* ── Mobile overrides ────────────────────────────────────── */
 
 @media (max-width: 767px) {

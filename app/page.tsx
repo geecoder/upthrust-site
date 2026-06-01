@@ -12,33 +12,31 @@ export default function Home() {
       {/* HERO */}
       <section style={{
         position: 'relative',
-        paddingTop: 'clamp(72px, 10vw, 130px)',
+        paddingTop: 'clamp(80px, 11vw, 140px)',
         paddingBottom: 0,
         overflow: 'hidden',
         background: 'var(--paper)',
       }}>
-        <div aria-hidden style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)',
-          backgroundSize: '120px 100%',
-          opacity: 0.4, pointerEvents: 'none',
-        }} />
+        <div aria-hidden className="hero-bg-accent" />
 
         <div className="container" style={{ position: 'relative' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="hero-grid">
 
             {/* Left: copy */}
             <div style={{ paddingBottom: 'clamp(64px, 8vw, 100px)' }}>
-              <p className="eyebrow rise-in">Career Capability Platform · Cohort 1 · Starts June 6, 2026</p>
-              <h1 className="display-xl rise-in delay-1 text-balance" style={{ marginTop: 16 }}>
+              <div className="rise-in" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--moss)', display: 'inline-block' }} />
+                <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--moss)' }}>PM &amp; BA Pathways · Cohort 1 Open</span>
+              </div>
+              <h1 className="display-xl rise-in delay-1 text-balance" style={{ marginTop: 0 }}>
                 Build evidence.<br/>
                 <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}>Not just credentials.</span>
               </h1>
-              <p className="lede rise-in delay-2" style={{ marginTop: 24, maxWidth: 480 }}>
-                A 12-week practical accelerator for Product Management and Business Analysis. Real work. Real portfolio. A Capability Passport employers can verify.
+              <p className="lede rise-in delay-2" style={{ marginTop: 20, maxWidth: 460 }}>
+                12 weeks of real product work, portfolio-grade deliverables, and a verified Capability Passport.
               </p>
 
-              <div className="rise-in delay-3 btn-row-mobile" style={{ marginTop: 36, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+              <div className="rise-in delay-3 btn-row-mobile" style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
                 <Link href="/assessment" className="btn btn-primary btn-arrow" data-analytics-event="Hero CTA Clicked">
                   Take the Assessment
                 </Link>
@@ -47,20 +45,16 @@ export default function Home() {
                 </Link>
               </div>
 
-              {/* Trust row */}
-              <div className="rise-in delay-4" style={{
-                marginTop: 40,
-                display: 'flex', flexWrap: 'wrap', gap: 20,
-                paddingTop: 28, borderTop: '1px solid var(--paper-line)',
-              }}>
+              {/* Trust strip */}
+              <div className="rise-in delay-4 hero-stat-strip">
                 {[
                   { value: '1,000+', label: 'Trained globally' },
-                  { value: 'Since 2019', label: 'Heritage' },
+                  { value: 'Since 2019', label: 'Established' },
                   { value: 'PM + BA', label: 'Pathways open' },
                 ].map(item => (
-                  <div key={item.label}>
-                    <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--ink)' }}>{item.value}</p>
-                    <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 2 }}>{item.label}</p>
+                  <div key={item.label} className="hero-stat-item">
+                    <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.375rem', fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--ink)', lineHeight: 1 }}>{item.value}</p>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 4 }}>{item.label}</p>
                   </div>
                 ))}
               </div>
@@ -122,7 +116,7 @@ export default function Home() {
       {/* HERITAGE STRIP — animated count-up */}
       <AnimatedHeritage />
 
-      {/* PROBLEM SECTION — visual with quote cards, not text wall */}
+      {/* PROBLEM SECTION */}
       <section style={{
         background: 'var(--ink)', color: 'var(--paper)',
         padding: 'clamp(72px, 10vw, 120px) 0',
@@ -130,50 +124,39 @@ export default function Home() {
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="problem-grid">
 
-            {/* Left: big statement */}
+            {/* Left */}
             <div>
               <p className="eyebrow-light">The problem we solve</p>
               <h2 className="display-l text-balance" style={{ marginTop: 16, color: 'var(--paper)' }}>
                 Most people don't have a learning problem.
+                <span style={{ display: 'block', color: 'var(--amber-soft)', fontStyle: 'italic' }}>They have a proof problem.</span>
               </h2>
-              <h2 className="display-l text-balance" style={{ marginTop: 4, color: 'var(--amber-soft)', fontStyle: 'italic' }}>
-                They have a proof problem.
-              </h2>
-              {/* ANIMATION 5 — proof problem section, desktop only */}
-              <div className="hidden md:flex justify-center my-8">
-                <LottieOnScroll
-                  src="https://lottie.host/98b1a29e-71c2-4d59-a6e3-3bdb07c6f26e/nbLu7gjJuF.lottie"
-                  loop={false}
-                  width={160}
-                  height={160}
-                />
-              </div>
-              <p className="lede" style={{ marginTop: 24, color: 'rgba(250,247,241,0.75)' }}>
+              <p className="lede" style={{ marginTop: 20, color: 'rgba(250,247,241,0.7)' }}>
                 Certificates say you attended. A Capability Passport shows what you can do.
               </p>
               <Link href="/accelerator" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                marginTop: 32, color: 'var(--amber-soft)', fontWeight: 600,
+                marginTop: 28, color: 'var(--amber-soft)', fontWeight: 600,
                 fontSize: '0.9375rem', borderBottom: '1px solid rgba(241,222,196,0.4)', paddingBottom: 2,
               }}>
                 See how it works →
               </Link>
             </div>
 
-            {/* Right: visual quote cards */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Right: before/after cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {[
-                { before: '"I have 3 certificates but no one calls me back"', after: 'Portfolio + Capability Passport', icon: '📄' },
-                { before: '"I finished the course but can\'t explain what I built"', after: '12 artefacts defended under review', icon: '🛠️' },
-                { before: '"I don\'t know how to show my value in interviews"', after: '10 interview stories from real work', icon: '💬' },
+                { before: '"3 certificates — no callbacks"', after: 'Portfolio + Capability Passport' },
+                { before: '"Finished the course, can\'t explain what I built"', after: '12 artefacts defended under review' },
+                { before: '"Can\'t show my value in interviews"', after: '10 ready-to-use interview stories' },
               ].map((item, i) => (
                 <div key={i} style={{
                   background: 'rgba(250,247,241,0.05)',
                   border: '1px solid rgba(250,247,241,0.1)',
-                  padding: '18px 20px',
+                  padding: '16px 20px',
                   display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 12, alignItems: 'center',
                 }}>
-                  <p style={{ fontSize: '0.875rem', color: 'rgba(250,247,241,0.55)', fontStyle: 'italic', lineHeight: 1.5 }}>{item.before}</p>
+                  <p style={{ fontSize: '0.875rem', color: 'rgba(250,247,241,0.5)', fontStyle: 'italic', lineHeight: 1.5 }}>{item.before}</p>
                   <span style={{ color: 'var(--amber)', fontSize: '1rem', flexShrink: 0 }}>→</span>
                   <p style={{ fontSize: '0.875rem', color: 'var(--amber-soft)', fontWeight: 600, lineHeight: 1.5 }}>{item.after}</p>
                 </div>
@@ -193,7 +176,7 @@ export default function Home() {
               Four steps. Each one earns the next.
             </h2>
             <p className="lede" style={{ marginTop: 20 }}>
-              We don't sell hours of training. We sell a sequence: a way of moving from confusion to capability to evidence, where each step proves you've earned the right to the next one.
+              A structured sequence from career clarity to verified capability — where every step produces real evidence.
             </p>
           </div>
           {/* ANIMATION 1b — four steps progress path, desktop only */}
@@ -228,21 +211,23 @@ export default function Home() {
 
           <div className="pathways-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 0.75fr', gap: 24 }}>
             {/* PM */}
-            <div className="card card-hover" style={{ padding: 36, display: 'flex', flexDirection: 'column' }}>
-              <div className="badge badge-open" style={{ alignSelf: 'flex-start', marginBottom: 24 }}>
+            <div className="card card-hover" style={{ padding: 36, display: 'flex', flexDirection: 'column', borderTop: '3px solid var(--ink)' }}>
+              <div className="badge badge-open" style={{ alignSelf: 'flex-start', marginBottom: 20 }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }}></span>
                 Cohort 1 · Open
               </div>
               <h3 className="display-s">Product Management</h3>
-              <p className="text-soft" style={{ marginTop: 16, fontSize: '0.9375rem', lineHeight: 1.6, flexGrow: 1 }}>
-                For people who want to decide what to build, why, and in what order. You'll learn to write PRDs, define MVP scope, set success metrics, and lead cross-functional teams through real product decisions.
+              <p className="text-soft" style={{ marginTop: 12, fontSize: '0.9375rem', lineHeight: 1.6, flexGrow: 1 }}>
+                Decide what to build, why, and in what order. Write PRDs teams actually ship from, set strategy, and own the product direction.
               </p>
-              <div style={{ marginTop: 28 }}>
-                <p className="caption text-muted" style={{ fontSize: '0.8125rem', marginBottom: 8 }}>You'll leave with</p>
-                <ul style={{ fontSize: '0.875rem', color: 'var(--ink-soft)', display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <li>· A full product case study</li>
-                  <li>· PRD, roadmap, metrics plan</li>
-                  <li>· Capstone presentation</li>
+              <div style={{ marginTop: 24 }}>
+                <ul style={{ fontSize: '0.875rem', color: 'var(--ink-soft)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {['Full product case study', 'PRD, roadmap, metrics plan', 'Interview story bank (8–10)'].map(i => (
+                    <li key={i} style={{ display: 'flex', gap: 10 }}>
+                      <span style={{ color: 'var(--amber-deep)', flexShrink: 0 }}>—</span>
+                      <span>{i}</span>
+                    </li>
+                  ))}
                 </ul>
                 <Link href="/pathway-product-management" className="btn-ghost btn-arrow" style={{ marginTop: 24, display: 'inline-block', fontSize: '0.9375rem' }}>
                   Explore PM
@@ -251,21 +236,23 @@ export default function Home() {
             </div>
 
             {/* BA */}
-            <div className="card card-hover" style={{ padding: 36, display: 'flex', flexDirection: 'column' }}>
-              <div className="badge badge-open" style={{ alignSelf: 'flex-start', marginBottom: 24 }}>
+            <div className="card card-hover" style={{ padding: 36, display: 'flex', flexDirection: 'column', borderTop: '3px solid var(--amber-deep)' }}>
+              <div className="badge badge-open" style={{ alignSelf: 'flex-start', marginBottom: 20 }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }}></span>
                 Cohort 1 · Open
               </div>
               <h3 className="display-s">Business Analysis</h3>
-              <p className="text-soft" style={{ marginTop: 16, fontSize: '0.9375rem', lineHeight: 1.6, flexGrow: 1 }}>
-                For people who structure ambiguity for a living. You'll learn to elicit requirements, map processes, write user stories that engineers actually use, and run UAT that catches what others miss.
+              <p className="text-soft" style={{ marginTop: 12, fontSize: '0.9375rem', lineHeight: 1.6, flexGrow: 1 }}>
+                Turn ambiguous requirements into documentation that ships. Elicit, document, and validate — and run UAT that catches what others miss.
               </p>
-              <div style={{ marginTop: 28 }}>
-                <p className="caption text-muted" style={{ fontSize: '0.8125rem', marginBottom: 8 }}>You'll leave with</p>
-                <ul style={{ fontSize: '0.875rem', color: 'var(--ink-soft)', display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <li>· A full BA case study</li>
-                  <li>· BRD, process maps, UAT pack</li>
-                  <li>· Capstone presentation</li>
+              <div style={{ marginTop: 24 }}>
+                <ul style={{ fontSize: '0.875rem', color: 'var(--ink-soft)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {['Full BA case study', 'BRD, process maps, UAT pack', 'Interview story bank (8–10)'].map(i => (
+                    <li key={i} style={{ display: 'flex', gap: 10 }}>
+                      <span style={{ color: 'var(--amber-deep)', flexShrink: 0 }}>—</span>
+                      <span>{i}</span>
+                    </li>
+                  ))}
                 </ul>
                 <Link href="/pathway-business-analysis" className="btn-ghost btn-arrow" style={{ marginTop: 24, display: 'inline-block', fontSize: '0.9375rem' }}>
                   Explore BA
@@ -331,21 +318,23 @@ export default function Home() {
               <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
                 A certificate says you attended. Your Passport shows what you can do.
               </h2>
-              <p className="lede" style={{ marginTop: 24, color: 'var(--ink-soft)' }}>
-                The Upthrust Capability Passport is a structured evidence record — not a certificate. Every capability area is assessed against a published rubric. Every score is backed by real work you produced. Every Passport is signed by a facilitator who reviewed your capstone.
+              <p className="lede" style={{ marginTop: 20, color: 'var(--ink-soft)' }}>
+                Every capability is scored against a published rubric, backed by real work you produced, and signed off by a facilitator who reviewed your capstone.
               </p>
-              <p style={{ marginTop: 20, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                We're honest: the Passport's value grows as our alumni network grows. Today, what you hold is a verifiable, defensible record of your work that you can present in any interview, on any application, to any employer. As Cohort 1 graduates land roles, that record will carry more weight every quarter.
-              </p>
-              <div style={{ marginTop: 32, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {['Capability areas assessed against published rubric', 'Real artefacts produced during the program', 'Capstone defence score and summary', 'Facilitator review and sign-off', 'Shareable digital record with unique Passport ID'].map((item) => (
+              <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[
+                  'Capability areas scored against published rubric',
+                  'Real artefacts produced during the program',
+                  'Capstone defence score and facilitator sign-off',
+                  'Shareable digital record with unique Passport ID',
+                ].map((item) => (
                   <div key={item} style={{ display: 'flex', gap: 12, fontSize: '0.9375rem', alignItems: 'flex-start' }}>
                     <span style={{ color: 'var(--moss)', flexShrink: 0, marginTop: 2 }}>✓</span>
                     <span style={{ color: 'var(--ink-soft)' }}>{item}</span>
                   </div>
                 ))}
               </div>
-              <Link href="/accelerator" className="btn-ghost btn-arrow" style={{ marginTop: 32, display: 'inline-block' }}>
+              <Link href="/accelerator" className="btn-ghost btn-arrow" style={{ marginTop: 28, display: 'inline-block' }}>
                 See what gets verified
               </Link>
             </div>
@@ -515,52 +504,51 @@ export default function Home() {
       {/* WHO THIS IS FOR */}
       <section className="section" style={{ background: 'var(--paper-soft)' }}>
         <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 64 }}>
+          <div style={{ maxWidth: 720, marginBottom: 56 }}>
             <p className="eyebrow">Who Upthrust Is Built For</p>
             <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-              Four kinds of people land here. They tend to recognise themselves quickly.
+              Four kinds of people land here.
             </h2>
           </div>
 
-          <div className="grid grid-2" style={{ gap: 48 }}>
+          <div className="grid grid-2" style={{ gap: 40 }}>
             {[
               {
                 title: 'The Career Switcher',
-                body: 'You\'ve spent years in banking, ops, support, admin, teaching, or healthcare. You can see how product roles use the exact instincts you\'ve already built — you just need the language, the artefacts, and the proof.',
+                body: 'Years in banking, ops, support, or healthcare — you already have the instincts. You need the language, the artefacts, and the proof.',
                 emoji: '🔄',
                 lottieUrl: 'https://lottie.host/e2978bab-bf5a-4de4-8e3d-eb5d72aa7a8b/mLCLGWMRLb.lottie',
                 loop: true as boolean, speed: 0.8,
               },
               {
                 title: 'The Early-Career Professional',
-                body: 'You graduated. Maybe you got a junior role. But you keep getting filtered out for "lack of experience." You need a way to demonstrate experience without waiting five years to be given the chance.',
+                body: 'You keep getting filtered out for "lack of experience." You need a way to demonstrate capability without waiting five years to be given the chance.',
                 emoji: '📍',
                 lottieUrl: 'https://lottie.host/b23d71d4-89ae-4e14-8efe-c9d62a374dff/dK6rAXADFh.lottie',
                 loop: false as boolean, speed: 1,
               },
               {
                 title: 'The International Repositioner',
-                body: 'You moved to the UK, Canada, or Australia. Or you\'re planning to. Your previous work doesn\'t translate cleanly. You need portfolio evidence that reads to a Western product team and a story that lands in 30 seconds.',
+                body: 'You moved (or are moving) to the UK, Canada, or Australia. Your previous work doesn\'t translate. You need portfolio evidence that reads to a Western product team.',
                 emoji: '🌍',
                 lottieUrl: 'https://lottie.host/c62b8eca-c7bb-4cbb-83fb-69b03a8f2c47/gBwlVSQ3hY.lottie',
                 loop: true as boolean, speed: 0.5,
               },
               {
                 title: 'The Quiet Upgrader',
-                body: 'You\'re already in a product-adjacent role. You\'re doing some of the work. But your title doesn\'t say it, your portfolio doesn\'t show it, and your career growth has stalled. You need to formalise what you already do.',
+                body: 'Already doing product work — but your title doesn\'t say it and your portfolio doesn\'t show it. You need to formalise what you already do.',
                 emoji: '💪',
                 lottieUrl: 'https://lottie.host/f10a1ede-9b4d-4c18-b0e3-7f0f4a2b2d51/HtJRFyBKiy.lottie',
                 loop: false as boolean, speed: 1,
               },
             ].map((p) => (
               <div key={p.title}>
-                {/* ANIMATION 5 — persona icon: emoji on mobile, Lottie on desktop */}
                 <span className="md:hidden text-3xl">{p.emoji}</span>
                 <div className="hidden md:block">
                   <LottieOnScroll src={p.lottieUrl} width={52} height={52} loop={p.loop} speed={p.speed} fallbackIcon={p.emoji} />
                 </div>
                 <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.018em', marginTop: 8 }}>{p.title}</h3>
-                <p className="text-soft" style={{ marginTop: 12, fontSize: '1rem', lineHeight: 1.65 }}>{p.body}</p>
+                <p className="text-soft" style={{ marginTop: 10, fontSize: '1rem', lineHeight: 1.6 }}>{p.body}</p>
               </div>
             ))}
           </div>
@@ -648,65 +636,28 @@ export default function Home() {
                 fontFamily: 'Fraunces, serif', fontSize: 'clamp(1.25rem, 2.2vw, 1.625rem)',
                 fontStyle: 'italic', lineHeight: 1.45, letterSpacing: '-0.02em',
                 color: 'var(--ink)', borderLeft: '3px solid var(--amber)',
-                paddingLeft: 24, marginBottom: 36,
+                paddingLeft: 24, marginBottom: 32,
               }}>
                 "Too many talented people were collecting certificates but still struggling to demonstrate real capability. Upthrust is my answer to that problem."
               </blockquote>
 
-              {/* Bio paragraphs */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                <p style={{ fontSize: '1.0625rem', lineHeight: 1.7, color: 'var(--ink-soft)' }}>
-                  Genesis is a Product Lead, CBAP-certified Business Analyst, and MBA graduate from the University of East London — with over a decade of experience across product management, business analysis, digital strategy, process automation, fintech, and technology-enabled transformation. He currently works as a Product Lead at <strong style={{ color: 'var(--ink)' }}>Rova</strong>, building digital financial products for Africans in the diaspora — multi-currency accounts, cross-border payments, remittance journeys, savings products, compliance-led onboarding, and customer engagement improvements.
-                </p>
+              <p style={{ fontSize: '1.0625rem', lineHeight: 1.7, color: 'var(--ink-soft)' }}>
+                Genesis is a CBAP-certified Product Lead with over a decade spanning product management, business analysis, fintech, and digital transformation across Nigeria, the UK, and the US. He currently works as Product Lead at <strong style={{ color: 'var(--ink)' }}>Rova</strong>, building financial products for the African diaspora. He has trained over 1,000 professionals globally and serves within the <strong style={{ color: 'var(--ink)' }}>IIBA Nigeria Chapter</strong>.
+              </p>
 
-                <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-                  His career has spanned multiple roles — Business Analyst, Product Owner, Technical Product Manager, Senior Product Manager, Product Lead — across Nigeria, the UK, and the US, supporting organisations in fintech, technology, consulting, NGOs, and digital transformation. This end-to-end experience has given him a rare perspective: not just how to write requirements or manage delivery, but how to connect business strategy, customer needs, technology decisions, regulatory realities, and commercial outcomes into one coherent product direction.
-                </p>
-
-                <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-                  Beyond building products, Genesis has built people. He has trained, mentored, and coached over 1,000 professionals globally, helping career switchers and early-career professionals transition into and grow within business analysis, product management, and digital careers. He also serves within the <strong style={{ color: 'var(--ink)' }}>IIBA Nigeria Chapter</strong>, contributing to the growth of the business analysis profession through leadership, sponsorship, and professional development.
-                </p>
-              </div>
-
-              {/* Journey callout boxes */}
-              <div style={{
-                marginTop: 36,
-                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16,
-              }} className="journey-grid">
+              {/* Key fact strip */}
+              <div style={{ marginTop: 28, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="journey-grid">
                 {[
-                  { label: 'The problem he kept seeing', body: 'Talented professionals collecting credentials but unable to demonstrate real capability when it counted.' },
-                  { label: 'What Upthrust is', body: 'A capability-building ecosystem — not a training platform. Built for professionals who want to become, not just attend.' },
-                ].map(({ label, body }) => (
-                  <div key={label} style={{
-                    padding: '20px 22px',
-                    background: 'var(--white)', border: '1px solid var(--paper-line)',
-                    borderTop: '3px solid var(--amber)',
-                  }}>
-                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>{label}</p>
-                    <p style={{ fontSize: '0.9375rem', lineHeight: 1.6, color: 'var(--ink-soft)' }}>{body}</p>
+                  { label: 'Roles held', detail: 'BA · Product Owner · TPM · Senior PM · Product Lead' },
+                  { label: 'Industries', detail: 'Fintech · Tech · NGO · Consulting · Digital Transformation' },
+                  { label: 'Certifications', detail: 'CBAP · MBA (University of East London)' },
+                  { label: 'Geography', detail: 'Nigeria · United Kingdom · United States' },
+                ].map(({ label, detail }) => (
+                  <div key={label} style={{ padding: '16px 18px', background: 'var(--white)', border: '1px solid var(--paper-line)' }}>
+                    <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 6 }}>{label}</p>
+                    <p style={{ fontSize: '0.875rem', lineHeight: 1.5, color: 'var(--ink-soft)' }}>{detail}</p>
                   </div>
                 ))}
-              </div>
-
-              {/* Mission statement */}
-              <div style={{
-                marginTop: 24, padding: '20px 24px',
-                background: 'var(--ink)', color: 'var(--paper)',
-              }}>
-                <p className="eyebrow-light" style={{ marginBottom: 12 }}>The mission</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {[
-                    'From learning concepts → to applying them',
-                    'From collecting certificates → to building evidence',
-                    'From career confusion → to professional clarity',
-                    'From potential → to proof',
-                  ].map((item) => (
-                    <p key={item} style={{ fontSize: '0.9375rem', color: 'rgba(250,247,241,0.85)', lineHeight: 1.5 }}>
-                      <span style={{ color: 'var(--amber)', marginRight: 8 }}>—</span>
-                      {item}
-                    </p>
-                  ))}
-                </div>
               </div>
 
               <Link href="/about" className="btn btn-secondary" style={{ marginTop: 28, display: 'inline-flex', alignItems: 'center', gap: 8 }}>

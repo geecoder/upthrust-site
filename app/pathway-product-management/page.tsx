@@ -11,7 +11,7 @@ export default function PMPathwayPage() {
         position: 'relative', overflow: 'hidden',
         background: 'var(--paper)',
       }}>
-        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.35 }} />
+        <div aria-hidden className="hero-bg-accent" />
         <div className="container" style={{ position: 'relative' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="pm-hero-grid">
             {/* Left: copy */}
@@ -25,8 +25,8 @@ export default function PMPathwayPage() {
                 Learn to decide what to build,
                 <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> and why.</span>
               </h1>
-              <p className="lede" style={{ marginTop: 24, maxWidth: 520 }}>
-                Own the product direction. Write PRDs that teams ship from. Set strategy. Manage trade-offs. The PM pathway builds practitioners, not attendees.
+              <p className="lede" style={{ marginTop: 20, maxWidth: 520 }}>
+                Own the product direction. Write PRDs teams ship from, set strategy, and manage real trade-offs.
               </p>
               <div className="btn-row-mobile" style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
                 <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Assessment First</Link>
@@ -106,7 +106,7 @@ export default function PMPathwayPage() {
               What you'll actually do — week by week.
             </h2>
             <p className="lede" style={{ marginTop: 20 }}>
-              On top of the shared 12-week curriculum, here's where the PM pathway diverges. Each week you produce a tangible PM artefact that becomes part of your portfolio.
+              Each week you produce a tangible PM artefact that goes straight into your portfolio.
             </p>
           </div>
           <PMWeeklyWork />
@@ -123,7 +123,7 @@ export default function PMPathwayPage() {
                 A PM portfolio that hiring managers actually want to read.
               </h2>
               <p className="lede" style={{ marginTop: 24, color: 'rgba(250,247,241,0.78)' }}>
-                Most PM portfolios are screenshots of features the candidate did not own and bullet points that describe outputs, not decisions. Your portfolio will be different. It will show how you think, what you chose, and why you chose it.
+                Not screenshots of features you touched — a record of decisions you made, with reasoning that holds up to scrutiny.
               </p>
               <ul style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.9375rem' }}>
                 {[
@@ -176,7 +176,7 @@ export default function PMPathwayPage() {
               Where this can take you.
             </h2>
             <p className="lede" style={{ marginTop: 20 }}>
-              Cohort 1 PM graduates are positioned to compete for the following roles. We don't guarantee any specific outcome — but we make sure your evidence holds up against what these roles actually screen for.
+              We don't guarantee outcomes — we make sure your evidence holds up against what these roles actually screen for.
             </p>
           </div>
 
@@ -289,7 +289,7 @@ export default function PMPathwayPage() {
                 Is PM actually your fit? Let's find out.
               </h2>
               <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'rgba(250,247,241,0.75)', marginBottom: 32 }}>
-                Before committing to a pathway, take the 8-minute Career Assessment. It compares your reflexes against PM, BA, and Design — and tells you, with evidence from your own answers, where you actually fit. Most people who thought they wanted PM either confirm it or discover BA is actually stronger.
+                The 8-minute Career Assessment compares your reflexes against PM, BA, and Design — with evidence from your own answers. Most people who thought they wanted PM either confirm it or discover BA is actually stronger.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
                 <Link href="/assessment" className="btn btn-amber btn-arrow">Take the Assessment — 8 min</Link>

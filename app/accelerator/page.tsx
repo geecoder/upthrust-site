@@ -18,18 +18,21 @@ export default function AcceleratorPage() {
         background: 'var(--paper)',
         position: 'relative', overflow: 'hidden',
       }}>
-        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.4, pointerEvents: 'none' }} />
+        <div aria-hidden className="hero-bg-accent" />
         <div className="container" style={{ position: 'relative' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="accel-hero-grid">
             {/* Left: copy */}
             <div style={{ paddingBottom: 'clamp(56px, 7vw, 90px)' }}>
-              <p className="eyebrow">The Upthrust Career Capability Accelerator</p>
-              <h1 className="display-xl text-balance" style={{ marginTop: 16 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--moss)', display: 'inline-block' }} />
+                <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--moss)' }}>Cohort 1 · Open Now</span>
+              </div>
+              <h1 className="display-xl text-balance" style={{ marginTop: 0 }}>
                 Twelve weeks. Real product work.
                 <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Evidence at the end.</span>
               </h1>
-              <p className="lede" style={{ marginTop: 24, maxWidth: 520 }}>
-                Cohort 1 is live. Work through realistic product scenarios, build portfolio-grade deliverables, defend your decisions, and earn a Capability Passport that shows what you can actually do.
+              <p className="lede" style={{ marginTop: 20, maxWidth: 520 }}>
+                Build portfolio-grade deliverables, defend your decisions, and earn a Capability Passport that shows what you can actually do.
               </p>
               <div className="btn-row-mobile" style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
                 <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Career Assessment</Link>
@@ -104,7 +107,7 @@ export default function AcceleratorPage() {
               The weekly rhythm that turns concept into capability.
             </h2>
             <p className="lede" style={{ marginTop: 20 }}>
-              Every week is the same six-step shape. Concept. Real case. Lab. Assignment. Feedback. Reflection. This repetition is the point — capability comes from practising the same loop until it becomes second nature.
+              Every week follows the same six-step shape — concept, case, lab, assignment, feedback, reflection — until the loop becomes second nature.
             </p>
           </div>
           {/* ANIMATION — weekly rhythm, above 6 steps, desktop only */}
@@ -132,7 +135,7 @@ export default function AcceleratorPage() {
               Twelve weeks, each one building on the last.
             </h2>
             <p className="lede" style={{ marginTop: 20 }}>
-              The program runs in four phases. Select a phase to explore the weekly content. PM and BA pathway-specific work layers on top of this shared curriculum.
+              Four phases, each building on the last. PM and BA pathway work layers on top of the shared curriculum.
             </p>
           </div>
           <CurriculumInteractive />
@@ -148,7 +151,7 @@ export default function AcceleratorPage() {
               Evidence, not attendance.
             </h2>
             <p className="lede" style={{ marginTop: 20, color: 'rgba(250,247,241,0.78)' }}>
-              By Week 12 you have produced a body of real work — not a stack of certificates. This is what makes the Capability Passport meaningful, and what makes you ready for real product roles.
+              By Week 12 you have a body of real work — not a stack of certificates — that makes the Capability Passport meaningful.
             </p>
           </div>
 

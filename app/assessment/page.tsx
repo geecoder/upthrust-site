@@ -152,7 +152,7 @@ export default function AssessmentPage() {
       <>
         {/* Hero */}
         <section style={{ paddingTop: 'clamp(80px, 12vw, 140px)', paddingBottom: 'clamp(60px, 8vw, 100px)', position: 'relative', overflow: 'hidden' }}>
-          <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, var(--paper-line) 1px, transparent 1px)', backgroundSize: '120px 100%', opacity: 0.4 }} />
+          <div aria-hidden className="hero-bg-accent" />
           <div className="container" style={{ position: 'relative' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="assessment-hero-grid">
               {/* Left: copy */}
@@ -163,10 +163,7 @@ export default function AssessmentPage() {
                   <span style={{ fontStyle: 'italic', color: 'var(--amber-deep)' }}> think about product work.</span>
                 </h1>
                 <p className="lede" style={{ marginTop: 24 }}>
-                  Twelve scenarios. Real product situations — vague stakeholders, conflicting priorities, launches that didn't land. Each one reveals something about how you reason under pressure.
-                </p>
-                <p style={{ marginTop: 16, fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-                  At the end you'll get a result that quotes your own answers back — not a generic type. Whether your reflexes point to PM, BA, or Design, you'll know exactly why.
+                  Twelve real product scenarios. Your answers reveal whether your reflexes point to PM, BA, or Design — and exactly why.
                 </p>
 
                 <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, padding: '20px', background: 'var(--paper-soft)', border: '1px solid var(--paper-line)' }}>
