@@ -7,6 +7,7 @@ import { calculateResult, getResultMeta, type Answer } from '@/lib/scoring';
 import { TALLY_FORMS, tallyDirectUrl } from '@/lib/config';
 import { trackEvent } from '@/lib/mixpanel';
 import { TRACKING_EVENTS } from '@/lib/tracking-events';
+import { LottieOnScroll } from '@/components/LottieOnScroll';
 
 type Stage = 'intro' | 'lead' | 'scenario' | 'result';
 
@@ -196,8 +197,8 @@ export default function AssessmentPage() {
               <div className="assessment-3d" style={{ position: 'relative', height: 440, overflow: 'hidden', borderRadius: 4 }}>
                 <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0 }}>
                   <img
-                    src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=700&q=80&auto=format&fit=crop"
-                    alt="Professional planning their career transition"
+                    src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=700&q=80"
+                    alt="Professional receiving career direction and pathway guidance"
                     className="hero-img"
                     style={{ height: '100%' }}
                   />
@@ -231,7 +232,18 @@ export default function AssessmentPage() {
         {/* What to expect */}
         <section style={{ background: 'var(--paper-soft)', padding: 'clamp(48px, 6vw, 80px) 0', borderTop: '1px solid var(--paper-line)' }}>
           <div className="container-narrow">
-            <p className="eyebrow" style={{ marginBottom: 24 }}>What happens next</p>
+            {/* ANIMATION — decision/pathway, desktop only */}
+          <div className="hidden md:flex justify-center my-8">
+            <LottieOnScroll
+              src="https://lottie.host/98b1a29e-71c2-4d59-a6e3-3bdb07c6f26e/nbLu7gjJuF.lottie"
+              loop={false}
+              width={180}
+              height={180}
+              threshold={0.3}
+              fallbackIcon="🎯"
+            />
+          </div>
+          <p className="eyebrow" style={{ marginBottom: 24 }}>What happens next</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }} className="steps-preview">
               {[
                 { num: '01', title: 'Tell us where to send your result', body: 'One quick form — name, email, and where you\'re based. That\'s it.' },

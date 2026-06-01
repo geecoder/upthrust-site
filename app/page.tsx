@@ -3,7 +3,6 @@ import Testimonials from '@/components/Testimonials';
 import AnimatedHeritage from '@/components/AnimatedHeritage';
 import OperatingModelInteractive from '@/components/OperatingModelInteractive';
 import FounderPhoto from '@/components/FounderPhoto';
-import { DirectLottie } from '@/components/DirectLottie';
 import { LottieOnScroll } from '@/components/LottieOnScroll';
 
 export default function Home() {
@@ -67,22 +66,25 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right: human image */}
+            {/* Right: Lottie on desktop, image on mobile */}
             <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 480 }} className="hero-img-side">
-              {/* ANIMATION 1 — hero right side, desktop only */}
-              <div className="hidden lg:flex items-center justify-center flex-shrink-0" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5, pointerEvents: 'none' }}>
-                <DirectLottie
+              {/* ANIMATION 1 — hero right (desktop only) */}
+              <div className="hidden lg:flex items-center justify-center" style={{ position: 'absolute', inset: 0 }}>
+                <LottieOnScroll
                   src="https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie"
+                  autoplay={true}
                   loop={true}
-                  width={300}
-                  height={300}
+                  width={340}
+                  height={340}
                   speed={0.7}
+                  fallbackIcon="📈"
                 />
               </div>
-              <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
+              {/* Image — visible on mobile/tablet, hidden on lg+ */}
+              <div className="hero-img-wrap lg:hidden" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
                 <img
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80&auto=format&fit=crop"
-                  alt="Professional working confidently in a modern workspace"
+                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80"
+                  alt="Product managers and business analysts collaborating in a real workshop session"
                   className="hero-img"
                   style={{ height: '100%', minHeight: 480 }}
                 />
@@ -193,6 +195,17 @@ export default function Home() {
             <p className="lede" style={{ marginTop: 20 }}>
               We don't sell hours of training. We sell a sequence: a way of moving from confusion to capability to evidence, where each step proves you've earned the right to the next one.
             </p>
+          </div>
+          {/* ANIMATION 1b — four steps progress path, desktop only */}
+          <div className="hidden md:flex justify-center mb-10">
+            <LottieOnScroll
+              src="https://lottie.host/7efaabd9-0c77-4b52-8b2a-5e56db6b10a8/fzHnVjXCFQ.lottie"
+              loop={false}
+              width={280}
+              height={90}
+              threshold={0.4}
+              fallbackIcon="→"
+            />
           </div>
           <OperatingModelInteractive />
         </div>
@@ -339,6 +352,17 @@ export default function Home() {
 
             {/* Passport mockup — professional document style */}
             <div style={{ position: 'relative' }}>
+              {/* ANIMATION 4 — passport verification, desktop only */}
+              <div className="hidden md:flex justify-center mb-6">
+                <LottieOnScroll
+                  src="https://lottie.host/e6f96dad-66bb-4e90-b3d8-b3b0cbf27e09/KBnXBWcXSd.lottie"
+                  loop={false}
+                  width={100}
+                  height={100}
+                  threshold={0.3}
+                  fallbackIcon="🏆"
+                />
+              </div>
               {/* Shadow stack effect */}
               <div aria-hidden style={{
                 position: 'absolute', top: 8, left: 8, right: -8, bottom: -8,
@@ -505,31 +529,35 @@ export default function Home() {
                 body: 'You\'ve spent years in banking, ops, support, admin, teaching, or healthcare. You can see how product roles use the exact instincts you\'ve already built — you just need the language, the artefacts, and the proof.',
                 emoji: '🔄',
                 lottieUrl: 'https://lottie.host/e2978bab-bf5a-4de4-8e3d-eb5d72aa7a8b/mLCLGWMRLb.lottie',
+                loop: true as boolean, speed: 0.8,
               },
               {
                 title: 'The Early-Career Professional',
                 body: 'You graduated. Maybe you got a junior role. But you keep getting filtered out for "lack of experience." You need a way to demonstrate experience without waiting five years to be given the chance.',
-                emoji: '🎓',
+                emoji: '📍',
                 lottieUrl: 'https://lottie.host/b23d71d4-89ae-4e14-8efe-c9d62a374dff/dK6rAXADFh.lottie',
+                loop: false as boolean, speed: 1,
               },
               {
                 title: 'The International Repositioner',
                 body: 'You moved to the UK, Canada, or Australia. Or you\'re planning to. Your previous work doesn\'t translate cleanly. You need portfolio evidence that reads to a Western product team and a story that lands in 30 seconds.',
                 emoji: '🌍',
                 lottieUrl: 'https://lottie.host/c62b8eca-c7bb-4cbb-83fb-69b03a8f2c47/gBwlVSQ3hY.lottie',
+                loop: true as boolean, speed: 0.5,
               },
               {
                 title: 'The Quiet Upgrader',
                 body: 'You\'re already in a product-adjacent role. You\'re doing some of the work. But your title doesn\'t say it, your portfolio doesn\'t show it, and your career growth has stalled. You need to formalise what you already do.',
-                emoji: '📈',
+                emoji: '💪',
                 lottieUrl: 'https://lottie.host/f10a1ede-9b4d-4c18-b0e3-7f0f4a2b2d51/HtJRFyBKiy.lottie',
+                loop: false as boolean, speed: 1,
               },
             ].map((p) => (
               <div key={p.title}>
-                {/* ANIMATION 6 — persona icon: emoji on mobile, Lottie on desktop */}
-                <span className="md:hidden text-2xl">{p.emoji}</span>
+                {/* ANIMATION 5 — persona icon: emoji on mobile, Lottie on desktop */}
+                <span className="md:hidden text-3xl">{p.emoji}</span>
                 <div className="hidden md:block">
-                  <LottieOnScroll src={p.lottieUrl} width={48} height={48} fallbackIcon={p.emoji} />
+                  <LottieOnScroll src={p.lottieUrl} width={52} height={52} loop={p.loop} speed={p.speed} fallbackIcon={p.emoji} />
                 </div>
                 <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.018em', marginTop: 8 }}>{p.title}</h3>
                 <p className="text-soft" style={{ marginTop: 12, fontSize: '1rem', lineHeight: 1.65 }}>{p.body}</p>

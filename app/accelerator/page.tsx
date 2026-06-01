@@ -6,7 +6,6 @@ import WhyNowVisual from '@/components/WhyNowVisual';
 import WhoIsForSection from '@/components/WhoIsForSection';
 import CapstonesInteractive from '@/components/CapstonesInteractive';
 import FAQInteractive from '@/components/FAQInteractive';
-import { DirectLottie } from '@/components/DirectLottie';
 import { LottieOnScroll } from '@/components/LottieOnScroll';
 
 export default function AcceleratorPage() {
@@ -42,8 +41,8 @@ export default function AcceleratorPage() {
             <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 460 }} className="accel-hero-3d">
               <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
                 <img
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80&auto=format&fit=crop"
-                  alt="Diverse team of professionals collaborating on product work"
+                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80"
+                  alt="Cohort of professionals collaborating on real product and business analysis work"
                   className="hero-img"
                   style={{ height: '100%', minHeight: 460 }}
                 />
@@ -108,14 +107,16 @@ export default function AcceleratorPage() {
               Every week is the same six-step shape. Concept. Real case. Lab. Assignment. Feedback. Reflection. This repetition is the point — capability comes from practising the same loop until it becomes second nature.
             </p>
           </div>
-          {/* ANIMATION 8 — weekly rhythm, above 6 steps, desktop only */}
+          {/* ANIMATION — weekly rhythm, above 6 steps, desktop only */}
           <div className="hidden md:flex justify-center mb-10">
-            <DirectLottie
+            <LottieOnScroll
               src="https://lottie.host/9df30d2e-c8f2-4d21-8a87-51a0cc0cb42f/LPkXi9ky3E.lottie"
               loop={true}
-              width={180}
-              height={180}
+              width={200}
+              height={200}
               speed={0.6}
+              threshold={0.3}
+              fallbackIcon="🔄"
             />
           </div>
           <WeeklyRhythmInteractive />
@@ -172,13 +173,15 @@ export default function AcceleratorPage() {
                 border: '1px solid rgba(250,247,241,0.12)',
                 borderTop: `3px solid ${section.accent}`,
               }}>
-                {/* ANIMATION 9 — top of PM and BA deliverables columns, desktop only */}
-                <div className="hidden md:flex justify-center mb-4">
+                {/* ANIMATION — top of PM and BA deliverables columns, desktop only */}
+                <div className="hidden md:flex justify-center mb-6">
                   <LottieOnScroll
                     src="https://lottie.host/3abf2e74-3c9e-4bef-9e80-11e7fdae4d67/E2xNnWCrxI.lottie"
-                    width={90}
-                    height={90}
                     loop={false}
+                    width={100}
+                    height={100}
+                    threshold={0.3}
+                    fallbackIcon="💼"
                   />
                 </div>
                 <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: section.accent, marginBottom: 24 }}>{section.pathway}</p>

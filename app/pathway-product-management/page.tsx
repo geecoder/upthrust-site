@@ -38,8 +38,8 @@ export default function PMPathwayPage() {
             <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 440 }} className="pm-hero-3d">
               <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
                 <img
-                  src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80&auto=format&fit=crop"
-                  alt="Professionals developing their product and business analysis skills"
+                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&q=80"
+                  alt="Product management team building strategy, execution, and roadmap work"
                   className="hero-img"
                   style={{ height: '100%', minHeight: 440 }}
                 />

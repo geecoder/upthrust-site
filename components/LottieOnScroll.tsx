@@ -2,41 +2,67 @@
 import { useEffect, useRef, useState } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
-interface Props {
-  src: string; loop?: boolean; width?: number; height?: number;
-  className?: string; threshold?: number; speed?: number;
+interface LottieOnScrollProps {
+  src: string;
+  loop?: boolean;
+  width?: number;
+  height?: number;
+  className?: string;
+  threshold?: number;
+  speed?: number;
   fallbackIcon?: string;
+  autoplay?: boolean;
 }
 
 export function LottieOnScroll({
-  src, loop = false, width = 200, height = 200,
-  className = '', threshold = 0.3, speed = 1, fallbackIcon = '✦',
-}: Props) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [triggered, setTriggered] = useState(false);
+  src,
+  loop = false,
+  width = 200,
+  height = 200,
+  className = '',
+  threshold = 0.25,
+  speed = 1,
+  fallbackIcon = '',
+  autoplay = false,
+}: LottieOnScrollProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [triggered, setTriggered] = useState(autoplay);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
+    if (autoplay) return;
+    const el = containerRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting && !triggered) setTriggered(true); },
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !triggered) setTriggered(true);
+      },
       { threshold }
     );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [triggered, threshold]);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [triggered, threshold, autoplay]);
 
   return (
-    <div ref={ref} className={className}
-      style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div
+      ref={containerRef}
+      className={className}
+      style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
       {triggered && !failed && (
-        <DotLottieReact src={src} autoplay loop={loop}
-          style={{ width, height }} speed={speed}
-          onError={() => setFailed(true)} />
+        <DotLottieReact
+          src={src}
+          autoplay
+          loop={loop}
+          speed={speed}
+          style={{ width, height }}
+          onError={() => setFailed(true)}
+        />
       )}
-      {failed && (
-        <span style={{ fontSize: Math.min(width, height) * 0.5 }}>{fallbackIcon}</span>
+      {(failed || (!triggered && fallbackIcon)) && fallbackIcon && (
+        <span style={{ fontSize: Math.round(Math.min(width, height) * 0.5) }}>
+          {fallbackIcon}
+        </span>
       )}
     </div>
   );
