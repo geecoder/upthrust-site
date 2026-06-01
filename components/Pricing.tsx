@@ -6,6 +6,7 @@ import { useRegion } from '@/lib/useRegion';
 import { PRICING, formatPrice, getPaymentLink, type Region } from '@/lib/config';
 import { trackEvent } from '@/lib/mixpanel';
 import { TRACKING_EVENTS } from '@/lib/tracking-events';
+import { LottieOnScroll } from '@/components/LottieOnScroll';
 
 interface Props {
   initialRegion?: Region;
@@ -165,6 +166,15 @@ export default function Pricing({ initialRegion = 'NG' }: Props) {
           border: '2px solid var(--ink)',
           position: 'relative',
         }}>
+          {/* ANIMATION 10 — premium card corner, desktop only */}
+          <div className="hidden md:block absolute top-3 right-3">
+            <LottieOnScroll
+              src="https://lottie.host/e6f96dad-66bb-4e90-b3d8-b3b0cbf27e09/KBnXBWcXSd.lottie"
+              width={56}
+              height={56}
+              loop={false}
+            />
+          </div>
           <div style={{
             position: 'absolute',
             top: -12,

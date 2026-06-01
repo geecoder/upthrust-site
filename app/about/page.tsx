@@ -27,8 +27,8 @@ export default function AboutPage() {
             <div className="about-hero-image" style={{ position: 'relative', alignSelf: 'stretch', minHeight: 400 }}>
               <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
                 <img
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80&auto=format&fit=crop&crop=top"
-                  alt="Genesis Nneji Enwenyeokwu — founder of Upthrust, product leader and capability builder"
+                  src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80&auto=format&fit=crop"
+                  alt="Professionals developing their product and business analysis skills"
                   className="hero-img"
                   style={{ height: '100%', minHeight: 400 }}
                 />

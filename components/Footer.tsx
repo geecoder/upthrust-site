@@ -251,14 +251,16 @@ export default function Footer() {
       </div>
 
       <style>{`
-        @media (max-width: 960px) {
+        @media (max-width: 1023px) {
           footer .footer-grid {
             grid-template-columns: 1fr 1fr !important;
+            gap: 32px !important;
           }
         }
-        @media (max-width: 560px) {
+        @media (max-width: 767px) {
           footer .footer-grid {
             grid-template-columns: 1fr !important;
+            gap: 32px !important;
           }
         }
       `}</style>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useInView, fadeUpStyle } from '@/lib/animations';
+import { LottieOnScroll } from '@/components/LottieOnScroll';
 
 const SHIFTS = [
   { old: 'Certificate collected', new: 'Evidence produced', pct: 85 },
@@ -103,8 +104,18 @@ export default function WhyNowVisual() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {SHIFTS.map((shift, i) => (
-            <div key={i} style={{
-              opacity: inView ? 1 : 0,
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start' }}>
+              {/* ANIMATION 7 — market stats row icon, desktop only */}
+              <div className="hidden md:block flex-shrink-0 mr-4">
+                <LottieOnScroll
+                  src="https://lottie.host/6c8bce90-c2ae-4be7-96e8-dd93edaef24c/VsB7JwKHVY.lottie"
+                  width={56}
+                  height={56}
+                  loop={false}
+                  threshold={0.4}
+                />
+              </div>
+            <div style={{ flex: 1, opacity: inView ? 1 : 0,
               transform: inView ? 'translateX(0)' : 'translateX(20px)',
               transition: `opacity 500ms ease ${200 + i * 100}ms, transform 500ms ease ${200 + i * 100}ms`,
             }}>
@@ -128,6 +139,7 @@ export default function WhyNowVisual() {
               <p style={{ fontSize: '0.6875rem', color: 'var(--ink-muted)', marginTop: 4, fontStyle: 'italic' }}>
                 % of employers prioritising this in 2024–25 hiring
               </p>
+            </div>
             </div>
           ))}
         </div>

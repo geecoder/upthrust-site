@@ -196,8 +196,8 @@ export default function AssessmentPage() {
               <div className="assessment-3d" style={{ position: 'relative', height: 440, overflow: 'hidden', borderRadius: 4 }}>
                 <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0 }}>
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=80&auto=format&fit=crop&crop=top"
-                    alt="Professional reflecting on their product career direction"
+                    src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=700&q=80&auto=format&fit=crop"
+                    alt="Professional planning their career transition"
                     className="hero-img"
                     style={{ height: '100%' }}
                   />

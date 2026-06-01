@@ -3,6 +3,8 @@ import Testimonials from '@/components/Testimonials';
 import AnimatedHeritage from '@/components/AnimatedHeritage';
 import OperatingModelInteractive from '@/components/OperatingModelInteractive';
 import FounderPhoto from '@/components/FounderPhoto';
+import { DirectLottie } from '@/components/DirectLottie';
+import { LottieOnScroll } from '@/components/LottieOnScroll';
 
 export default function Home() {
   return (
@@ -67,11 +69,20 @@ export default function Home() {
 
             {/* Right: human image */}
             <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 480 }} className="hero-img-side">
+              {/* ANIMATION 1 — hero right side, desktop only */}
+              <div className="hidden lg:flex items-center justify-center flex-shrink-0" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5, pointerEvents: 'none' }}>
+                <DirectLottie
+                  src="https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie"
+                  loop={true}
+                  width={300}
+                  height={300}
+                  speed={0.7}
+                />
+              </div>
               <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
-                {/* Unsplash — Black professional woman presenting/leading, Lagos/London context */}
                 <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80&auto=format&fit=crop"
-                  alt="A professional presenting her product work — the kind of capability Upthrust builds"
+                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80&auto=format&fit=crop"
+                  alt="Professional working confidently in a modern workspace"
                   className="hero-img"
                   style={{ height: '100%', minHeight: 480 }}
                 />
@@ -126,6 +137,15 @@ export default function Home() {
               <h2 className="display-l text-balance" style={{ marginTop: 4, color: 'var(--amber-soft)', fontStyle: 'italic' }}>
                 They have a proof problem.
               </h2>
+              {/* ANIMATION 5 — proof problem section, desktop only */}
+              <div className="hidden md:flex justify-center my-8">
+                <LottieOnScroll
+                  src="https://lottie.host/98b1a29e-71c2-4d59-a6e3-3bdb07c6f26e/nbLu7gjJuF.lottie"
+                  loop={false}
+                  width={160}
+                  height={160}
+                />
+              </div>
               <p className="lede" style={{ marginTop: 24, color: 'rgba(250,247,241,0.75)' }}>
                 Certificates say you attended. A Capability Passport shows what you can do.
               </p>
@@ -483,22 +503,35 @@ export default function Home() {
               {
                 title: 'The Career Switcher',
                 body: 'You\'ve spent years in banking, ops, support, admin, teaching, or healthcare. You can see how product roles use the exact instincts you\'ve already built — you just need the language, the artefacts, and the proof.',
+                emoji: '🔄',
+                lottieUrl: 'https://lottie.host/e2978bab-bf5a-4de4-8e3d-eb5d72aa7a8b/mLCLGWMRLb.lottie',
               },
               {
                 title: 'The Early-Career Professional',
                 body: 'You graduated. Maybe you got a junior role. But you keep getting filtered out for "lack of experience." You need a way to demonstrate experience without waiting five years to be given the chance.',
+                emoji: '🎓',
+                lottieUrl: 'https://lottie.host/b23d71d4-89ae-4e14-8efe-c9d62a374dff/dK6rAXADFh.lottie',
               },
               {
                 title: 'The International Repositioner',
                 body: 'You moved to the UK, Canada, or Australia. Or you\'re planning to. Your previous work doesn\'t translate cleanly. You need portfolio evidence that reads to a Western product team and a story that lands in 30 seconds.',
+                emoji: '🌍',
+                lottieUrl: 'https://lottie.host/c62b8eca-c7bb-4cbb-83fb-69b03a8f2c47/gBwlVSQ3hY.lottie',
               },
               {
                 title: 'The Quiet Upgrader',
                 body: 'You\'re already in a product-adjacent role. You\'re doing some of the work. But your title doesn\'t say it, your portfolio doesn\'t show it, and your career growth has stalled. You need to formalise what you already do.',
+                emoji: '📈',
+                lottieUrl: 'https://lottie.host/f10a1ede-9b4d-4c18-b0e3-7f0f4a2b2d51/HtJRFyBKiy.lottie',
               },
             ].map((p) => (
               <div key={p.title}>
-                <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.018em' }}>{p.title}</h3>
+                {/* ANIMATION 6 — persona icon: emoji on mobile, Lottie on desktop */}
+                <span className="md:hidden text-2xl">{p.emoji}</span>
+                <div className="hidden md:block">
+                  <LottieOnScroll src={p.lottieUrl} width={48} height={48} fallbackIcon={p.emoji} />
+                </div>
+                <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.5rem', fontWeight: 500, letterSpacing: '-0.018em', marginTop: 8 }}>{p.title}</h3>
                 <p className="text-soft" style={{ marginTop: 12, fontSize: '1rem', lineHeight: 1.65 }}>{p.body}</p>
               </div>
             ))}

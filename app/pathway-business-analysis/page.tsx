@@ -38,8 +38,8 @@ export default function BAPathwayPage() {
             <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 440 }} className="ba-hero-3d">
               <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
                 <img
-                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80&auto=format&fit=crop"
-                  alt="Business analyst facilitating a requirements workshop with stakeholders"
+                  src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80&auto=format&fit=crop"
+                  alt="Professionals developing their product and business analysis skills"
                   className="hero-img"
                   style={{ height: '100%', minHeight: 440 }}
                 />

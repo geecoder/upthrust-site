@@ -1,8 +1,9 @@
 'use client';
 
 import { useInView, useCountUp } from '@/lib/animations';
+import { LottieOnScroll } from '@/components/LottieOnScroll';
 
-function AnimatedStat({ target, suffix = '', label }: { target: number; suffix?: string; label: string }) {
+function AnimatedStat({ target, suffix = '', label, lottieUrl }: { target: number; suffix?: string; label: string; lottieUrl?: string }) {
   const { ref, inView } = useInView({ threshold: 0.5 });
   const value = useCountUp(target, 2000, inView);
 
@@ -28,6 +29,11 @@ function AnimatedStat({ target, suffix = '', label }: { target: number; suffix?:
       }}>
         {label}
       </p>
+      {lottieUrl && (
+        <div className="hidden md:flex justify-center mt-3">
+          <LottieOnScroll src={lottieUrl} width={60} height={60} loop={false} threshold={0.5} />
+        </div>
+      )}
     </div>
   );
 }
@@ -47,9 +53,13 @@ export default function AnimatedHeritage() {
           gap: 'clamp(24px, 4vw, 48px)',
           alignItems: 'center',
         }} className="heritage-grid">
-          <AnimatedStat target={1000} suffix="+" label="Professionals trained globally" />
-          <AnimatedStat target={2019} suffix="" label="Year Upthrust was founded" />
-          <AnimatedStat target={4} suffix="" label="Continents represented" />
+          {/* ANIMATIONS 2, 3, 4 — stat icons on desktop */}
+          <AnimatedStat target={1000} suffix="+" label="Professionals trained globally"
+            lottieUrl="https://lottie.host/e7d73b32-e81d-4f0a-8512-7a9543c08b8e/VmLBvMSjxj.lottie" />
+          <AnimatedStat target={2019} suffix="" label="Year Upthrust was founded"
+            lottieUrl="https://lottie.host/2b2bb1e0-e2a9-4b73-91e4-6de5c4832e60/IfKVCqeH2L.lottie" />
+          <AnimatedStat target={4} suffix="" label="Continents represented"
+            lottieUrl="https://lottie.host/c9c9d8e1-e2a5-4ef0-88eb-6a4ed4b14234/YE5TYEzh6c.lottie" />
           <AnimatedStat target={25} suffix="" label="Cohort 1 seats (max)" />
         </div>
       </div>
