@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { SectionLabel } from '@/components/ui/SectionLabel';
-import { Badge } from '@/components/ui/Badge';
 
 const FAQS = [
   {
@@ -127,10 +126,20 @@ export default function FAQPage() {
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="bg-navy py-32 lg:py-40 text-center">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <Badge variant="paper">Frequently Asked Questions</Badge>
-          <h1 className="font-serif text-display-md text-white mt-6">
+      <section className="relative bg-navy py-32 lg:py-40 text-center overflow-hidden">
+        <div aria-hidden className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+          <div style={{ position:'absolute', width:'70vw', height:'70vw', maxWidth:900, maxHeight:900, top:'-20%', right:'-15%', background:'radial-gradient(ellipse at center, rgba(197,116,58,0.10) 0%, transparent 70%)', borderRadius:'40% 60% 70% 30% / 40% 50% 60% 50%', filter:'blur(40px)' }} />
+          <div style={{ position:'absolute', width:'50vw', height:'50vw', maxWidth:700, maxHeight:700, bottom:'-10%', left:'-10%', background:'radial-gradient(ellipse at center, rgba(79,106,74,0.07) 0%, transparent 65%)', filter:'blur(50px)' }} />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="inline-flex items-center gap-2 bg-amber/10 border border-amber/20 rounded-full px-4 py-1.5 mb-6">
+            <span className="w-2 h-2 bg-amber rounded-full animate-pulse inline-block flex-shrink-0" />
+            <span className="text-amber text-xs font-bold tracking-widest uppercase">Frequently Asked Questions</span>
+          </div>
+          <h1
+            className="font-serif text-white max-w-2xl mx-auto"
+            style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.08, letterSpacing: '-0.035em' }}
+          >
             Everything you need to know.
           </h1>
         </div>

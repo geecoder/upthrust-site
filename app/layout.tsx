@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Header from '@/components/Header';
+import HeaderStack from '@/components/HeaderStack';
 import Footer from '@/components/Footer';
 import AnalyticsProvider from '@/components/AnalyticsProvider';
 import { SITE } from '@/lib/config';
@@ -47,16 +47,18 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // Detect visitor's region server-side using Vercel geo headers.
-  // Passed to <body data-region="..."> so the client Pricing component reads it instantly.
   const region = await getRegionFromRequest();
 
   return (
-    <html lang="en">
+    <html lang="en" style={{ '--header-h': '108px' } as React.CSSProperties}>
       <body data-region={region}>
         <AnalyticsProvider />
-        <Header />
-        <main>{children}</main>
+        {/* Fixed banner + navbar stack */}
+        <HeaderStack />
+        {/* Main content offset by banner (40px) + navbar (68px) = 108px */}
+        <main style={{ paddingTop: 'var(--header-h)' }}>
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

@@ -6,7 +6,6 @@ import { TALLY_FORMS, tallyEmbedUrl } from '@/lib/config';
 import { trackEvent } from '@/lib/mixpanel';
 import { TRACKING_EVENTS } from '@/lib/tracking-events';
 import { SectionLabel } from '@/components/ui/SectionLabel';
-import { Badge } from '@/components/ui/Badge';
 
 export default function ConsultationPage() {
   const tallyIframeRef = useRef<HTMLIFrameElement>(null);
@@ -70,12 +69,22 @@ export default function ConsultationPage() {
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="bg-navy py-32 lg:py-40 text-center">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <Badge variant="paper">Book a Consultation</Badge>
-          <h1 className="font-serif text-display-md text-white mt-6 max-w-2xl mx-auto">
+      <section className="relative bg-navy py-32 lg:py-40 text-center overflow-hidden">
+        <div aria-hidden className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+          <div style={{ position:'absolute', width:'70vw', height:'70vw', maxWidth:900, maxHeight:900, top:'-20%', right:'-15%', background:'radial-gradient(ellipse at center, rgba(197,116,58,0.10) 0%, transparent 70%)', borderRadius:'40% 60% 70% 30% / 40% 50% 60% 50%', filter:'blur(40px)' }} />
+          <div style={{ position:'absolute', width:'50vw', height:'50vw', maxWidth:700, maxHeight:700, bottom:'-10%', left:'-10%', background:'radial-gradient(ellipse at center, rgba(79,106,74,0.07) 0%, transparent 65%)', filter:'blur(50px)' }} />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="inline-flex items-center gap-2 bg-amber/10 border border-amber/20 rounded-full px-4 py-1.5 mb-6">
+            <span className="w-2 h-2 bg-amber rounded-full animate-pulse inline-block flex-shrink-0" />
+            <span className="text-amber text-xs font-bold tracking-widest uppercase">Book a Consultation</span>
+          </div>
+          <h1
+            className="font-serif text-white max-w-2xl mx-auto"
+            style={{ fontSize: 'clamp(2.25rem, 5vw, 2.75rem)', lineHeight: 1.1, letterSpacing: '-0.03em' }}
+          >
             Not sure where to start?
-            <br/>
+            <br />
             <span className="text-amber italic">Let&rsquo;s work it out together.</span>
           </h1>
           <p className="text-paper/60 text-xl mt-4">Free 30-minute call. No pressure.</p>

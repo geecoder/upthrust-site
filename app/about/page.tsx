@@ -1,20 +1,24 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { SectionLabel } from '@/components/ui/SectionLabel';
-import { FeatureRow } from '@/components/ui/FeatureRow';
-import { Badge } from '@/components/ui/Badge';
+import { HeroSwirl } from '@/components/HeroSwirl';
 
 export default function AboutPage() {
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="bg-navy py-32 lg:py-40">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <Badge variant="paper">About Upthrust</Badge>
-          <h1 className="font-serif text-display-md text-white mt-6 max-w-3xl mx-auto text-balance">
+      <section className="relative min-h-[60vh] bg-navy flex items-center py-24 overflow-hidden">
+        <HeroSwirl variant="subtle" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-6">About Upthrust</p>
+          <h1
+            className="font-serif text-white max-w-3xl text-balance"
+            style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', lineHeight: 1.08, letterSpacing: '-0.035em' }}
+          >
             Built on a simple observation:
-            <br/>
-            <span className="text-amber italic">Professionals can do the work. They just can&rsquo;t prove it.</span>
+            <br />
+            <span className="text-amber italic">
+              Professionals can do the work. They just can&rsquo;t prove it.
+            </span>
           </h1>
         </div>
       </section>
@@ -22,29 +26,34 @@ export default function AboutPage() {
       {/* ─── STATS STRIP ──────────────────────────────────────── */}
       <section className="bg-navy border-t border-white/10 py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
             {[
               { num: '2019', label: 'Year Upthrust founded' },
               { num: '1,000+', label: 'Professionals trained' },
               { num: '4', label: 'Continents represented' },
               { num: '2026', label: 'Strategic repositioning' },
             ].map(stat => (
-              <div key={stat.label}>
-                <p className="font-serif text-4xl text-paper font-light tracking-tight">{stat.num}</p>
-                <p className="text-paper/50 text-xs mt-2 uppercase tracking-wide font-bold">{stat.label}</p>
+              <div key={stat.label} className="text-center py-6 px-4">
+                <p className="font-serif text-4xl text-amber font-light tracking-tight">{stat.num}</p>
+                <p className="text-paper/50 text-xs mt-2 uppercase tracking-widest font-bold">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* DIVIDER */}
+      <div className="section-divider" />
+
       {/* ─── WHY REPOSITIONING ────────────────────────────────── */}
       <section className="bg-paper py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-16">
             <div>
-              <SectionLabel>Why now</SectionLabel>
-              <h2 className="font-serif text-display-sm text-navy">The honest reason we&rsquo;re repositioning.</h2>
+              <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-4">Why now</p>
+              <h2 className="font-serif text-navy tracking-tight" style={{ fontSize: 'clamp(1.75rem, 3vw, 2rem)' }}>
+                The honest reason we&rsquo;re repositioning.
+              </h2>
             </div>
             <div className="flex flex-col gap-5">
               <p className="text-ink/80 text-lg leading-relaxed">
@@ -66,40 +75,76 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ─── FOUNDER ──────────────────────────────────────────── */}
+      {/* DIVIDER */}
+      <div className="section-divider" />
+
+      {/* ─── FOUNDER FULL BIO ─────────────────────────────────── */}
       <section className="bg-white py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel>The founder</SectionLabel>
-          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12 lg:gap-16 items-start mt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
 
-            {/* Photo */}
-            <div className="flex-shrink-0">
-              <div className="relative max-w-xs w-full mx-auto lg:mx-0" style={{ maxWidth: 280 }}>
+            {/* Photo column */}
+            <div>
+              <div className="relative inline-block w-full max-w-sm">
+                <div className="absolute -inset-3 bg-amber/10 rounded-3xl blur-xl" />
                 <Image
                   src="/images/founder-genesis.jpg"
-                  alt="Genesis Nneji Enwenyeokwu, founder of Upthrust"
-                  width={280}
-                  height={350}
-                  className="rounded-2xl shadow-lg object-cover w-full"
-                  style={{ height: 350 }}
+                  alt="Genesis Nneji Enwenyeokwu — Founder, Upthrust"
+                  width={480}
+                  height={600}
+                  className="relative rounded-2xl shadow-2xl object-cover ring-1 ring-amber/20 w-full"
+                  style={{ height: 560 }}
                 />
+                <div className="absolute -bottom-5 -right-5 bg-navy rounded-2xl p-5 shadow-2xl border border-white/10">
+                  <p className="text-amber text-xs font-bold tracking-widest uppercase mb-2">Credentials</p>
+                  <p className="text-paper text-sm font-semibold">CBAP Certified</p>
+                  <p className="text-paper text-sm font-semibold">MBA — UEL London</p>
+                  <p className="text-paper/50 text-xs mt-1">Product Lead · Est. 2019</p>
+                </div>
               </div>
             </div>
 
-            {/* Content */}
+            {/* Bio column */}
             <div>
-              <h2 className="font-serif text-3xl text-navy mb-1">Genesis Nneji Enwenyeokwu</h2>
-              <p className="text-amber text-sm font-bold mb-8">Founder &amp; Program Director, Upthrust · Product Lead, Rova</p>
+              <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-4">The Founder</p>
+              <h2 className="font-serif text-4xl text-navy mb-2 leading-tight tracking-tight">
+                Genesis Nneji Enwenyeokwu
+              </h2>
+              <p className="text-amber font-bold text-sm mb-8">CBAP · MBA · Product Lead · Facilitator</p>
 
-              <FeatureRow dark={false} icon="📍" title="Based in" description="Lagos & London" />
-              <FeatureRow dark={false} icon="📅" title="Founded" description="2019" />
-              <FeatureRow dark={false} icon="🎓" title="Background" description="Product Lead, CBAP, MBA (UEL) · 10+ years across PM & BA" />
-              <FeatureRow dark={false} icon="🌍" title="Trained" description="1,000+ professionals globally" />
+              <div className="space-y-5 text-ink/75 text-base leading-relaxed">
+                <p>
+                  Genesis Nneji Enwenyeokwu is a CBAP-certified Business Analyst, Product Lead, facilitator, and digital
+                  product practitioner with over a decade of experience across business analysis, product management,
+                  business process automation, and digital product delivery.
+                </p>
+                <p>
+                  He has helped hundreds of professionals transition into business analysis and product careers, while also
+                  building and supporting B2B and B2C digital products across Nigeria, the UK, and the US.
+                </p>
+                <p>
+                  Upthrust was built from a pattern he kept seeing: talented professionals finishing courses, collecting
+                  certificates, and still struggling to show credible evidence of what they could actually do.
+                  The Career Capability Accelerator is the answer to that gap.
+                </p>
+              </div>
 
-              <blockquote className="border-l-4 border-amber pl-6 mt-8 italic text-ink/70 text-lg leading-relaxed">
-                &ldquo;Too many talented people were collecting certificates but still struggling to demonstrate real capability.
-                Upthrust is my answer to that problem.&rdquo;
+              <blockquote className="border-l-4 border-amber pl-6 mt-8 italic text-ink/60 text-lg leading-relaxed">
+                &ldquo;Capability that cannot be shown is capability that cannot be used.&rdquo;
               </blockquote>
+
+              <div className="grid grid-cols-3 gap-6 mt-10 pt-10 border-t border-ink/10">
+                {[
+                  ['10+', 'Years experience'],
+                  ['1,000+', 'Professionals trained'],
+                  ['3', 'Continents'],
+                ].map(([val, label]) => (
+                  <div key={label}>
+                    <p className="font-serif text-3xl text-navy mb-1">{val}</p>
+                    <p className="text-ink/50 text-xs font-medium uppercase tracking-wide">{label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -108,17 +153,19 @@ export default function AboutPage() {
       {/* ─── WHAT WE STAND FOR ────────────────────────────────── */}
       <section className="bg-paper py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <SectionLabel>What we stand for</SectionLabel>
-          <h2 className="font-serif text-display-sm text-navy mb-12">Three things we will not do.</h2>
+          <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-4">What we stand for</p>
+          <h2 className="font-serif text-navy mb-12 tracking-tight" style={{ fontSize: 'clamp(1.75rem, 3vw, 2rem)' }}>
+            Three things we will not do.
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { num: '01', title: 'We are not a certificate factory.', body: 'Capability is the product. Evidence is the proof.' },
               { num: '02', title: 'We are not an AI-only tool.', body: 'Human mentorship and judgement are central to Upthrust.' },
               { num: '03', title: 'We are not a course marketplace.', body: 'PM, BA, and Design only — until each is proven.' },
             ].map(p => (
-              <div key={p.num} className="bg-white rounded-2xl p-8 border border-paper/50">
+              <div key={p.num} className="bg-white rounded-2xl p-8 border border-paper/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <p className="text-amber font-bold text-sm mb-3">{p.num}</p>
-                <h3 className="font-serif text-xl text-navy mb-3 leading-tight">{p.title}</h3>
+                <h3 className="font-serif text-xl text-navy mb-3 leading-tight tracking-tight">{p.title}</h3>
                 <p className="text-ink/60 text-sm leading-relaxed">{p.body}</p>
               </div>
             ))}
@@ -126,26 +173,40 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* DIVIDER */}
+      <div className="section-divider" />
+
       {/* ─── MISSION ──────────────────────────────────────────── */}
-      <section className="bg-navy py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <SectionLabel light>Our mission</SectionLabel>
-          <h2 className="font-serif text-display-md text-white mb-6 max-w-3xl mx-auto">
-            We do not guarantee jobs.
-            <span className="text-amber italic"> We guarantee readiness.</span>
-          </h2>
-          <p className="text-paper/60 text-lg max-w-2xl mx-auto">
-            What you can show. What you can defend. The evidence that backs your story in any interview.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center mt-10">
-            <Link href="/assessment"
-              className="bg-amber hover:bg-amber-dark text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-              Take the Assessment
-            </Link>
-            <Link href="/consultation"
-              className="border-2 border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
-              Book a Consultation
-            </Link>
+      <section className="relative bg-navy py-24 lg:py-32 overflow-hidden">
+        <HeroSwirl variant="subtle" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-4">Our Mission</p>
+            <h2 className="font-serif text-4xl text-white mb-6 leading-tight tracking-tight">
+              To help professionals build capability, prove it, and open doors.
+            </h2>
+            <p className="text-paper/70 text-lg leading-relaxed mb-4">
+              Too many ambitious professionals are stuck between learning and opportunity. They have taken courses,
+              watched videos, and earned certificates, but still cannot show credible evidence of what they can do.
+            </p>
+            <p className="text-paper/70 text-lg leading-relaxed mb-10">
+              Upthrust was created to close that gap — for professionals across Africa, the UK, Canada, and the global diaspora.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/assessment"
+                className="group inline-flex items-center gap-2 bg-amber hover:bg-amber-dark text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 shadow-lg shadow-amber/20"
+              >
+                Take the Assessment
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </Link>
+              <Link
+                href="/consultation"
+                className="inline-flex items-center border-2 border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200"
+              >
+                Book a Consultation
+              </Link>
+            </div>
           </div>
         </div>
       </section>

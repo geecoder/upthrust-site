@@ -10,6 +10,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@300;400;500;600;700;800&display=swap');
 
 :root {
+  /* Header offset — updated by JS when banner dismissed */
+  --header-h: 108px;
+
   /* Color tokens */
   --ink: #0F1A2E;
   --ink-soft: #1F2B42;
@@ -513,4 +516,20 @@ section h1, section h2, section h3 { text-align: left; }
   letter-spacing: -0.04em;
   color: var(--paper-line);
   line-height: 1;
+}
+
+/* ── Section divider (navy ↔ paper transitions) ──────────── */
+.section-divider {
+  background: linear-gradient(to right, transparent, rgba(197,116,58,0.3), transparent);
+  height: 1px;
+  width: 100%;
+}
+
+/* ── Horizontal scroll snap for mobile testimonials ──────── */
+.testimonials-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.testimonials-scroll::-webkit-scrollbar {
+  display: none;
 }

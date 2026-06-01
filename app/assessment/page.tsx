@@ -149,14 +149,28 @@ export default function AssessmentPage() {
     return (
       <>
         {/* Hero */}
-        <section className="bg-navy py-24 lg:py-32 text-center">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-white/10 text-paper border border-white/15">
-              The Upthrust Career Assessment
-            </span>
-            <h1 className="font-serif text-display-lg text-white mt-6 max-w-3xl mx-auto text-balance max-[768px]:text-display-sm">
+        <section className="relative bg-navy py-24 lg:py-32 text-center overflow-hidden">
+          {/* HeroSwirl is not 'use client', safe to use inline */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 overflow-hidden pointer-events-none"
+            style={{ zIndex: 0 }}
+          >
+            <div style={{ position:'absolute', width:'70vw', height:'70vw', maxWidth:900, maxHeight:900, top:'-20%', right:'-15%', background:'radial-gradient(ellipse at center, rgba(197,116,58,0.10) 0%, transparent 70%)', borderRadius:'40% 60% 70% 30% / 40% 50% 60% 50%', filter:'blur(40px)' }} />
+            <div style={{ position:'absolute', width:'50vw', height:'50vw', maxWidth:700, maxHeight:700, bottom:'-10%', left:'-10%', background:'radial-gradient(ellipse at center, rgba(79,106,74,0.07) 0%, transparent 65%)', borderRadius:'60% 40% 30% 70% / 60% 30% 70% 40%', filter:'blur(50px)' }} />
+          </div>
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="inline-flex items-center gap-2 bg-amber/10 border border-amber/20 rounded-full px-4 py-1.5 mb-6">
+              <span className="w-2 h-2 bg-amber rounded-full animate-pulse inline-block flex-shrink-0" />
+              <span className="text-amber text-xs font-bold tracking-widest uppercase">The Upthrust Career Assessment</span>
+            </div>
+            <h1
+              className="font-serif text-white max-w-3xl mx-auto text-balance"
+              style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.08, letterSpacing: '-0.035em' }}
+            >
               Discover how you actually
-              <span className="text-amber italic"> think about product work.</span>
+              <br />
+              <span className="text-amber italic">think about product work.</span>
             </h1>
             <p className="text-paper/70 text-xl mt-5 max-w-2xl mx-auto">
               12 real scenarios. About 8 minutes. A result that quotes your own answers.

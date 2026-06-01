@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { SectionLabel } from '@/components/ui/SectionLabel';
-import { Badge } from '@/components/ui/Badge';
+import { HeroSwirl } from '@/components/HeroSwirl';
 import Pricing from '@/components/Pricing';
 import CapstonesInteractive from '@/components/CapstonesInteractive';
 
@@ -34,15 +34,22 @@ export default function AcceleratorPage() {
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="bg-navy min-h-[80vh] flex items-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-ink/80 pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32 relative w-full">
+      <section className="relative bg-navy min-h-[80vh] flex items-center overflow-hidden">
+        <HeroSwirl variant="subtle" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12 lg:gap-16 items-center">
             <div>
-              <Badge variant="amber">Career Capability Accelerator · Cohort 1</Badge>
-              <h1 className="font-serif text-display-lg text-white mt-6 text-balance max-[768px]:text-display-sm">
+              <div className="inline-flex items-center gap-2 bg-amber/10 border border-amber/20 rounded-full px-4 py-1.5 mb-6">
+                <span className="w-2 h-2 bg-amber rounded-full animate-pulse inline-block flex-shrink-0" />
+                <span className="text-amber text-xs font-bold tracking-widest uppercase">Career Capability Accelerator · Cohort 1</span>
+              </div>
+              <h1
+                className="font-serif text-white text-balance"
+                style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.08, letterSpacing: '-0.035em' }}
+              >
                 Twelve weeks. Real work.
-                <span className="text-amber italic"> Evidence at the end.</span>
+                <br />
+                <span className="text-amber italic">Evidence at the end.</span>
               </h1>
               <p className="text-paper/70 text-xl mt-5 max-w-lg leading-relaxed">
                 Build portfolio-grade deliverables. Earn a Capability Passport.
@@ -107,8 +114,9 @@ export default function AcceleratorPage() {
       </section>
 
       {/* ─── WEEKLY RHYTHM ────────────────────────────────────── */}
-      <section className="bg-navy py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section className="relative bg-navy py-24 lg:py-32 overflow-hidden">
+        <HeroSwirl variant="subtle" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <SectionLabel light>How the accelerator works</SectionLabel>
           <h2 className="font-serif text-display-sm text-white mb-12">
             The weekly rhythm that turns concept into capability.
@@ -147,8 +155,9 @@ export default function AcceleratorPage() {
       </section>
 
       {/* ─── DELIVERABLES ─────────────────────────────────────── */}
-      <section className="bg-navy py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section className="relative bg-navy py-24 lg:py-32 overflow-hidden">
+        <HeroSwirl variant="subtle" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <SectionLabel light>What you walk out with</SectionLabel>
           <h2 className="font-serif text-display-sm text-white mb-12">Evidence, not attendance.</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -188,8 +197,9 @@ export default function AcceleratorPage() {
       </section>
 
       {/* ─── CAPSTONES ────────────────────────────────────────── */}
-      <section className="bg-navy py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section className="relative bg-navy py-24 lg:py-32 overflow-hidden">
+        <HeroSwirl variant="subtle" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <SectionLabel light>Cohort 1 capstone projects</SectionLabel>
           <h2 className="font-serif text-display-sm text-white mb-4">Real briefs. Real industries.</h2>
           <p className="text-paper/60 text-lg mb-12">Eight product briefs across fintech, health tech, logistics, and more.</p>

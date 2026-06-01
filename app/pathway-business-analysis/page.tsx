@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { SectionLabel } from '@/components/ui/SectionLabel';
-import { Badge } from '@/components/ui/Badge';
 
 const BA_WEEKS = [
   { wk: 'Week 1',  title: 'Business Problem Framing',      desc: 'Scope a business problem from a vague brief' },
@@ -21,15 +20,25 @@ export default function BAPathwayPage() {
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="bg-navy min-h-[80vh] flex items-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-ink/80 pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32 relative w-full">
+      <section className="relative bg-navy min-h-[80vh] flex items-center overflow-hidden">
+        <div aria-hidden className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+          <div style={{ position:'absolute', width:'70vw', height:'70vw', maxWidth:900, maxHeight:900, top:'-20%', right:'-15%', background:'radial-gradient(ellipse at center, rgba(197,116,58,0.10) 0%, transparent 70%)', borderRadius:'40% 60% 70% 30% / 40% 50% 60% 50%', filter:'blur(40px)', animation:'swirlFloat1 12s ease-in-out infinite alternate' }} />
+          <div style={{ position:'absolute', width:'50vw', height:'50vw', maxWidth:700, maxHeight:700, bottom:'-10%', left:'-10%', background:'radial-gradient(ellipse at center, rgba(79,106,74,0.07) 0%, transparent 65%)', filter:'blur(50px)', animation:'swirlFloat2 16s ease-in-out infinite alternate' }} />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12 lg:gap-16 items-center">
             <div>
-              <Badge variant="amber">Cohort 1 · Open Now</Badge>
-              <h1 className="font-serif text-display-lg text-white mt-6 text-balance max-[768px]:text-display-sm">
-                Make the ambiguous
-                <span className="text-amber italic"> actionable.</span>
+              <div className="inline-flex items-center gap-2 bg-amber/10 border border-amber/20 rounded-full px-4 py-1.5 mb-6">
+                <span className="w-2 h-2 bg-amber rounded-full animate-pulse inline-block flex-shrink-0" />
+                <span className="text-amber text-xs font-bold tracking-widest uppercase">BA Pathway · Cohort 1 Open</span>
+              </div>
+              <h1
+                className="font-serif text-white text-balance"
+                style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: 1.08, letterSpacing: '-0.035em' }}
+              >
+                Build evidence as a
+                <br />
+                <span className="text-amber italic">Business Analyst.</span>
               </h1>
               <p className="text-paper/70 text-xl mt-5 max-w-lg leading-relaxed">
                 Elicit requirements, map processes, and write BRDs that ship.
