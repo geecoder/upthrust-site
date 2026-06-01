@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ============================================================
    UPTHRUST — DESIGN SYSTEM
    Fraunces serif display + Manrope geometric sans

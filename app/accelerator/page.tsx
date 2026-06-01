@@ -1,285 +1,216 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import { SectionLabel } from '@/components/ui/SectionLabel';
+import { Badge } from '@/components/ui/Badge';
 import Pricing from '@/components/Pricing';
-import CurriculumInteractive from '@/components/CurriculumInteractive';
-import WeeklyRhythmInteractive from '@/components/WeeklyRhythmInteractive';
-import WhyNowVisual from '@/components/WhyNowVisual';
-import WhoIsForSection from '@/components/WhoIsForSection';
 import CapstonesInteractive from '@/components/CapstonesInteractive';
-import FAQInteractive from '@/components/FAQInteractive';
-import { LottieOnScroll } from '@/components/LottieOnScroll';
+
+const WEEKS = [
+  { wk: 'Week 0',  title: 'Onboarding & Diagnostic',              desc: 'Baseline assessment, tool setup, pathway confirmation' },
+  { wk: 'Week 1',  title: 'Digital Product Foundations',           desc: 'How real product teams work across all roles' },
+  { wk: 'Week 2',  title: 'Problem Discovery',                     desc: 'Define user and business problems before jumping to solutions' },
+  { wk: 'Week 3',  title: 'Product Strategy & Business Context',   desc: 'Connect problems to goals, MVP scope, and success measures' },
+  { wk: 'Week 4',  title: 'Requirements & Scope',                  desc: 'Turn ideas into clear requirements and user stories' },
+  { wk: 'Week 5',  title: 'Journey, Workflow & Process Design',    desc: 'Map journeys, processes, workflows, and edge cases' },
+  { wk: 'Week 6',  title: 'UX & Product Design Foundations',       desc: 'Personas, journey maps, information architecture' },
+  { wk: 'Week 7',  title: 'Prototyping & Design Systems',          desc: 'Figma workflows, handoff norms, design system thinking' },
+  { wk: 'Week 8',  title: 'Agile Delivery & Backlog',              desc: 'Epics, stories, sprint flow, DoR and DoD' },
+  { wk: 'Week 9',  title: 'Stakeholder Management',                desc: 'Vague requests, scope pressure, trade-off conversations' },
+  { wk: 'Week 10', title: 'Testing, UAT & Launch Readiness',       desc: 'UAT scenarios, release checklists, go-live controls' },
+  { wk: 'Week 11', title: 'Metrics & Continuous Improvement',      desc: 'Define success, funnels, activation, feedback loops' },
+  { wk: 'Week 12', title: 'Capstone Defence & Portfolio Review',   desc: 'Present and defend. Capability Passport. Demo Day.' },
+];
+
+const RHYTHM = [
+  { n: '01', title: 'Concept Class',      meta: '90 min · Live',        desc: 'The weekly idea explained by a practitioner who has done the work.' },
+  { n: '02', title: 'Real-World Case',    meta: '30 min · Live',        desc: 'A realistic product scenario showing the concept in action.' },
+  { n: '03', title: 'Practical Lab',      meta: '60 min · Live',        desc: 'Guided hands-on session. You practise with a facilitator watching.' },
+  { n: '04', title: 'Weekly Assignment',  meta: 'Self-paced · 3–4 hrs', desc: 'A tangible deliverable that goes straight into your portfolio.' },
+  { n: '05', title: 'Feedback Review',    meta: 'Async · 1 hr',         desc: 'Structured feedback on your submission from facilitators.' },
+  { n: '06', title: 'Reflection & Prep',  meta: 'Self-paced · 30 min',  desc: 'Review what you learned and prepare for the next week.' },
+];
 
 export default function AcceleratorPage() {
   return (
     <>
-      {/* HERO */}
-      <section style={{
-        paddingTop: 'clamp(72px, 10vw, 120px)',
-        paddingBottom: 0,
-        background: 'var(--paper)',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        <div aria-hidden className="hero-bg-accent" />
-        <div className="container" style={{ position: 'relative' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="accel-hero-grid">
-            {/* Left: copy */}
-            <div style={{ paddingBottom: 'clamp(56px, 7vw, 90px)' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--moss)', display: 'inline-block' }} />
-                <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--moss)' }}>Cohort 1 · Open Now</span>
-              </div>
-              <h1 className="display-xl text-balance" style={{ marginTop: 0 }}>
-                Twelve weeks. Real product work.
-                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Evidence at the end.</span>
+      {/* ─── HERO ─────────────────────────────────────────────── */}
+      <section className="bg-navy min-h-[80vh] flex items-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-ink/80 pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32 relative w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12 lg:gap-16 items-center">
+            <div>
+              <Badge variant="amber">Career Capability Accelerator · Cohort 1</Badge>
+              <h1 className="font-serif text-display-lg text-white mt-6 text-balance max-[768px]:text-display-sm">
+                Twelve weeks. Real work.
+                <span className="text-amber italic"> Evidence at the end.</span>
               </h1>
-              <p className="lede" style={{ marginTop: 20, maxWidth: 520 }}>
-                Build portfolio-grade deliverables, defend your decisions, and earn a Capability Passport that shows what you can actually do.
+              <p className="text-paper/70 text-xl mt-5 max-w-lg leading-relaxed">
+                Build portfolio-grade deliverables. Earn a Capability Passport.
               </p>
-              <div className="btn-row-mobile" style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-                <Link href="/assessment" className="btn btn-primary btn-arrow">Take the Career Assessment</Link>
-                <Link href="/consultation" className="btn btn-secondary">Book a Consultation</Link>
+              {/* Stat pills */}
+              <div className="flex flex-wrap gap-2 mt-6">
+                {['12 weeks', '15–25 learners', '8–10 hrs/week', 'Live + async'].map(p => (
+                  <span key={p} className="bg-white/10 text-paper/80 px-4 py-2 rounded-full text-sm font-medium">
+                    {p}
+                  </span>
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-4 mt-8">
+                <Link href="/assessment"
+                  className="bg-amber hover:bg-amber-dark text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
+                  Take the Assessment
+                </Link>
+                <Link href="/consultation"
+                  className="border-2 border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
+                  Book a Consultation
+                </Link>
               </div>
             </div>
 
-            {/* Right: human image — cohort learning session */}
-            <div style={{ position: 'relative', alignSelf: 'stretch', minHeight: 460 }} className="accel-hero-3d">
-              <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
-                <img
-                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80"
-                  alt="Cohort of professionals collaborating on real product and business analysis work"
-                  className="hero-img"
-                  style={{ height: '100%', minHeight: 460 }}
-                />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,26,46,0.65) 0%, transparent 60%)', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', bottom: 20, left: 20, padding: '6px 14px', background: 'rgba(15,26,46,0.85)', backdropFilter: 'blur(8px)' }}>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-soft)' }}>
-                    Live · Practical · Cohort-based
-                  </p>
-                </div>
-              </div>
+            <div className="hidden lg:block">
+              <Image
+                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1000&q=85"
+                alt="Cohort learning session"
+                width={520}
+                height={480}
+                className="rounded-2xl object-cover shadow-2xl w-full"
+                style={{ height: 480 }}
+                priority
+              />
             </div>
           </div>
         </div>
-        <style>{`
-          @media (max-width: 900px) {
-            .accel-hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
-            .accel-hero-3d { min-height: 280px !important; height: 280px !important; }
-            .accel-hero-3d .hero-img-wrap { position: relative !important; height: 280px !important; border-radius: 0 !important; }
-          }
-        `}</style>
       </section>
 
-      {/* AT A GLANCE */}
-      <section style={{ borderTop: '1px solid var(--paper-line)', borderBottom: '1px solid var(--paper-line)', padding: '40px 0', background: 'var(--ink)' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 32 }} className="glance-grid">
+      {/* ─── MARKET STATS ─────────────────────────────────────── */}
+      <section className="bg-paper py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionLabel>Why now</SectionLabel>
+          <h2 className="font-serif text-display-sm text-navy mb-12">
+            The market is moving from credentials to capability.
+          </h2>
+          <div className="divide-y divide-ink/10">
             {[
-              { label: 'Duration', value: '12 weeks' },
-              { label: 'Cohort size', value: '15–25' },
-              { label: 'Time / week', value: '8–10 hrs' },
-              { label: 'Pathways', value: 'PM & BA' },
-              { label: 'Format', value: 'Live + async' },
-            ].map((stat) => (
-              <div key={stat.label} style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(250,247,241,0.5)', marginBottom: 8 }}>{stat.label}</p>
-                <p style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 500, letterSpacing: '-0.025em', color: 'var(--paper)' }}>
-                  {stat.value}
-                </p>
+              { pct: '85%', label: 'Employers prioritise portfolio over CV',    quote: '"Show me what you built"' },
+              { pct: '78%', label: 'Value capability demo over certification',   quote: '"Not what you studied"' },
+              { pct: '91%', label: 'Prefer capstone to course completion',       quote: '"Show me your capstone"' },
+              { pct: '83%', label: 'Want active builders not passive learners',  quote: '"Show me what you did"' },
+            ].map(({ pct, label, quote }) => (
+              <div key={pct} className="flex items-center gap-8 py-6">
+                <p className="font-serif text-5xl text-amber flex-shrink-0 w-28 leading-none">{pct}</p>
+                <p className="font-bold text-navy text-lg flex-1">{label}</p>
+                <p className="text-ink/50 text-sm italic hidden md:block">{quote}</p>
               </div>
             ))}
           </div>
-          <style>{`@media (max-width: 900px) { section .glance-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; } }`}</style>
         </div>
       </section>
 
-      {/* WHY THIS EXISTS — visual */}
-      <section className="section">
-        <div className="container">
-          <WhyNowVisual />
+      {/* ─── WEEKLY RHYTHM ────────────────────────────────────── */}
+      <section className="bg-navy py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionLabel light>How the accelerator works</SectionLabel>
+          <h2 className="font-serif text-display-sm text-white mb-12">
+            The weekly rhythm that turns concept into capability.
+          </h2>
+          <div className="divide-y divide-white/10">
+            {RHYTHM.map(({ n, title, meta, desc }) => (
+              <div key={n} className="flex gap-6 py-5 items-start">
+                <p className="font-serif text-3xl text-amber/40 w-12 flex-shrink-0 leading-none">{n}</p>
+                <div className="flex-1">
+                  <p className="font-bold text-white text-base">{title}</p>
+                  <p className="text-paper/60 text-sm mt-1">{desc}</p>
+                </div>
+                <p className="text-paper/30 text-xs font-medium hidden sm:block flex-shrink-0">{meta}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS — interactive rhythm */}
-      <section className="section" style={{ background: 'var(--paper-soft)' }}>
-        <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 56 }}>
-            <p className="eyebrow">How the Accelerator works</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-              The weekly rhythm that turns concept into capability.
-            </h2>
-            <p className="lede" style={{ marginTop: 20 }}>
-              Every week follows the same six-step shape — concept, case, lab, assignment, feedback, reflection — until the loop becomes second nature.
-            </p>
+      {/* ─── CURRICULUM ───────────────────────────────────────── */}
+      <section className="bg-paper py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionLabel>12-week curriculum</SectionLabel>
+          <h2 className="font-serif text-display-sm text-navy mb-12">Each week builds on the last.</h2>
+          <div className="rounded-2xl overflow-hidden border border-ink/10">
+            {WEEKS.map(({ wk, title, desc }, i) => (
+              <div key={wk}
+                className={`flex items-center gap-6 px-6 py-4 border-b border-ink/5 last:border-0 ${i % 2 === 0 ? 'bg-white' : 'bg-paper'}`}>
+                <span className="text-xs font-bold text-amber uppercase tracking-widest w-16 flex-shrink-0">{wk}</span>
+                <p className="font-bold text-navy text-sm flex-1">{title}</p>
+                <p className="text-ink/50 text-xs text-right ml-auto hidden md:block max-w-xs">{desc}</p>
+              </div>
+            ))}
           </div>
-          {/* ANIMATION — weekly rhythm, above 6 steps, desktop only */}
-          <div className="hidden md:flex justify-center mb-10">
-            <LottieOnScroll
-              src="https://lottie.host/9df30d2e-c8f2-4d21-8a87-51a0cc0cb42f/LPkXi9ky3E.lottie"
-              loop={true}
-              width={200}
-              height={200}
-              speed={0.6}
-              threshold={0.3}
-              fallbackIcon="🔄"
-            />
-          </div>
-          <WeeklyRhythmInteractive />
         </div>
       </section>
 
-      {/* 12-WEEK CURRICULUM — interactive tabs */}
-      <section className="section">
-        <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 48 }}>
-            <p className="eyebrow">The 12-week curriculum</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-              Twelve weeks, each one building on the last.
-            </h2>
-            <p className="lede" style={{ marginTop: 20 }}>
-              Four phases, each building on the last. PM and BA pathway work layers on top of the shared curriculum.
-            </p>
-          </div>
-          <CurriculumInteractive />
-        </div>
-      </section>
-
-      {/* WHAT YOU WALK OUT WITH */}
-      <section className="section" style={{ background: 'var(--ink)', color: 'var(--paper)' }}>
-        <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 64 }}>
-            <p className="eyebrow-light">What you walk out with</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16, color: 'var(--paper)' }}>
-              Evidence, not attendance.
-            </h2>
-            <p className="lede" style={{ marginTop: 20, color: 'rgba(250,247,241,0.78)' }}>
-              By Week 12 you have a body of real work — not a stack of certificates — that makes the Capability Passport meaningful.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="deliverables-grid">
+      {/* ─── DELIVERABLES ─────────────────────────────────────── */}
+      <section className="bg-navy py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionLabel light>What you walk out with</SectionLabel>
+          <h2 className="font-serif text-display-sm text-white mb-12">Evidence, not attendance.</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
-                pathway: 'PM Pathway',
-                color: 'var(--ink)',
-                accent: 'var(--amber)',
-                items: ['Product teardown + strategy analysis', 'Problem brief', 'Product strategy canvas', 'Full PRD with edge cases', 'User journey map', 'Sprint backlog', 'Metrics + kill criteria plan', 'Launch brief', 'Capstone project + presentation', 'Portfolio case study', 'Interview story bank (8–10 stories)', 'Capability Passport (Premium)'],
+                title: 'PM Pathway',
+                items: ['Full product case study', 'PRD that another PM would respect', 'Roadmap tied to a business goal', 'Metrics plan with kill criteria', 'Interview story bank (8–10)', 'Capability Passport (Premium)'],
               },
               {
-                pathway: 'BA Pathway',
-                color: 'var(--amber-deep)',
-                accent: 'var(--amber)',
-                items: ['Stakeholder map + RACI', 'Business case', 'Requirements elicitation notes', 'Full BRD (functional + non-functional)', 'As-Is / To-Be process maps', 'User stories with acceptance criteria', 'UAT pack + test scenarios', 'Post-launch reporting framework', 'Capstone project + presentation', 'Portfolio case study', 'Interview story bank (8–10 stories)', 'Capability Passport (Premium)'],
+                title: 'BA Pathway',
+                items: ['Full BA case study', 'BRD — functional & non-functional', 'As-Is / To-Be process maps', 'User stories with acceptance criteria', 'UAT pack + test scenarios', 'Capability Passport (Premium)'],
               },
-            ].map((section) => (
-              <div key={section.pathway} style={{
-                padding: '32px',
-                background: 'rgba(250,247,241,0.04)',
-                border: '1px solid rgba(250,247,241,0.12)',
-                borderTop: `3px solid ${section.accent}`,
-              }}>
-                {/* ANIMATION — top of PM and BA deliverables columns, desktop only */}
-                <div className="hidden md:flex justify-center mb-6">
-                  <LottieOnScroll
-                    src="https://lottie.host/3abf2e74-3c9e-4bef-9e80-11e7fdae4d67/E2xNnWCrxI.lottie"
-                    loop={false}
-                    width={100}
-                    height={100}
-                    threshold={0.3}
-                    fallbackIcon="💼"
-                  />
-                </div>
-                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: section.accent, marginBottom: 24 }}>{section.pathway}</p>
-                <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, listStyle: 'none', padding: 0, margin: 0 }}>
-                  {section.items.map((item, i) => (
-                    <li key={i} style={{ display: 'flex', gap: 12, fontSize: '0.9375rem', color: i === section.items.length - 1 ? section.accent : 'rgba(250,247,241,0.82)', fontWeight: i === section.items.length - 1 ? 500 : 400 }}>
-                      <span style={{ color: section.accent, flexShrink: 0 }}>—</span>
-                      <span>{item}</span>
+            ].map(({ title, items }) => (
+              <div key={title} className="bg-white/5 border border-white/10 rounded-2xl p-8">
+                <h3 className="font-serif text-xl text-white mb-6">{title}</h3>
+                <ul className="flex flex-col gap-3">
+                  {items.map(item => (
+                    <li key={item} className="flex gap-2 text-sm text-paper/80">
+                      <span className="text-amber flex-shrink-0">→</span>
+                      {item}
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-
-          <style>{`@media (max-width: 760px) { section .deliverables-grid { grid-template-columns: 1fr !important; } }`}</style>
         </div>
       </section>
 
-      {/* WHO THIS IS FOR / NOT FOR */}
-      <section className="section">
-        <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 56 }}>
-            <p className="eyebrow">Who this is for</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-              Upthrust is not for everyone. That is deliberate.
-            </h2>
-            <p className="lede" style={{ marginTop: 20 }}>
-              A selective, serious cohort produces better outcomes than a large, passive one. Read both sides before enrolling.
-            </p>
-          </div>
-          <WhoIsForSection />
-        </div>
-      </section>
-
-      {/* TIERS / PRICING */}
-      <section className="section" style={{ background: 'var(--paper-soft)' }}>
-        <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 56 }}>
-            <p className="eyebrow">Cohort 1 tiers</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-              Two ways to participate. One outcome.
-            </h2>
-            <p className="lede" style={{ marginTop: 20 }}>
-              Pricing is set regionally — Nigeria/Africa, UK, Canada, and US are priced differently to reflect local realities. The selector below automatically detects your location.
-            </p>
-          </div>
+      {/* ─── PRICING ──────────────────────────────────────────── */}
+      <section className="bg-paper py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionLabel>Investment</SectionLabel>
+          <h2 className="font-serif text-display-sm text-navy mb-12">Choose your experience.</h2>
           <Pricing />
         </div>
       </section>
 
-      {/* CAPSTONE OPTIONS */}
-      <section className="section">
-        <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 48 }}>
-            <p className="eyebrow">Cohort 1 capstone projects</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-              Real briefs. Real industries. You pick one.
-            </h2>
-            <p className="lede" style={{ marginTop: 20 }}>
-              Eight real product briefs — spanning fintech, health tech, logistics, proptech, edtech, and government. Each has a PM-specific and a BA-specific version. Filter by region or difficulty, then click to see your brief.
-            </p>
-          </div>
+      {/* ─── CAPSTONES ────────────────────────────────────────── */}
+      <section className="bg-navy py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionLabel light>Cohort 1 capstone projects</SectionLabel>
+          <h2 className="font-serif text-display-sm text-white mb-4">Real briefs. Real industries.</h2>
+          <p className="text-paper/60 text-lg mb-12">Eight product briefs across fintech, health tech, logistics, and more.</p>
           <CapstonesInteractive />
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="section" style={{ background: 'var(--paper-soft)' }}>
-        <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 48 }}>
-            <p className="eyebrow">Common questions</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>Before you ask.</h2>
-            <p className="lede" style={{ marginTop: 20 }}>
-              Everything we get asked before enrollment. If your question is not here, the consultation call is where we answer it.
-            </p>
-          </div>
-          <FAQInteractive />
-        </div>
-      </section>
-
-      {/* FINAL CTA */}
-      <section style={{ background: 'var(--ink)', color: 'var(--paper)', padding: 'clamp(80px, 11vw, 140px) 0' }}>
-        <div className="container-medium" style={{ textAlign: 'center' }}>
-          <p className="eyebrow-light">The next move</p>
-          <h2 className="display-l text-balance" style={{ marginTop: 20, color: 'var(--paper)' }}>
-            Twelve weeks from now,<br/>
-            <span style={{ fontStyle: 'italic', color: 'var(--amber-soft)' }}>you'll have something to show.</span>
+      {/* ─── FINAL CTA ────────────────────────────────────────── */}
+      <section className="bg-amber py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <h2 className="font-serif text-display-sm text-white mb-4">
+            Twelve weeks from now, you&rsquo;ll have something to show.
           </h2>
-          <p className="lede" style={{ marginTop: 24, color: 'rgba(250,247,241,0.78)', maxWidth: 560, marginLeft: 'auto', marginRight: 'auto' }}>
-            The first step is the Career Assessment — 8 minutes, 12 scenarios, a result that quotes your own answers back to you. From there, we talk.
-          </p>
-          <div style={{ marginTop: 40, display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center' }}>
-            <Link href="/assessment" className="btn btn-amber btn-arrow">Take the Career Assessment</Link>
-            <Link href="/consultation" className="btn btn-secondary" style={{ background: 'transparent', color: 'var(--paper)', borderColor: 'var(--paper)' }}>
+          <p className="text-white/80 text-lg mb-8">The first step is the Career Assessment — 8 minutes.</p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/assessment"
+              className="bg-white text-amber hover:bg-paper px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
+              Take the Assessment
+            </Link>
+            <Link href="/consultation"
+              className="border-2 border-white/40 hover:border-white text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
               Book a Consultation
             </Link>
           </div>

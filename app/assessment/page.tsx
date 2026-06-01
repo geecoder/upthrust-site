@@ -7,8 +7,6 @@ import { calculateResult, getResultMeta, type Answer } from '@/lib/scoring';
 import { TALLY_FORMS, tallyDirectUrl } from '@/lib/config';
 import { trackEvent } from '@/lib/mixpanel';
 import { TRACKING_EVENTS } from '@/lib/tracking-events';
-import { LottieOnScroll } from '@/components/LottieOnScroll';
-
 type Stage = 'intro' | 'lead' | 'scenario' | 'result';
 
 // Silent Tally submission
@@ -151,110 +149,74 @@ export default function AssessmentPage() {
     return (
       <>
         {/* Hero */}
-        <section style={{ paddingTop: 'clamp(80px, 12vw, 140px)', paddingBottom: 'clamp(60px, 8vw, 100px)', position: 'relative', overflow: 'hidden' }}>
-          <div aria-hidden className="hero-bg-accent" />
-          <div className="container" style={{ position: 'relative' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="assessment-hero-grid">
-              {/* Left: copy */}
-              <div>
-                <p className="eyebrow">The Upthrust Career Assessment</p>
-                <h1 className="display-l text-balance" style={{ marginTop: 16 }}>
-                  Discover how you actually
-                  <span style={{ fontStyle: 'italic', color: 'var(--amber-deep)' }}> think about product work.</span>
-                </h1>
-                <p className="lede" style={{ marginTop: 24 }}>
-                  Twelve real product scenarios. Your answers reveal whether your reflexes point to PM, BA, or Design — and exactly why.
-                </p>
+        <section className="bg-navy py-24 lg:py-32 text-center">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-white/10 text-paper border border-white/15">
+              The Upthrust Career Assessment
+            </span>
+            <h1 className="font-serif text-display-lg text-white mt-6 max-w-3xl mx-auto text-balance max-[768px]:text-display-sm">
+              Discover how you actually
+              <span className="text-amber italic"> think about product work.</span>
+            </h1>
+            <p className="text-paper/70 text-xl mt-5 max-w-2xl mx-auto">
+              12 real scenarios. About 8 minutes. A result that quotes your own answers.
+            </p>
 
-                <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, padding: '20px', background: 'var(--paper-soft)', border: '1px solid var(--paper-line)' }}>
-                  {[{ value: '12', label: 'Scenarios' }, { value: '~8', label: 'Minutes' }, { value: '7', label: 'Result types' }].map(stat => (
-                    <div key={stat.label} style={{ textAlign: 'center' }}>
-                      <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.875rem', fontWeight: 500, letterSpacing: '-0.03em' }}>{stat.value}</p>
-                      <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 4 }}>{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
+            {/* Stat pills */}
+            <div className="flex flex-wrap gap-3 justify-center mt-8">
+              {[{ v: '12', l: 'Scenarios' }, { v: '~8', l: 'Minutes' }, { v: '7', l: 'Result Types' }].map(s => (
+                <span key={s.l} className="bg-white/10 text-paper/80 px-5 py-2 rounded-full text-sm font-medium">
+                  <strong className="font-bold">{s.v}</strong> {s.l}
+                </span>
+              ))}
+            </div>
 
-                <button onClick={() => {
-                  trackEvent(TRACKING_EVENTS.careerAssessmentStarted, {
-                    cta_text: 'Begin the Assessment',
-                    source_page: window.location.pathname,
-                    section_name: 'Assessment Hero',
-                    form_name: 'Career Assessment',
-                    button_location: 'page_section',
-                    user_intent: 'career_fit',
-                  });
-                  setStage('lead');
-                }} className="btn btn-primary btn-arrow" style={{ marginTop: 32, fontSize: '1rem', padding: '16px 28px' }}>
-                  Begin the Assessment
-                </button>
-              </div>
+            <button
+              onClick={() => {
+                trackEvent(TRACKING_EVENTS.careerAssessmentStarted, {
+                  cta_text: 'Begin the Assessment',
+                  source_page: window.location.pathname,
+                  section_name: 'Assessment Hero',
+                  form_name: 'Career Assessment',
+                  button_location: 'page_section',
+                  user_intent: 'career_fit',
+                });
+                setStage('lead');
+              }}
+              className="mt-10 bg-amber hover:bg-amber-dark text-white px-10 py-5 rounded-xl font-bold text-lg transition-all duration-200 min-h-[44px] inline-flex items-center gap-2"
+            >
+              Begin the Assessment →
+            </button>
 
-              {/* Right: human image — person thinking/reflecting on career */}
-              <div className="assessment-3d" style={{ position: 'relative', height: 440, overflow: 'hidden', borderRadius: 4 }}>
-                <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0 }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=700&q=80"
-                    alt="Professional receiving career direction and pathway guidance"
-                    className="hero-img"
-                    style={{ height: '100%' }}
-                  />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,26,46,0.7) 0%, transparent 60%)' }} />
-                  {/* PM / BA / Design label cards */}
-                  <div style={{ position: 'absolute', bottom: 20, left: 0, right: 0, display: 'flex', gap: 8, justifyContent: 'center' }}>
-                    {['Product Management', 'Business Analysis', 'Product Design'].map((label, i) => (
-                      <div key={label} style={{
-                        padding: '5px 10px',
-                        background: i === 0 ? 'var(--ink)' : i === 1 ? 'var(--amber)' : 'rgba(15,26,46,0.6)',
-                        backdropFilter: 'blur(8px)',
-                      }}>
-                        <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--paper)', whiteSpace: 'nowrap' }}>
-                          {label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            {/* Hero image - desktop only */}
+            <div className="hidden md:block mt-12 max-w-3xl mx-auto">
+              <img
+                src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=1200&q=85"
+                alt="Professional reflecting on career direction"
+                className="rounded-2xl shadow-2xl w-full object-cover"
+                style={{ height: 360 }}
+              />
             </div>
           </div>
-          <style>{`
-            @media (max-width: 860px) {
-              .assessment-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-              .assessment-3d { max-width: 420px; margin: 0 auto; }
-            }
-          `}</style>
         </section>
 
-        {/* What to expect */}
-        <section style={{ background: 'var(--paper-soft)', padding: 'clamp(48px, 6vw, 80px) 0', borderTop: '1px solid var(--paper-line)' }}>
-          <div className="container-narrow">
-            {/* ANIMATION — decision/pathway, desktop only */}
-          <div className="hidden md:flex justify-center my-8">
-            <LottieOnScroll
-              src="https://lottie.host/98b1a29e-71c2-4d59-a6e3-3bdb07c6f26e/nbLu7gjJuF.lottie"
-              loop={false}
-              width={180}
-              height={180}
-              threshold={0.3}
-              fallbackIcon="🎯"
-            />
-          </div>
-          <p className="eyebrow" style={{ marginBottom: 24 }}>What happens next</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }} className="steps-preview">
+        {/* How it works */}
+        <section className="bg-paper py-24">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <p className="text-xs font-black tracking-[0.2em] uppercase text-amber mb-8 text-center">What happens next</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { num: '01', title: 'Tell us where to send your result', body: 'One quick form — name, email, and where you\'re based. That\'s it.' },
-                { num: '02', title: 'Work through 12 real scenarios', body: 'Each scenario puts you in a product situation. Pick the response that feels most instinctive to you.' },
-                { num: '03', title: 'Get a personalised result', body: 'Your specific answers quoted back to you, with an explanation of what each choice reveals.' },
+                { num: '01', title: 'Tell us where to send your result', body: 'Name, email, and country. That\'s it.' },
+                { num: '02', title: 'Work through 12 real scenarios', body: 'Pick the response that feels most instinctive to you.' },
+                { num: '03', title: 'Get a personalised result', body: 'Your specific answers quoted back — with what each reveals.' },
               ].map(step => (
-                <div key={step.num} style={{ padding: '20px 24px', background: 'var(--white)', border: '1px solid var(--paper-line)' }}>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 8 }}>{step.num}</p>
-                  <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.125rem', fontWeight: 500, letterSpacing: '-0.018em', marginBottom: 8 }}>{step.title}</h3>
-                  <p style={{ fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--ink-muted)' }}>{step.body}</p>
+                <div key={step.num} className="bg-white rounded-2xl p-8 border border-paper/50">
+                  <p className="font-serif text-4xl text-amber mb-4 leading-none">{step.num}</p>
+                  <h3 className="font-bold text-navy text-lg mb-2">{step.title}</h3>
+                  <p className="text-ink/70 text-sm leading-relaxed">{step.body}</p>
                 </div>
               ))}
             </div>
-            <style>{`@media (max-width: 640px) { .steps-preview { grid-template-columns: 1fr !important; } }`}</style>
           </div>
         </section>
       </>

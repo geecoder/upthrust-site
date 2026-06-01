@@ -1,285 +1,149 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import { SectionLabel } from '@/components/ui/SectionLabel';
+import { FeatureRow } from '@/components/ui/FeatureRow';
+import { Badge } from '@/components/ui/Badge';
 
 export default function AboutPage() {
   return (
     <>
-      {/* HERO */}
-      <section style={{
-        paddingTop: 'clamp(72px, 10vw, 120px)',
-        paddingBottom: 0,
-        position: 'relative', overflow: 'hidden',
-      }}>
-        <div aria-hidden className="hero-bg-accent" />
-        <div className="container" style={{ position: 'relative' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'flex-end' }} className="about-hero-grid">
-            <div style={{ paddingBottom: 'clamp(56px, 7vw, 90px)' }}>
-              <p className="eyebrow">About Upthrust</p>
-              <h1 className="display-xl text-balance" style={{ marginTop: 16 }}>
-                Trained 1,000+ professionals.
-                <span style={{ color: 'var(--amber-deep)', fontStyle: 'italic' }}> Repositioned around what works.</span>
-              </h1>
-              <p className="lede" style={{ marginTop: 24, maxWidth: 500 }}>
-                Since 2019. Now rebuilt around capability and evidence — not certificates and content.
-              </p>
-            </div>
-
-            {/* Human image — Genesis or team moment */}
-            <div className="about-hero-image" style={{ position: 'relative', alignSelf: 'stretch', minHeight: 400 }}>
-              <div className="hero-img-wrap" style={{ position: 'absolute', inset: 0, borderRadius: '4px 4px 0 0' }}>
-                <img
-                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80"
-                  alt="Upthrust capability-building sessions with professionals doing real product work"
-                  className="hero-img"
-                  style={{ height: '100%', minHeight: 400 }}
-                />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,26,46,0.65) 0%, transparent 60%)' }} />
-                <div style={{ position: 'absolute', bottom: 20, left: 20, padding: '6px 14px', background: 'rgba(15,26,46,0.85)', backdropFilter: 'blur(8px)' }}>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--amber-soft)' }}>
-                    Est. 2019 · 1,000+ trained globally
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* ─── HERO ─────────────────────────────────────────────── */}
+      <section className="bg-navy py-32 lg:py-40">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <Badge variant="paper">About Upthrust</Badge>
+          <h1 className="font-serif text-display-md text-white mt-6 max-w-3xl mx-auto text-balance">
+            Built on a simple observation:
+            <br/>
+            <span className="text-amber italic">Professionals can do the work. They just can&rsquo;t prove it.</span>
+          </h1>
         </div>
-        <style>{`
-          @media (max-width: 900px) {
-            .about-hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
-            .about-hero-image { min-height: 260px !important; height: 260px !important; }
-            .about-hero-image .hero-img-wrap { position: relative !important; height: 260px !important; border-radius: 0 !important; }
-          }
-        `}</style>
       </section>
 
-      {/* HERITAGE STRIP */}
-      <section style={{ borderTop: '1px solid var(--paper-line)', borderBottom: '1px solid var(--paper-line)', padding: '40px 0', background: 'var(--paper-soft)' }}>
-        <div className="container">
-          <div className="grid grid-4" style={{ gap: 32 }}>
+      {/* ─── STATS STRIP ──────────────────────────────────────── */}
+      <section className="bg-navy border-t border-white/10 py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { num: '2019', label: 'Year Upthrust was founded' },
-              { num: '1,000+', label: 'Professionals trained globally' },
+              { num: '2019', label: 'Year Upthrust founded' },
+              { num: '1,000+', label: 'Professionals trained' },
               { num: '4', label: 'Continents represented' },
-              { num: '2026', label: 'Year of strategic repositioning' },
-            ].map((stat) => (
+              { num: '2026', label: 'Strategic repositioning' },
+            ].map(stat => (
               <div key={stat.label}>
-                <p style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 500, letterSpacing: '-0.022em', color: 'var(--ink)' }}>
-                  {stat.num}
-                </p>
-                <p style={{ marginTop: 4, fontSize: '0.875rem', color: 'var(--ink-muted)', lineHeight: 1.4 }}>{stat.label}</p>
+                <p className="font-serif text-4xl text-paper font-light tracking-tight">{stat.num}</p>
+                <p className="text-paper/50 text-xs mt-2 uppercase tracking-wide font-bold">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* WHY WE'RE REPOSITIONING */}
-      <section className="section">
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 80 }} className="why-grid">
+      {/* ─── WHY REPOSITIONING ────────────────────────────────── */}
+      <section className="bg-paper py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-16">
             <div>
-              <p className="eyebrow">Why now</p>
-              <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-                The honest reason we're repositioning.
-              </h2>
+              <SectionLabel>Why now</SectionLabel>
+              <h2 className="font-serif text-display-sm text-navy">The honest reason we&rsquo;re repositioning.</h2>
             </div>
-            <div>
-              <p className="lede" style={{ color: 'var(--ink-soft)' }}>
-                For years, we ran training programs the way most of the industry does — content delivery, projects, certificates. People learned. Many got roles. Many did not.
+            <div className="flex flex-col gap-5">
+              <p className="text-ink/80 text-lg leading-relaxed">
+                For years, we ran training programs the way most of the industry does — content delivery, projects, certificates.
+                People learned. Many got roles. Many did not.
               </p>
-              <p style={{ marginTop: 20, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                The pattern we kept seeing was uncomfortable: capable people with our certificate still struggled to show employers what they could do — not because they hadn't learned, but because they'd never been forced to <em>practise under real conditions</em>. Meanwhile, employers stopped trusting certificates. The bar moved from "what did you study?" to "show me what you can do."
+              <p className="text-ink/60 text-base leading-relaxed">
+                The pattern we kept seeing: capable people with our certificate still struggled to show employers what they could do —
+                not because they hadn&rsquo;t learned, but because they&rsquo;d never been forced to practise under real conditions.
+                Meanwhile, employers stopped trusting certificates. The bar moved from &ldquo;what did you study?&rdquo; to
+                &ldquo;show me what you can do.&rdquo;
               </p>
-              <p style={{ marginTop: 20, fontSize: '1rem', lineHeight: 1.65, color: 'var(--ink-muted)' }}>
-                So we rebuilt. The Career Capability Accelerator is the result — same team, same care for learners, redesigned around what employers now reward.
+              <p className="text-ink/60 text-base leading-relaxed">
+                So we rebuilt. The Career Capability Accelerator is the result — same team, same care for learners,
+                redesigned around what employers now reward.
               </p>
             </div>
           </div>
-          <style>{`
-            @media (max-width: 900px) {
-              section .why-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
-            }
-          `}</style>
         </div>
       </section>
 
-      {/* FOUNDER */}
-      <section className="section" style={{ background: 'var(--paper-soft)', padding: 'clamp(80px, 11vw, 130px) 0' }}>
-        <div className="container">
+      {/* ─── FOUNDER ──────────────────────────────────────────── */}
+      <section className="bg-white py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionLabel>The founder</SectionLabel>
+          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12 lg:gap-16 items-start mt-8">
 
-          {/* Header */}
-          <div style={{ maxWidth: 760, marginBottom: 72 }}>
-            <p className="eyebrow">The founder</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-              Genesis Nneji Enwenyeokwu —
-              <span style={{ fontStyle: 'italic', color: 'var(--amber-deep)' }}> practitioner, builder, mentor.</span>
-            </h2>
-          </div>
-
-          {/* Two-column — photo + credentials / bio */}
-          <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 72, alignItems: 'start' }} className="founder-deep-grid">
-
-            {/* Left column */}
-            <div>
-              <div style={{ position: 'relative' }}>
-                <div style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden', background: 'var(--ink)' }}>
-                  <img
-                    src="/images/founder-genesis.jpg"
-                    alt="Genesis Nneji Enwenyeokwu, founder of Upthrust"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'saturate(1.05) contrast(1.02)' }}
-                  />
-                </div>
-                <div aria-hidden style={{ position: 'absolute', left: -12, top: -12, width: 56, height: 56, borderTop: '2px solid var(--amber)', borderLeft: '2px solid var(--amber)' }} />
-                <div aria-hidden style={{ position: 'absolute', right: -12, bottom: -12, width: 56, height: 56, borderBottom: '2px solid var(--ink)', borderRight: '2px solid var(--ink)' }} />
-              </div>
-
-              <div style={{ marginTop: 24 }}>
-                <p style={{ fontFamily: 'Fraunces, serif', fontSize: '1.25rem', fontWeight: 500, letterSpacing: '-0.02em' }}>Genesis Nneji Enwenyeokwu</p>
-                <p style={{ fontSize: '0.875rem', color: 'var(--amber-deep)', marginTop: 4, fontWeight: 500 }}>Founder & Program Director, Upthrust</p>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--ink-muted)', marginTop: 2 }}>Product Lead, Rova · IIBA Nigeria Chapter</p>
-              </div>
-
-              {/* Credential badges */}
-              <div style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {['CBAP Certified', 'MBA · University of East London', 'Product Lead', 'IIBA Nigeria', '10+ Years Experience', 'Nigeria · UK · US'].map((b) => (
-                  <span key={b} style={{
-                    fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem',
-                    letterSpacing: '0.1em', textTransform: 'uppercase',
-                    padding: '5px 8px', border: '1px solid var(--paper-line)',
-                    color: 'var(--ink-muted)', background: 'var(--white)',
-                  }}>{b}</span>
-                ))}
-              </div>
-
-              {/* Expertise matrix */}
-              <div style={{ marginTop: 24, border: '1px solid var(--paper-line)', background: 'var(--white)' }}>
-                <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--paper-line)' }}>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.625rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>Expertise spans</p>
-                </div>
-                {[
-                  ['Product Management', 'Strategy · Discovery · Delivery'],
-                  ['Business Analysis', 'Requirements · Process · UAT'],
-                  ['Fintech', 'Payments · Wallets · Compliance'],
-                  ['Design Thinking', 'UX · Service Design · Innovation'],
-                  ['Digital Transformation', 'Process · Automation · Change'],
-                ].map(([domain, detail]) => (
-                  <div key={domain} style={{
-                    padding: '10px 16px', borderBottom: '1px solid var(--paper-line)',
-                    display: 'flex', justifyContent: 'space-between', gap: 8,
-                  }}>
-                    <span style={{ fontSize: '0.8125rem', fontWeight: 500 }}>{domain}</span>
-                    <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5625rem', color: 'var(--ink-muted)', letterSpacing: '0.06em', textAlign: 'right' }}>{detail}</span>
-                  </div>
-                ))}
+            {/* Photo */}
+            <div className="flex-shrink-0">
+              <div className="relative max-w-xs w-full mx-auto lg:mx-0" style={{ maxWidth: 280 }}>
+                <Image
+                  src="/images/founder-genesis.jpg"
+                  alt="Genesis Nneji Enwenyeokwu, founder of Upthrust"
+                  width={280}
+                  height={350}
+                  className="rounded-2xl shadow-lg object-cover w-full"
+                  style={{ height: 350 }}
+                />
               </div>
             </div>
 
-            {/* Right column — full bio */}
+            {/* Content */}
             <div>
-              {/* Opening quote */}
-              <blockquote style={{
-                fontFamily: 'Fraunces, serif', fontSize: 'clamp(1.25rem, 2.2vw, 1.625rem)',
-                fontStyle: 'italic', lineHeight: 1.45, letterSpacing: '-0.02em',
-                borderLeft: '3px solid var(--amber)', paddingLeft: 28, marginBottom: 40,
-              }}>
-                "Too many talented people were collecting certificates but still struggling to demonstrate real capability. Upthrust is my answer to that problem."
+              <h2 className="font-serif text-3xl text-navy mb-1">Genesis Nneji Enwenyeokwu</h2>
+              <p className="text-amber text-sm font-bold mb-8">Founder &amp; Program Director, Upthrust · Product Lead, Rova</p>
+
+              <FeatureRow dark={false} icon="📍" title="Based in" description="Lagos & London" />
+              <FeatureRow dark={false} icon="📅" title="Founded" description="2019" />
+              <FeatureRow dark={false} icon="🎓" title="Background" description="Product Lead, CBAP, MBA (UEL) · 10+ years across PM & BA" />
+              <FeatureRow dark={false} icon="🌍" title="Trained" description="1,000+ professionals globally" />
+
+              <blockquote className="border-l-4 border-amber pl-6 mt-8 italic text-ink/70 text-lg leading-relaxed">
+                &ldquo;Too many talented people were collecting certificates but still struggling to demonstrate real capability.
+                Upthrust is my answer to that problem.&rdquo;
               </blockquote>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <div>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>The practitioner</p>
-                  <p style={{ fontSize: '1.0625rem', lineHeight: 1.7, color: 'var(--ink-soft)' }}>
-                    Genesis is a CBAP-certified Product Lead and MBA graduate from the University of East London, with over a decade across product management, business analysis, fintech, and digital transformation in Nigeria, the UK, and the US. He has operated in roles from Business Analyst through Senior PM to Product Lead — giving him end-to-end perspective on how strategy, requirements, delivery, and commercial outcomes connect.
-                  </p>
-                </div>
-
-                <div>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Current work at Rova</p>
-                  <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-                    Genesis currently works as Product Lead at <strong style={{ color: 'var(--ink)' }}>Rova</strong>, building digital financial products for Africans in the diaspora — multi-currency accounts, cross-border payments, compliance-led onboarding, and remittance journeys. This live fintech environment shapes how Upthrust is designed: real decisions, real trade-offs, real constraints.
-                  </p>
-                </div>
-
-                <div>
-                  <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-deep)', marginBottom: 10 }}>Building people</p>
-                  <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
-                    He has trained, mentored, and coached over 1,000 professionals globally — helping career switchers and early-career professionals move into product and BA roles. He also serves within the <strong style={{ color: 'var(--ink)' }}>IIBA Nigeria Chapter</strong>, contributing to the growth of the business analysis profession through leadership and professional development.
-                  </p>
-                </div>
-              </div>
-
-              {/* Mission — from potential to proof */}
-              <div style={{ marginTop: 36, background: 'var(--ink)', color: 'var(--paper)', padding: '24px 28px' }}>
-                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--amber-soft)', marginBottom: 16 }}>
-                  His mission through Upthrust
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {[
-                    'From learning concepts → to applying them',
-                    'From collecting certificates → to building evidence',
-                    'From career confusion → to professional clarity',
-                    'From potential → to proof',
-                    'From ambition → to capability',
-                  ].map((item) => (
-                    <p key={item} style={{ fontSize: '0.9375rem', lineHeight: 1.5, color: 'rgba(250,247,241,0.85)' }}>
-                      <span style={{ color: 'var(--amber)', marginRight: 10 }}>—</span>{item}
-                    </p>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </div>
-
-        <style>{`
-          @media (max-width: 960px) {
-            section .founder-deep-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
-          }
-        `}</style>
       </section>
 
-      {/* WHAT WE STAND FOR */}
-      <section className="section">
-        <div className="container">
-          <div style={{ maxWidth: 720, marginBottom: 56 }}>
-            <p className="eyebrow">What we stand for</p>
-            <h2 className="display-m text-balance" style={{ marginTop: 16 }}>
-              Three things we will not do.
-            </h2>
-            <p className="lede" style={{ marginTop: 20 }}>
-              Most education companies grow by saying yes to everything. We grew by saying no.
-            </p>
-          </div>
-
-          <div className="grid grid-3" style={{ gap: 24 }}>
+      {/* ─── WHAT WE STAND FOR ────────────────────────────────── */}
+      <section className="bg-paper py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionLabel>What we stand for</SectionLabel>
+          <h2 className="font-serif text-display-sm text-navy mb-12">Three things we will not do.</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { num: '01', title: 'We are not a certificate factory.', body: 'Capability is the product. Evidence is the proof. Certificates exist because the system asks for them — but they are not what we sell.' },
-              { num: '02', title: 'We are not an AI-only tool.', body: 'Human mentorship and human judgement are central to how Upthrust works. AI enhances feedback, surfaces patterns, and scales review — but it does not replace mentors.' },
-              { num: '03', title: 'We are not a course marketplace.', body: 'We stay narrow on Product Management, Business Analysis, and Product Design until each is proven. No drift into adjacent tracks. No padding the catalogue.' },
-            ].map((principle) => (
-              <div key={principle.num} className="card" style={{ padding: 32 }}>
-                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--amber-deep)', letterSpacing: '0.1em' }}>{principle.num}</p>
-                <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.375rem', fontWeight: 500, letterSpacing: '-0.02em', marginTop: 12, lineHeight: 1.25 }}>{principle.title}</h3>
-                <p className="text-soft" style={{ marginTop: 14, fontSize: '0.9375rem', lineHeight: 1.6 }}>{principle.body}</p>
+              { num: '01', title: 'We are not a certificate factory.', body: 'Capability is the product. Evidence is the proof.' },
+              { num: '02', title: 'We are not an AI-only tool.', body: 'Human mentorship and judgement are central to Upthrust.' },
+              { num: '03', title: 'We are not a course marketplace.', body: 'PM, BA, and Design only — until each is proven.' },
+            ].map(p => (
+              <div key={p.num} className="bg-white rounded-2xl p-8 border border-paper/50">
+                <p className="text-amber font-bold text-sm mb-3">{p.num}</p>
+                <h3 className="font-serif text-xl text-navy mb-3 leading-tight">{p.title}</h3>
+                <p className="text-ink/60 text-sm leading-relaxed">{p.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* PROMISE */}
-      <section style={{ background: 'var(--ink)', color: 'var(--paper)', padding: 'clamp(80px, 11vw, 140px) 0' }}>
-        <div className="container-medium" style={{ textAlign: 'center' }}>
-          <p className="eyebrow-light">Our promise</p>
-          <h2 className="display-l text-balance" style={{ marginTop: 20, color: 'var(--paper)' }}>
-            We do not guarantee jobs.<br />
-            <span style={{ fontStyle: 'italic', color: 'var(--amber-soft)' }}>We guarantee readiness.</span>
+      {/* ─── MISSION ──────────────────────────────────────────── */}
+      <section className="bg-navy py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <SectionLabel light>Our mission</SectionLabel>
+          <h2 className="font-serif text-display-md text-white mb-6 max-w-3xl mx-auto">
+            We do not guarantee jobs.
+            <span className="text-amber italic"> We guarantee readiness.</span>
           </h2>
-          <p className="lede" style={{ marginTop: 24, color: 'rgba(250,247,241,0.78)', maxWidth: 640, marginLeft: 'auto', marginRight: 'auto' }}>
-            What you can show. What you can defend. What you can build under deadline. The story you can tell in an interview. The evidence that backs that story up. That is what we are accountable for.
+          <p className="text-paper/60 text-lg max-w-2xl mx-auto">
+            What you can show. What you can defend. The evidence that backs your story in any interview.
           </p>
-          <div style={{ marginTop: 40, display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center' }}>
-            <Link href="/assessment" className="btn btn-amber btn-arrow">Take the Assessment</Link>
-            <Link href="/consultation" className="btn btn-secondary" style={{ background: 'transparent', color: 'var(--paper)', borderColor: 'var(--paper)' }}>
+          <div className="flex flex-wrap gap-4 justify-center mt-10">
+            <Link href="/assessment"
+              className="bg-amber hover:bg-amber-dark text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
+              Take the Assessment
+            </Link>
+            <Link href="/consultation"
+              className="border-2 border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 min-h-[44px] inline-flex items-center">
               Book a Consultation
             </Link>
           </div>
