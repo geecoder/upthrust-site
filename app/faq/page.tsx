@@ -8,7 +8,7 @@ const FAQS = [
   {
     section: 'The program',
     items: [
-      { q: 'What exactly is the Career Capability Accelerator?', a: 'A 12-week practical program for PM or BA — live sessions, weekly portfolio assignments, AI-assisted feedback, and expert review. Eligible learners earn a Capability Passport: a verifiable evidence record of what you produced and how you performed.' },
+      { q: 'What exactly is the Career Capability Accelerator?', a: 'A 12-week practical program across four pathways — Product Management, Business Analysis, Product Design, and Payment Operations — with live sessions, weekly portfolio assignments, AI-assisted feedback, and expert review. Eligible learners earn a Capability Passport: a verifiable evidence record of what you produced and how you performed.' },
       { q: 'How is this different from other bootcamps and courses?', a: 'Most programs sell content and certificates. We sell practice and evidence. By Week 12 you have a portfolio of real artefacts you produced, a capstone you defended, and a Capability Passport that documents what you can do.' },
       { q: 'How much time per week does this actually take?', a: 'Plan for 8–10 hours: 2 hrs live class, 1 hr lab, 3–4 hrs assignment, 1 hr feedback review. People doing less than 6 hours tend to fall behind by Week 3 and finish with weak portfolios.' },
       { q: 'Is the program live or pre-recorded?', a: 'Live-anchored. Concept classes and labs are live and synchronous. Recordings are always available — but the program is designed around live participation.' },
@@ -17,8 +17,8 @@ const FAQS = [
   {
     section: 'Pathways and choosing',
     items: [
-      { q: 'Which pathway should I choose — PM or BA?', a: 'Take the Career Assessment first. It will tell you, with evidence from your own answers, where you actually fit. If scores are close, the consultation call is where we decide together.' },
-      { q: 'I want to do Product Design. Why is it not in Cohort 1?', a: 'We launched PM and BA only to protect delivery quality. Product Design opens in Cohort 2 once we have proven PM and BA delivery. Join the Cohort 2 waitlist via the assessment.' },
+      { q: 'Which pathway should I choose?', a: 'Take the Career Assessment first. It will tell you, with evidence from your own answers, where you actually fit. If scores are close, the consultation call is where we decide together.' },
+      { q: 'Why did Product Design and Payment Operations open later than PM and BA?', a: 'We ran Product Management and Business Analysis first to prove the delivery model — the same twelve-week spine, the same review discipline. Product Design and Payment Operations now open with that model proven, running their own Cohort 1 while PM and BA run Cohort 2.' },
       { q: 'Can I switch pathways mid-program?', a: 'In rare cases, yes — within the first 2 weeks. After that, the pathway-specific work has diverged enough that switching is impractical. Take the assessment and consultation before enrolling.' },
     ],
   },
@@ -26,7 +26,7 @@ const FAQS = [
     section: 'Eligibility and background',
     items: [
       { q: 'Do I need tech experience to enroll?', a: 'No. You need to be comfortable with computers, willing to learn product vocabulary, and ready to write clearly. Most successful learners come from non-tech backgrounds.' },
-      { q: 'Can I join from outside Nigeria?', a: 'Yes. Cohort 1 includes learners from across Africa, the UK, Canada, Australia, and the global diaspora. Live sessions work for both Africa and UK/Europe time zones.' },
+      { q: 'Can I join from outside Nigeria?', a: 'Yes. Our cohorts include learners from across Africa, the UK, Canada, Australia, and the global diaspora. Live sessions work for both Africa and UK/Europe time zones.' },
       { q: 'I am already in a junior product role. Will this help me?', a: 'Yes. If your title says PM, BA, or analyst but your portfolio does not reflect it, the Accelerator will help you formalise what you already do and produce the evidence to grow.' },
     ],
   },
@@ -55,7 +55,7 @@ export default function FAQPage() {
       <section className="relative bg-navy py-28 lg:py-36 overflow-hidden">
         <HeroSwirl variant="subtle" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-amber/12 border border-amber/25 rounded-full px-4 py-1.5 mb-6">
+          <div className="inline-flex items-center gap-2 bg-amber/12 border border-amber/25 px-4 py-1.5 mb-6">
             <span className="w-2 h-2 bg-amber rounded-full animate-pulse flex-shrink-0" />
             <span className="text-amber text-xs font-bold tracking-[0.15em] uppercase">Frequently Asked Questions</span>
           </div>
@@ -83,10 +83,10 @@ export default function FAQPage() {
           <h2 className="font-serif text-h2 text-white mb-4">Still wondering?</h2>
           <p className="text-paper/60 text-lg mb-8">Take the assessment for a personalised result, or book a call for your specific question.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/assessment" className="bg-amber hover:bg-amber-dark text-white font-bold px-8 py-4 rounded-2xl transition-all text-base min-h-[44px] inline-flex items-center justify-center">
+            <Link href="/assessment" className="bg-amber hover:bg-amber-dark text-white font-bold px-8 py-4 transition-all text-base min-h-[44px] inline-flex items-center justify-center">
               Take the Assessment →
             </Link>
-            <Link href="/consultation" className="border-2 border-white/30 hover:border-white/60 text-white font-bold px-8 py-4 rounded-2xl transition-all text-base min-h-[44px] inline-flex items-center justify-center">
+            <Link href="/consultation" className="border-2 border-white/30 hover:border-white/60 text-white font-bold px-8 py-4 transition-all text-base min-h-[44px] inline-flex items-center justify-center">
               Book a Consultation
             </Link>
           </div>

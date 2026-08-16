@@ -15,7 +15,7 @@ export default function WaitlistThankYou() {
           You're on the list.
         </h1>
         <p className="lede" style={{ marginTop: 24 }}>
-          We'll send you Cohort 1 announcements before they go public — including curriculum previews, founder updates, and any early-cohort pricing we offer.
+          We'll send you cohort announcements before they go public — including curriculum previews, founder updates, and any early-cohort pricing we offer.
         </p>
 
         <div style={{
@@ -26,7 +26,7 @@ export default function WaitlistThankYou() {
         }}>
           <p className="eyebrow">The smartest next move</p>
           <p style={{ marginTop: 12, fontSize: '0.9375rem', color: 'var(--ink-soft)', lineHeight: 1.65 }}>
-            If you haven't taken the Career Assessment yet, do it now. It tells you which pathway actually fits how you think — PM or BA — so when Cohort 1 opens, you already know where you belong. It takes 8 minutes.
+            If you haven't taken the Career Assessment yet, do it now. It tells you which of the four pathways actually fits how you think, so when your cohort opens, you already know where you belong. It takes 8 minutes.
           </p>
           <Link href="/assessment" className="btn btn-primary btn-arrow" style={{ marginTop: 20 }}>
             Take the Assessment

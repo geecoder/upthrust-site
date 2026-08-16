@@ -15,12 +15,12 @@ export default function Footer() {
 
           {/* Col 1: Brand */}
           <div className="lg:col-span-1">
-            <div className="relative" style={{ width: 140, height: 52 }}>
+            <div className="relative" style={{ width: 180, height: 76 }}>
               <Image
                 src="/brand/upthrust-logo.png"
                 alt="Upthrust"
                 fill
-                sizes="140px"
+                sizes="180px"
                 className="object-contain brightness-0 invert opacity-90"
               />
             </div>
@@ -28,8 +28,8 @@ export default function Footer() {
               Build evidence of capability — not another certificate.
             </p>
             <div className="flex flex-wrap gap-2 mt-4">
-              {['Lagos', 'London', 'Toronto', 'Sydney'].map((city) => (
-                <span key={city} className="bg-white/10 text-paper/60 px-3 py-1 rounded-full text-xs">
+              {['Lagos', 'London', 'Toronto'].map((city) => (
+                <span key={city} style={{ fontFamily: 'var(--font-mono)' }} className="bg-white/10 text-paper/60 px-3 py-1 text-xs">
                   {city}
                 </span>
               ))}
@@ -38,12 +38,14 @@ export default function Footer() {
 
           {/* Col 2: Programme */}
           <div>
-            <h4 className="text-paper/40 text-xs font-bold uppercase tracking-widest mb-4">Programme</h4>
+            <h4 style={{ fontFamily: 'var(--font-mono)' }} className="text-paper/40 text-xs font-bold uppercase tracking-widest mb-4">Programme</h4>
             <ul className="flex flex-col gap-2">
               {[
                 { href: '/accelerator', label: 'The Accelerator' },
-                { href: '/pathway-product-management', label: 'Product Management' },
-                { href: '/pathway-business-analysis', label: 'Business Analysis' },
+                { href: '/pathways/product-management', label: 'Product Management' },
+                { href: '/pathways/business-analysis', label: 'Business Analysis' },
+                { href: '/pathways/product-design', label: 'Product Design' },
+                { href: '/pathways/payment-operations', label: 'Payment Operations' },
                 { href: '/assessment', label: 'Career Assessment' },
               ].map(({ href, label }) => (
                 <li key={href}>
@@ -57,11 +59,10 @@ export default function Footer() {
 
           {/* Col 3: Company */}
           <div>
-            <h4 className="text-paper/40 text-xs font-bold uppercase tracking-widest mb-4">Company</h4>
+            <h4 style={{ fontFamily: 'var(--font-mono)' }} className="text-paper/40 text-xs font-bold uppercase tracking-widest mb-4">Company</h4>
             <ul className="flex flex-col gap-2">
               {[
                 { href: '/about', label: 'About Upthrust' },
-                { href: '/faq', label: 'FAQ' },
                 { href: '/consultation', label: 'Consultation' },
               ].map(({ href, label }) => (
                 <li key={href}>
@@ -75,7 +76,7 @@ export default function Footer() {
 
           {/* Col 4: Connect */}
           <div>
-            <h4 className="text-paper/40 text-xs font-bold uppercase tracking-widest mb-4">Connect</h4>
+            <h4 style={{ fontFamily: 'var(--font-mono)' }} className="text-paper/40 text-xs font-bold uppercase tracking-widest mb-4">Connect</h4>
             <ul className="flex flex-col gap-2">
               <li>
                 <a href="mailto:info@upthrustdigital.com"
@@ -84,17 +85,12 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="https://linkedin.com/company/upthrust" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.linkedin.com/company/upthrustdigital/" target="_blank" rel="noopener noreferrer"
                   className="text-paper/70 text-sm hover:text-paper transition-colors py-1 block">
                   LinkedIn
                 </a>
               </li>
             </ul>
-            <div className="mt-6 p-4 rounded-xl border border-white/10 bg-white/5">
-              <p className="font-serif italic text-sm text-paper/50 leading-relaxed">
-                "From potential to proof."
-              </p>
-            </div>
           </div>
         </div>
 

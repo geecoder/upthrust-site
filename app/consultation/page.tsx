@@ -63,7 +63,7 @@ export default function ConsultationPage() {
       <section className="relative bg-navy py-28 lg:py-36 overflow-hidden text-center">
         <HeroSwirl variant="subtle" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="inline-flex items-center gap-2 bg-amber/12 border border-amber/25 rounded-full px-4 py-1.5 mb-6">
+          <div className="inline-flex items-center gap-2 bg-amber/12 border border-amber/25 px-4 py-1.5 mb-6">
             <span className="w-2 h-2 bg-amber rounded-full animate-pulse flex-shrink-0" />
             <span className="text-amber text-xs font-bold tracking-[0.15em] uppercase">Book a Consultation</span>
           </div>
@@ -81,15 +81,15 @@ export default function ConsultationPage() {
           <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-6">What we&rsquo;ll talk about</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { icon: '🎯', title: 'Your situation',     body: 'Where you are and what isn\'t working right now.' },
-              { icon: '📊', title: 'Your assessment',   body: 'Walk through your result and what it means.' },
-              { icon: '🛣️', title: 'The right pathway', body: 'PM, BA, or Design Cohort 2 waitlist.' },
-              { icon: '💡', title: 'The right tier',     body: 'Standard or Premium — based on your goals.' },
-              { icon: '⚖️', title: 'Honest constraints', body: 'Time, money, timeline — what\'s realistic.' },
-              { icon: '✅', title: 'Clear next step',    body: 'Enroll, wait, or do something else first.' },
-            ].map(({ icon, title, body }) => (
-              <div key={title} className="flex gap-3 p-4 bg-paper/40 rounded-xl border border-gray-100">
-                <span className="text-xl flex-shrink-0">{icon}</span>
+              { title: 'Your situation',     body: 'Where you are and what isn\'t working right now.' },
+              { title: 'Your assessment',   body: 'Walk through your result and what it means.' },
+              { title: 'The right pathway', body: 'PM, BA, Design, or Payment Ops.' },
+              { title: 'The right tier',     body: 'Standard or Premium — based on your goals.' },
+              { title: 'Honest constraints', body: 'Time, money, timeline — what\'s realistic.' },
+              { title: 'Clear next step',    body: 'Enroll, wait, or do something else first.' },
+            ].map(({ title, body }, i) => (
+              <div key={title} className="flex gap-3 p-4 bg-paper/40 border border-gray-100">
+                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--seal-600)' }} className="text-xs flex-shrink-0 pt-0.5">{String(i + 1).padStart(2, '0')}</span>
                 <div>
                   <p className="font-bold text-navy text-sm mb-0.5">{title}</p>
                   <p className="text-ink-soft text-xs leading-relaxed">{body}</p>
@@ -105,7 +105,7 @@ export default function ConsultationPage() {
         <div className="max-w-2xl mx-auto px-6 lg:px-8">
           <p className="text-xs font-black tracking-[0.18em] uppercase text-amber mb-4">Request your slot</p>
           <h2 className="font-serif text-h2 text-navy mb-8">Fill this in — we&rsquo;ll reach out within 24 hours.</h2>
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-card overflow-hidden">
+          <div className="bg-white border border-gray-100 shadow-card overflow-hidden">
             <iframe
               ref={tallyIframeRef}
               data-tally-src={tallyEmbedUrl(TALLY_FORMS.consultation, { alignLeft: true, transparentBackground: true })}

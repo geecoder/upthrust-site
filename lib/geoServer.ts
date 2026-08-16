@@ -1,17 +1,14 @@
 import { headers } from 'next/headers';
 import type { Region } from './config';
 
+// Pricing shows exactly one of four currencies, by visitor location:
+// Nigeria -> NGN. UK -> GBP. Canada -> CAD. Everyone else (rest of Africa,
+// the US, and the rest of the world) -> USD. Do not add other African
+// countries to the NG bucket — only Nigeria itself gets NGN pricing.
 const COUNTRY_TO_REGION: Record<string, Region> = {
-  // Nigeria + Africa → NGN pricing
-  NG: 'NG', GH: 'NG', KE: 'NG', ZA: 'NG', UG: 'NG', TZ: 'NG',
-  RW: 'NG', SN: 'NG', CI: 'NG', EG: 'NG', CM: 'NG', ET: 'NG',
-  ZM: 'NG', ZW: 'NG', MW: 'NG', MZ: 'NG', BJ: 'NG', TG: 'NG',
-  AO: 'NG', GA: 'NG', CD: 'NG', CG: 'NG', NE: 'NG', ML: 'NG',
-  // UK + Ireland → GBP
+  NG: 'NG',
   GB: 'GB', IE: 'GB',
-  // Canada → CAD
   CA: 'CA',
-  // United States → USD
   US: 'US',
 };
 
@@ -32,5 +29,5 @@ export function getRegionFromCookie(cookieValue: string | undefined): Region {
   if (cookieValue && ['NG', 'GB', 'CA', 'US', 'OTHER'].includes(cookieValue)) {
     return cookieValue as Region;
   }
-  return 'NG';
+  return 'OTHER';
 }

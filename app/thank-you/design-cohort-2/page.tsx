@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function DesignWaitlistThankYou() {
+export default function DesignInterestThankYou() {
   return (
     <section style={{
       minHeight: 'calc(100vh - 200px)',
@@ -10,12 +10,14 @@ export default function DesignWaitlistThankYou() {
       paddingBottom: 'clamp(60px, 8vw, 100px)',
     }}>
       <div className="container-narrow">
-        <p className="eyebrow">Design Cohort 2 Waitlist · Confirmed</p>
+        <p className="eyebrow">Product Design · Interest confirmed</p>
         <h1 className="display-l text-balance" style={{ marginTop: 20 }}>
-          You're on the Design waitlist.
+          Good news — Product Design is open now.
         </h1>
         <p className="lede" style={{ marginTop: 24 }}>
-          The Product Design pathway opens in Cohort 2, after we've proven PM and BA delivery in Cohort 1. You'll be first to hear when enrollment opens — and you'll get any waitlist-only pricing we offer.
+          The Product Design pathway is no longer a waitlist. It is running its own Cohort 1 alongside Payment
+          Operations, with the same twelve-week spine and review discipline already proven through Product Management
+          and Business Analysis.
         </p>
 
         <div style={{
@@ -24,17 +26,15 @@ export default function DesignWaitlistThankYou() {
           background: 'var(--paper-soft)',
           border: '1px solid var(--paper-line)',
         }}>
-          <p className="eyebrow">A question worth considering</p>
+          <p className="eyebrow">Next step</p>
           <p style={{ marginTop: 12, fontSize: '0.9375rem', color: 'var(--ink-soft)', lineHeight: 1.65 }}>
-            Many people who score Design-leaning on the assessment are actually <em>hybrid BA/Design</em> — meaning they think in user journeys and process structure at the same time. If that sounds like you, joining the BA pathway in Cohort 1 (while staying on the Design waitlist for Cohort 2) is often the smartest play.
-          </p>
-          <p style={{ marginTop: 12, fontSize: '0.9375rem', color: 'var(--ink-soft)', lineHeight: 1.65 }}>
-            A 20-minute consultation is the fastest way to think this through.
+            Take the Career Assessment to confirm Product Design is the right fit, or go straight to the pathway page
+            to see the twelve-week track, sample work, and pricing.
           </p>
           <div style={{ marginTop: 24, display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <Link href="/consultation" className="btn btn-primary btn-arrow">Book a Consultation</Link>
-            <Link href="/pathway-business-analysis" className="btn-ghost btn-arrow" style={{ fontSize: '0.9375rem' }}>
-              See the BA pathway
+            <Link href="/pathways/product-design" className="btn btn-primary btn-arrow">See the Product Design pathway</Link>
+            <Link href="/assessment" className="btn-ghost btn-arrow" style={{ fontSize: '0.9375rem' }}>
+              Take the Career Assessment
             </Link>
           </div>
         </div>

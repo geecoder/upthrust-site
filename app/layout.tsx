@@ -50,12 +50,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const region = await getRegionFromRequest();
 
   return (
-    <html lang="en" style={{ '--nav-offset': '108px' } as React.CSSProperties}>
+    <html lang="en">
       <body data-region={region}>
         <AnalyticsProvider />
         <Navbar />
-        {/* offset = banner (40px) + navbar (68px) = 108px; JS updates to 68px on banner dismiss */}
-        <main style={{ paddingTop: 'var(--nav-offset, 108px)' }}>
+        <main>
           {children}
         </main>
         <Footer />

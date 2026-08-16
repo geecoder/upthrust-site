@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { COHORT } from '@/lib/cohort-config';
 
 export const runtime = 'edge';
 export const alt = 'Upthrust — Build evidence of capability. Not another certificate.';
@@ -71,7 +72,7 @@ export default async function OGImage() {
             margin: 0,
             maxWidth: 720,
           }}>
-            12-week practical accelerator. Product Management &amp; Business Analysis. Cohort 1 open.
+            12-week practical accelerator. Four pathways. Starts {COHORT.startDateDisplay}.
           </p>
           <div style={{
             display: 'flex',

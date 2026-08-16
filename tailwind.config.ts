@@ -9,19 +9,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        navy:         '#0F1A2E',
-        amber:        '#C5743A',
-        'amber-dark': '#A05A26',
-        'amber-light':'#F1DEC4',
-        paper:        '#FAF7F1',
-        ink:          '#1F2B42',
-        'ink-soft':   '#4A5568',
-        moss:         '#4F6A4A',
-        'moss-light': '#E8F0E8',
+        // Brand tokens — see app/globals.css for the full raw+semantic palette
+        ink:      { 50:'#F2F4F7', 100:'#D9DEE6', 200:'#AFB8C6', 300:'#808EA3', 400:'#536478', 500:'#2F3F54', 600:'#1D2C3F', 700:'#11202F', 800:'#0B1A2B', 900:'#060F1A', DEFAULT:'#0B1A2B' },
+        bone:     { DEFAULT: '#F4EFE6', dim: '#ECE5D6' },
+        paper:    { DEFAULT: '#FAFAF7', dim: '#F1F0EA' },
+        seal:     { 50:'#FBEEE7', 100:'#F4D3C3', 300:'#DE8B6A', 500:'#B4472B', 600:'#9A3A22', 700:'#7A2C18', DEFAULT:'#B4472B' },
+        moss:     { 50:'#E8EFE9', 500:'#2F5D3A', 700:'#1F4026', DEFAULT:'#2F5D3A' },
+        ochre:    { 50:'#F5EEDB', 500:'#B48A2E', 700:'#7E5F18', DEFAULT:'#B48A2E' },
+        crimson:  { 50:'#F4E1E1', 500:'#9B2C2C', 700:'#6B1818', DEFAULT:'#9B2C2C' },
+        // Legacy aliases so existing bg-navy / text-amber utility classes keep working
+        navy:         '#0B1A2B',
+        amber:        '#B4472B',
+        'amber-dark': '#9A3A22',
+        'amber-light':'#F4D3C3',
+        'ink-soft':   '#2F3F54',
       },
       fontFamily: {
-        sans:  ['Inter', 'Manrope', 'system-ui', 'sans-serif'],
+        sans:  ['Inter Tight', 'Inter', 'system-ui', 'sans-serif'],
         serif: ['Fraunces', 'Georgia', 'serif'],
+        mono:  ['JetBrains Mono', 'SF Mono', 'Consolas', 'monospace'],
+      },
+      borderRadius: {
+        1: '2px', 2: '4px', 3: '8px', 4: '12px',
       },
       fontSize: {
         'hero':    ['4.25rem', { lineHeight: '1.05', letterSpacing: '-0.04em' }],
