@@ -1,12 +1,20 @@
-// Single source of truth for cohort facts, per-pathway cohort numbers, and Passport
-// ID formatting. These change every cohort and must never be hardcoded in templates —
-// nav badges, hero strips, pathway facts strips, the enrolment summary/confirmation,
-// and /verify all read from here.
+// Single source of truth for cohort facts, per-programme cohort numbers, seat
+// inventory, and Passport ID formatting. These change every cohort and must
+// never be hardcoded in templates — nav badges, hero strips, facts strips, the
+// enrolment summary/confirmation, and /verify all read from here.
 //
-// All four pathways start 20 Sep 2026. PM and BA are running their Cohort 2;
-// Product Design and Payment Operations open their Cohort 1. The cohort number is a
-// per-pathway property, not a global constant — do not assume every pathway is on
-// the same cohort number.
+// All four 12-week pathways start 20 Sep 2026. PM and BA are running their
+// Cohort 2; Product Design and Payment Operations open their Cohort 1. The
+// cohort number is a per-pathway property, not a global constant — do not
+// assume every pathway is on the same cohort number.
+//
+// The two 5-week specialist intensives (AI Product Builder, BA for AI &
+// Automation) run on their own, later cadence — start 5 Oct 2026, applications
+// close 28 Sep 2026 — both on their first cohort (Cohort 1). Intensives are
+// single-price (no Standard/Premium tiers) and do not issue a Capability
+// Passport — that stays a pathway-Premium perk. Seats are modeled
+// per-programme (not one shared global count) so nav badges and the site-wide
+// banner can be derived rather than hardcoded — see seatsLine()/siteSeatsLine().
 
 export type PathwaySlug =
   | 'product-management'
@@ -25,6 +33,8 @@ export interface PathwayCohort {
   passportPrefix: string; // e.g. "UP-C2" — derived from cohort, kept explicit for readability
   start: string; // ISO date
   status: string; // "Cohort 2 · Open"
+  seatsMax: number;
+  seatsRemaining: number;
 }
 
 export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
@@ -37,6 +47,8 @@ export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
     passportPrefix: 'UP-C2',
     start: '2026-09-20',
     status: 'Cohort 2 · Open',
+    seatsMax: 25,
+    seatsRemaining: 14,
   },
   'business-analysis': {
     slug: 'business-analysis',
@@ -47,6 +59,8 @@ export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
     passportPrefix: 'UP-C2',
     start: '2026-09-20',
     status: 'Cohort 2 · Open',
+    seatsMax: 25,
+    seatsRemaining: 16,
   },
   'product-design': {
     slug: 'product-design',
@@ -57,6 +71,8 @@ export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
     passportPrefix: 'UP-C1',
     start: '2026-09-20',
     status: 'Cohort 1 · Open',
+    seatsMax: 22,
+    seatsRemaining: 20,
   },
   'payment-operations': {
     slug: 'payment-operations',
@@ -67,27 +83,93 @@ export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
     passportPrefix: 'UP-C1',
     start: '2026-09-20',
     status: 'Cohort 1 · Open',
+    seatsMax: 22,
+    seatsRemaining: 18,
   },
 };
 
 export const PATHWAY_LIST = Object.values(PATHWAYS);
 
-// Shared cohort facts — apply to every pathway this cohort.
+// ── Specialist intensives (5 weeks, single price, no Passport) ─────────────
+
+export type IntensiveSlug = 'ai-product-builder' | 'ba-for-ai-automation';
+
+export type IntensiveKey = 'ai' | 'bx';
+
+export interface IntensiveCohort {
+  slug: IntensiveSlug;
+  label: string;
+  key: IntensiveKey;
+  cohort: number;
+  trackCode: string; // suffix in an enrolment reference: UP-{trackCode}-C{cohort}-{number}
+  start: string; // ISO date
+  status: string;
+  seatsMax: number;
+  seatsRemaining: number;
+}
+
+export const INTENSIVES: Record<IntensiveSlug, IntensiveCohort> = {
+  'ai-product-builder': {
+    slug: 'ai-product-builder',
+    label: 'AI Product Builder',
+    key: 'ai',
+    cohort: 1,
+    trackCode: 'AI',
+    start: '2026-10-05',
+    status: 'Cohort 1 · Open',
+    seatsMax: 20,
+    seatsRemaining: 15,
+  },
+  'ba-for-ai-automation': {
+    slug: 'ba-for-ai-automation',
+    label: 'BA for AI & Automation',
+    key: 'bx',
+    cohort: 1,
+    trackCode: 'BX',
+    start: '2026-10-05',
+    status: 'Cohort 1 · Open',
+    seatsMax: 20,
+    seatsRemaining: 17,
+  },
+};
+
+export const INTENSIVE_LIST = Object.values(INTENSIVES);
+
+export type ProgrammeSlug = PathwaySlug | IntensiveSlug;
+
+// Shared cohort facts that genuinely apply across every programme this cohort.
+// Seat counts live per-programme above, not here — see seatsLine()/siteSeatsLine().
 export const COHORT = {
   startDate: '2026-09-20',
   startDateDisplay: '20 Sep 2026',
+  applyByDate: '2026-09-15',
+  applyByDateDisplay: '15 Sep 2026',
+  // Intensives run on their own, later cadence — see the doc comment above.
+  intensiveStartDate: '2026-10-05',
+  intensiveStartDateDisplay: '5 Oct 2026',
+  intensiveApplyByDate: '2026-09-28',
+  intensiveApplyByDateDisplay: '28 Sep 2026',
   demoDay: null as string | null, // set when confirmed
-  seatsMax: 25,
-  seatsRemaining: 18,
   hoursPerWeek: '8–10',
+  intensiveHoursPerWeek: '6–8',
   liveSessionDays: ['Tuesday', 'Thursday'] as const,
   feedbackSlaHours: 48,
   cohortRangeMin: 15,
   cohortRangeMax: 25,
 };
 
-export function seatsLine(): string {
-  return `${COHORT.seatsRemaining} of ${COHORT.seatsMax} seats remaining`;
+// Per-programme seats line, e.g. "14 of 25 seats remaining".
+export function seatsLine(slug: ProgrammeSlug): string {
+  const p = slug in PATHWAYS ? PATHWAYS[slug as PathwaySlug] : INTENSIVES[slug as IntensiveSlug];
+  return `${p.seatsRemaining} of ${p.seatsMax} seats remaining`;
+}
+
+// Site-wide banner, derived by summing every live programme — never hardcoded.
+export function siteSeatsLine(): string {
+  const all = [...PATHWAY_LIST, ...INTENSIVE_LIST];
+  const remaining = all.reduce((sum, p) => sum + p.seatsRemaining, 0);
+  const max = all.reduce((sum, p) => sum + p.seatsMax, 0);
+  return `${remaining} of ${max} seats remaining`;
 }
 
 // Look up a pathway by its route slug or its short key (pm/ba/pd/po).
@@ -96,6 +178,24 @@ export function getPathway(id: PathwaySlug | PathwayKey): PathwayCohort {
   const bySlug = PATHWAY_LIST.find((p) => p.key === id);
   if (!bySlug) throw new Error(`Unknown pathway: ${id}`);
   return bySlug;
+}
+
+// Look up an intensive by its route slug or its short key (ai/bx).
+export function getIntensive(id: IntensiveSlug | IntensiveKey): IntensiveCohort {
+  if (id in INTENSIVES) return INTENSIVES[id as IntensiveSlug];
+  const bySlug = INTENSIVE_LIST.find((i) => i.key === id);
+  if (!bySlug) throw new Error(`Unknown intensive: ${id}`);
+  return bySlug;
+}
+
+export function isIntensiveSlug(slug: ProgrammeSlug): slug is IntensiveSlug {
+  return slug in INTENSIVES;
+}
+
+// Unified lookup across both programme families — for nav, sitemap, and the
+// enrolment flow, which all need to treat pathways and intensives uniformly.
+export function getProgramme(slug: ProgrammeSlug): { slug: ProgrammeSlug; label: string; cohort: number; trackCode: string; start: string; status: string } {
+  return isIntensiveSlug(slug) ? getIntensive(slug) : getPathway(slug);
 }
 
 const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

@@ -1,7 +1,8 @@
-// Single source of truth for Tally form IDs, payment links, and pricing.
+// Single source of truth for Tally form IDs and pricing.
 // Edit this file to change form IDs or pricing across the whole site.
 
-import type { PathwaySlug } from './cohort-config';
+import type { PathwaySlug, IntensiveSlug, ProgrammeSlug } from './cohort-config';
+import { isIntensiveSlug } from './cohort-config';
 
 export const TALLY_FORMS = {
   consultation: '5BeeKM',
@@ -48,11 +49,21 @@ export const REGION_LABELS: Record<Region, string> = {
 
 export const REGION_PROCESSOR: Record<Region, string> = {
   NG: 'Paystack',
-  GB: 'Stripe',
-  CA: 'Stripe',
-  US: 'Stripe',
-  OTHER: 'Stripe',
+  GB: 'Bank transfer',
+  CA: 'Bank transfer',
+  US: 'Bank transfer',
+  OTHER: 'Bank transfer',
 };
+
+// The single branch point between the two payment rails — Nigeria pays via
+// Paystack online, everyone else pays via manual bank transfer (reconciled by
+// hand against the enrolment reference). See lib/payments/ for the rail
+// implementations that key off this.
+export type PaymentRailKind = 'paystack' | 'bank_transfer';
+
+export function railFor(region: Region): PaymentRailKind {
+  return region === 'NG' ? 'paystack' : 'bank_transfer';
+}
 
 const REGION_CURRENCY: Record<Region, { currency: string; symbol: string }> = {
   NG: { currency: 'NGN', symbol: '₦' },
@@ -79,90 +90,58 @@ export interface Pricing {
   premiumInstallment2: number;
 }
 
-function halved(amount: number): number {
-  return Math.round(amount / 2);
-}
-
-// Per-pathway, per-region pricing. Rest-of-world ('OTHER') mirrors US pricing.
-export const PATHWAY_PRICING: Record<PathwaySlug, Record<Region, Pricing>> = {
-  'business-analysis': {
-    NG: { standard: 350000, premium: 500000, standardInstallment2: halved(350000), premiumInstallment2: halved(500000) },
-    GB: { standard: 595, premium: 895, standardInstallment2: halved(595), premiumInstallment2: halved(895) },
-    CA: { standard: 995, premium: 1495, standardInstallment2: halved(995), premiumInstallment2: halved(1495) },
-    US: { standard: 795, premium: 1195, standardInstallment2: halved(795), premiumInstallment2: halved(1195) },
-    OTHER: { standard: 795, premium: 1195, standardInstallment2: halved(795), premiumInstallment2: halved(1195) },
-  },
-  'product-management': {
-    NG: { standard: 375000, premium: 650000, standardInstallment2: halved(375000), premiumInstallment2: halved(650000) },
-    GB: { standard: 695, premium: 995, standardInstallment2: halved(695), premiumInstallment2: halved(995) },
-    CA: { standard: 1095, premium: 1595, standardInstallment2: halved(1095), premiumInstallment2: halved(1595) },
-    US: { standard: 895, premium: 1295, standardInstallment2: halved(895), premiumInstallment2: halved(1295) },
-    OTHER: { standard: 895, premium: 1295, standardInstallment2: halved(895), premiumInstallment2: halved(1295) },
-  },
-  'product-design': {
-    NG: { standard: 300000, premium: 550000, standardInstallment2: halved(300000), premiumInstallment2: halved(550000) },
-    GB: { standard: 695, premium: 995, standardInstallment2: halved(695), premiumInstallment2: halved(995) },
-    CA: { standard: 1095, premium: 1595, standardInstallment2: halved(1095), premiumInstallment2: halved(1595) },
-    US: { standard: 895, premium: 1295, standardInstallment2: halved(895), premiumInstallment2: halved(1295) },
-    OTHER: { standard: 895, premium: 1295, standardInstallment2: halved(895), premiumInstallment2: halved(1295) },
-  },
-  'payment-operations': {
-    NG: { standard: 400000, premium: 700000, standardInstallment2: halved(400000), premiumInstallment2: halved(700000) },
-    GB: { standard: 795, premium: 1195, standardInstallment2: halved(795), premiumInstallment2: halved(1195) },
-    CA: { standard: 1195, premium: 1795, standardInstallment2: halved(1195), premiumInstallment2: halved(1795) },
-    US: { standard: 995, premium: 1495, standardInstallment2: halved(995), premiumInstallment2: halved(1495) },
-    OTHER: { standard: 995, premium: 1495, standardInstallment2: halved(995), premiumInstallment2: halved(1495) },
-  },
+// One shared Standard/Premium price table used by all 4 pathways (not
+// differentiated per pathway). The 2-payment amounts are not a simple half —
+// they bake in a real installment premium, shown transparently on the
+// pricing page ("paying in full is always the lowest total"). Rest-of-world
+// ('OTHER') mirrors US pricing.
+export const SHARED_PATHWAY_PRICING: Record<Region, Pricing> = {
+  NG: { standard: 400000, premium: 600000, standardInstallment2: 210000, premiumInstallment2: 315000 },
+  GB: { standard: 995, premium: 1495, standardInstallment2: 520, premiumInstallment2: 780 },
+  CA: { standard: 1750, premium: 2595, standardInstallment2: 915, premiumInstallment2: 1355 },
+  US: { standard: 1295, premium: 1950, standardInstallment2: 675, premiumInstallment2: 1020 },
+  OTHER: { standard: 1295, premium: 1950, standardInstallment2: 675, premiumInstallment2: 1020 },
 };
 
-export function getPricing(pathway: PathwaySlug, region: Region): Pricing {
-  return PATHWAY_PRICING[pathway][region];
+export function getPricing(_pathway: PathwaySlug, region: Region): Pricing {
+  return SHARED_PATHWAY_PRICING[region];
 }
 
 // ============================================================
-// PAYMENT LINKS — UPDATE THESE WITH YOUR PAYSTACK/STRIPE LINKS
+// INTENSIVE PRICING — the two 5-week specialist intensives. Single price
+// point each (no Standard/Premium split, no Capability Passport), with a
+// discounted "bundled" price when added onto a pathway enrolment. Both
+// intensives share the same per-region pricing today — update independently
+// here if that should ever diverge.
 // ============================================================
-// After creating payment links in Paystack and Stripe, paste the URLs here.
-// Leave as empty strings until you have real links — the buttons will fall back to consultation.
 
-export const PAYMENT_LINKS = {
-  NG: {
-    standardFull: '', // Paystack standard full payment link
-    standardInstallment: '', // Paystack standard installment 1 of 2
-    premiumFull: '', // Paystack premium full payment link
-    premiumInstallment: '', // Paystack premium installment 1 of 2
-  },
-  GB: {
-    standardFull: '', // Stripe standard full GBP
-    standardInstallment: '', // Stripe standard installment GBP
-    premiumFull: '', // Stripe premium full GBP
-    premiumInstallment: '', // Stripe premium installment GBP
-  },
-  CA: {
-    standardFull: '',
-    standardInstallment: '',
-    premiumFull: '',
-    premiumInstallment: '',
-  },
-  US: {
-    standardFull: '',
-    standardInstallment: '',
-    premiumFull: '',
-    premiumInstallment: '',
-  },
-  OTHER: {
-    standardFull: '',
-    standardInstallment: '',
-    premiumFull: '',
-    premiumInstallment: '',
-  },
-} as const;
+export interface IntensivePricing {
+  standalone: number;
+  bundled: number; // discounted price when added onto a pathway enrolment
+}
 
-// Helper: return the right payment link or fall back to consultation
-export function getPaymentLink(region: Region, tier: 'standard' | 'premium', mode: 'full' | 'installment'): string {
-  const key = `${tier}${mode === 'full' ? 'Full' : 'Installment'}` as keyof typeof PAYMENT_LINKS.NG;
-  const link = PAYMENT_LINKS[region][key];
-  return link || '/consultation';
+const INTENSIVE_PRICING_BY_REGION: Record<Region, IntensivePricing> = {
+  NG: { standalone: 250000, bundled: 180000 },
+  GB: { standalone: 395, bundled: 295 },
+  CA: { standalone: 690, bundled: 520 },
+  US: { standalone: 495, bundled: 375 },
+  OTHER: { standalone: 495, bundled: 375 }, // mirrors US, per existing convention
+};
+
+export const INTENSIVE_PRICING: Record<IntensiveSlug, Record<Region, IntensivePricing>> = {
+  'ai-product-builder': INTENSIVE_PRICING_BY_REGION,
+  'ba-for-ai-automation': INTENSIVE_PRICING_BY_REGION,
+};
+
+export function getIntensivePricing(intensive: IntensiveSlug, region: Region): IntensivePricing {
+  return INTENSIVE_PRICING[intensive][region];
+}
+
+// Unified lookup across both programme families, for callers (nav, enrol
+// flow) that don't need to care which kind of programme they're pricing.
+// Pathways return {standard, premium}; intensives return {standalone, bundled}.
+export function getProgrammePricing(slug: ProgrammeSlug, region: Region): Pricing | IntensivePricing {
+  return isIntensiveSlug(slug) ? getIntensivePricing(slug, region) : getPricing(slug, region);
 }
 
 // ============================================================

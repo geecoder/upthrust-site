@@ -1,0 +1,574 @@
+// Every constant in this file is transcribed verbatim from the prototype's
+// `class Component extends DCLogic` (Upthrust-v3-prototype-standalone.html).
+// The prototype is the specification. Do not reword, reorder, or "improve"
+// anything here — the site's copy, ordering, and numbers all come from it.
+
+export type ProgKey = 'pm' | 'ba' | 'pd' | 'po' | 'aipb' | 'baai';
+export type CurKey = 'ng' | 'uk' | 'ca' | 'us';
+
+export const PROG_IDS: ProgKey[] = ['pm', 'ba', 'pd', 'po', 'aipb', 'baai'];
+
+// The prototype's SPA `route` state maps onto real URLs here. Everything else
+// about navigation behaviour is unchanged.
+export const PROG_HREF: Record<ProgKey, string> = {
+  pm: '/pathways/product-management',
+  ba: '/pathways/business-analysis',
+  pd: '/pathways/product-design',
+  po: '/pathways/payment-operations',
+  aipb: '/intensives/ai-product-builder',
+  baai: '/intensives/ba-for-ai-automation',
+};
+
+export const P: Record<ProgKey, { n: string; l: string; wk: string; fam: 'path' | 'int'; seats: number; cap: number; code: string }> = {
+  pm: { n: 'Product Management', l: 'Own outcomes, not a backlog.', wk: '12', fam: 'path', seats: 14, cap: 25, code: 'PM' },
+  ba: { n: 'Business Analysis', l: 'Turn ambiguity into structure.', wk: '12', fam: 'path', seats: 16, cap: 25, code: 'BA' },
+  pd: { n: 'Product Design', l: 'Design what people can actually use.', wk: '12', fam: 'path', seats: 20, cap: 22, code: 'PD' },
+  po: { n: 'Payment Operations', l: 'Keep money moving and reconciled.', wk: '12', fam: 'path', seats: 18, cap: 22, code: 'PO' },
+  aipb: { n: 'AI Product Builder', l: 'Ship a working AI product.', wk: '5', fam: 'int', seats: 15, cap: 20, code: 'AI' },
+  baai: { n: 'BA for AI & Automation', l: 'Specify AI work that survives audit.', wk: '5', fam: 'int', seats: 17, cap: 20, code: 'BX' },
+};
+
+// Currency, processor and the two intensive prices (standalone, bundled).
+// The intensive figures are the only prices here still carried over from the
+// prototype — the two intensives do not exist on production, so there was
+// nothing live to read them back from.
+// The prototype's own `std`/`prem` arrays are gone: they were one shared price
+// table for all four pathways with a three-payment tier, and production is
+// per-pathway with two payments. See PATH_PRICE below.
+export const CUR: Record<CurKey, { c: string; proc: string; int: [number, number] }> = {
+  ng: { c: 'NGN', proc: 'PAYSTACK', int: [250000, 180000] },
+  uk: { c: 'GBP', proc: 'BANK TRANSFER', int: [395, 295] },
+  ca: { c: 'CAD', proc: 'BANK TRANSFER', int: [690, 520] },
+  us: { c: 'USD', proc: 'BANK TRANSFER', int: [495, 375] },
+};
+
+// Live pricing as served by web.upthrustdigital.com. The USD column was read
+// back off production directly (PM 895/1295, BA 795/1195, PD 895/1295,
+// PO 995/1495) and matches; NGN/GBP/CAD are the same table's other columns.
+export type PathKey = 'pm' | 'ba' | 'pd' | 'po';
+
+export const PATH_PRICE: Record<PathKey, Record<CurKey, { std: number; prem: number }>> = {
+  pm: { ng: { std: 375000, prem: 650000 }, uk: { std: 695, prem: 995 }, ca: { std: 1095, prem: 1595 }, us: { std: 895, prem: 1295 } },
+  ba: { ng: { std: 350000, prem: 500000 }, uk: { std: 595, prem: 895 }, ca: { std: 995, prem: 1495 }, us: { std: 795, prem: 1195 } },
+  pd: { ng: { std: 300000, prem: 550000 }, uk: { std: 695, prem: 995 }, ca: { std: 1095, prem: 1595 }, us: { std: 895, prem: 1295 } },
+  po: { ng: { std: 400000, prem: 700000 }, uk: { std: 795, prem: 1195 }, ca: { std: 1195, prem: 1795 }, us: { std: 995, prem: 1495 } },
+};
+
+// Production charges no instalment premium — each of two payments is half the
+// full price. Keeping it derived means the two can never drift apart.
+const half = (n: number) => Math.round(n / 2);
+
+export function priceFor(k: ProgKey, cur: CurKey) {
+  const c = CUR[cur];
+  if (P[k].fam === 'int') {
+    return { code: c.c, proc: c.proc, std: c.int[0], prem: c.int[0], stdP2: c.int[0], premP2: c.int[0], alone: c.int[0], bundle: c.int[1] };
+  }
+  const p = PATH_PRICE[k as PathKey][cur];
+  return { code: c.c, proc: c.proc, std: p.std, prem: p.prem, stdP2: half(p.std), premP2: half(p.prem), alone: c.int[0], bundle: c.int[1] };
+}
+
+// The prototype's BANK constant lived here, holding bracketed placeholder
+// account details. It has been removed rather than filled in: this module is
+// imported by 'use client' components, so anything here is compiled into the
+// JavaScript bundle and shipped to every visitor of every page. Real payee
+// details now come from lib/payments/bank-accounts.ts, which is `server-only`
+// and reads .env.local, and the pathway page passes down just the one region
+// the visitor needs.
+
+export const Q: { s: string; q: string; o: { t: string; k: 'pm' | 'ba' | 'pd' | 'po' }[] }[] = [
+  { s: 'A stakeholder asks for "a dashboard".', q: 'Your first move?', o: [
+    { t: 'Ask what decision it is meant to support', k: 'pm' },
+    { t: 'Ask who uses it and where the data lives', k: 'ba' },
+    { t: 'Sketch two versions and watch someone read them', k: 'pd' },
+    { t: 'Ask which numbers must reconcile daily', k: 'po' } ] },
+  { s: 'Two weeks to launch, one flow will not be ready.', q: 'What do you do?', o: [
+    { t: 'Cut scope, protect the date, write down what dropped', k: 'pm' },
+    { t: 'Map affected requirements, recheck acceptance criteria', k: 'ba' },
+    { t: 'Design a simpler interim journey', k: 'pd' },
+    { t: 'Write the manual workaround and name its owner', k: 'po' } ] },
+  { s: 'You inherit an undocumented process.', q: 'Where do you start?', o: [
+    { t: 'Interview the people who run it, draw the As-Is', k: 'ba' },
+    { t: 'Find the metric it moves, work backwards', k: 'pm' },
+    { t: 'Walk it as a user, note every friction point', k: 'pd' },
+    { t: 'Trace one real transaction until it breaks', k: 'po' } ] },
+  { s: 'The team cannot agree what to build next.', q: 'How do you break the tie?', o: [
+    { t: 'Rank the options against the business goal', k: 'pm' },
+    { t: 'Get agreement on the problem statement first', k: 'ba' },
+    { t: 'Prototype both so the argument gets concrete', k: 'pd' },
+    { t: 'Cost each one in operational load', k: 'po' } ] },
+  { s: 'A feature launched last month is barely used.', q: 'First check?', o: [
+    { t: 'The funnel and the instrumentation', k: 'pm' },
+    { t: 'The requirements against what shipped', k: 'ba' },
+    { t: 'Five users attempting the task while I watch', k: 'pd' },
+    { t: 'Error rates, and what happened to the money', k: 'po' } ] },
+  { s: 'A full day, no meetings.', q: 'What would you enjoy writing?', o: [
+    { t: 'A strategy canvas and a metrics plan', k: 'pm' },
+    { t: 'A BRD with acceptance criteria and edge cases', k: 'ba' },
+    { t: 'A journey map and a set of screens', k: 'pd' },
+    { t: 'A reconciliation model and a controls matrix', k: 'po' } ] },
+  { s: 'An executive wants a mid-sprint update.', q: 'What do you bring?', o: [
+    { t: 'Outcomes, risks, and the one decision I need', k: 'pm' },
+    { t: 'Requirement status with open questions listed', k: 'ba' },
+    { t: 'The current build and what changed', k: 'pd' },
+    { t: 'Volumes processed and exceptions outstanding', k: 'po' } ] },
+  { s: 'A vendor demos an AI tool. The room is excited.', q: 'Your instinct?', o: [
+    { t: 'Ask what outcome it moves and how we would know', k: 'pm' },
+    { t: 'Ask what data it needs and who reviews output', k: 'ba' },
+    { t: 'Ask how a user recovers when it is wrong', k: 'pd' },
+    { t: 'Ask what happens to the audit trail', k: 'po' } ] },
+  { s: 'One week to de-risk an expensive bet.', q: 'What do you run?', o: [
+    { t: 'The cheapest test that could prove us wrong', k: 'pm' },
+    { t: 'Stakeholder interviews to surface constraints', k: 'ba' },
+    { t: 'A clickable prototype with real users', k: 'pd' },
+    { t: 'A dry run on real volumes', k: 'po' } ] },
+  { s: 'Your last difficult project.', q: 'What frustrated you most?', o: [
+    { t: 'Work not tied to any outcome', k: 'pm' },
+    { t: 'Ambiguity nobody would write down', k: 'ba' },
+    { t: 'Decisions made without seeing the experience', k: 'pd' },
+    { t: 'Numbers that never balanced, nobody chasing why', k: 'po' } ] },
+  { s: 'UAT finds a defect that is arguably "as specified".', q: 'Next?', o: [
+    { t: 'Fix the spec first, then decide on the defect', k: 'ba' },
+    { t: 'Judge it on user impact, decide if we ship', k: 'pm' },
+    { t: 'Check whether the design misled the user', k: 'pd' },
+    { t: 'Check what it did to the ledger', k: 'po' } ] },
+  { s: 'Twelve weeks from now, in an interview.', q: 'What do you want to show?', o: [
+    { t: 'A product decision I made and what it delivered', k: 'pm' },
+    { t: 'A requirements pack a team could build from', k: 'ba' },
+    { t: 'A journey I redesigned and how it tested', k: 'pd' },
+    { t: 'An incident I resolved and the control I added', k: 'po' } ] },
+];
+
+export const DIMS: { l: string; k: 'pm' | 'ba' | 'pd' | 'po' }[] = [
+  { l: 'Product judgement', k: 'pm' }, { l: 'Structured thinking', k: 'ba' },
+  { l: 'Experience reasoning', k: 'pd' }, { l: 'Operational rigour', k: 'po' },
+];
+
+export const ABOUT = {
+  shifts: [
+    { a: 'Learning concepts', b: 'Applying them' },
+    { a: 'Collecting certificates', b: 'Building evidence' },
+    { a: 'Career confusion', b: 'Professional clarity' },
+    { a: 'Potential', b: 'Proof' },
+  ],
+  beliefs: [
+    { n: '01', t: 'Capability over credentials', d: 'A certificate says you attended. A portfolio says you can do the work.' },
+    { n: '02', t: 'Practice over theory', d: 'Every concept is taught through a real scenario from a real market.' },
+    { n: '03', t: 'Evidence over claims', d: 'You leave with artefacts a hiring manager can read, not adjectives.' },
+    { n: '04', t: 'Honesty over hype', d: 'We do not guarantee jobs. We guarantee you will be ready to compete for one.' },
+  ],
+  timeline: [
+    { y: '2019', t: 'Upthrust begins', d: 'Founded to close the gap between training and capability.' },
+    { y: '2021', t: 'Cohort model formalised', d: 'Live, capped cohorts replace one-off workshops.' },
+    { y: '2023', t: '1,000 professionals trained', d: 'Alumni working across Nigeria, the UK and Canada.' },
+    { y: '2025', t: 'The Capability Passport', d: 'A verifiable record of assessed, defended work.' },
+    { y: '2026', t: 'Six programmes', d: 'Four pathways and two AI intensives, all cohort-based.' },
+  ],
+  stats: [
+    { n: 1000, s: '+', l: 'PROFESSIONALS TRAINED', raw: 0 },
+    { n: 2019, s: '', l: 'FOUNDED', raw: 1 },
+    { n: 6, s: '', l: 'PROGRAMMES', raw: 0 },
+    { n: 25, s: '', l: 'MAX PER COHORT', raw: 0 },
+  ],
+};
+
+export const FOOT: { h: string; links: { l: string; k: string }[] }[] = [
+  { h: 'PATHWAYS', links: [
+    { l: 'Product Management', k: 'pm' }, { l: 'Business Analysis', k: 'ba' },
+    { l: 'Product Design', k: 'pd' }, { l: 'Payment Operations', k: 'po' },
+  ] },
+  { h: 'INTENSIVES', links: [
+    { l: 'AI Product Builder', k: 'aipb' }, { l: 'BA for AI & Automation', k: 'baai' },
+  ] },
+  { h: 'EXPLORE', links: [
+    { l: 'The Accelerator', k: 'accel' }, { l: 'Career Assessment', k: 'assess' }, { l: 'About', k: 'about' },
+  ] },
+];
+
+export const SHIFT = [
+  { a: 'Certificate collected', b: 'Evidence produced', n: 85 },
+  { a: 'Course completed', b: 'Capability demonstrated', n: 78 },
+  { a: '"I attended X program"', b: '"Here is my capstone"', n: 91 },
+  { a: 'Passive learner', b: 'Active builder', n: 83 },
+];
+
+export const LOOPX = [
+  { n: '01', t: 'Concept class', m: '90 MIN · LIVE', d: 'One framework, taught live. No more. You leave able to name the thing, know when it applies, and know what bad practice looks like.', o: 'Weekly framework understood' },
+  { n: '02', t: 'Real-world case', m: '30 MIN · LIVE', d: 'A real situation from a Nigerian, UK or Canadian team, walked end to end — including what went wrong.', o: 'Pattern recognition in context' },
+  { n: '03', t: 'Practical lab', m: '60 MIN · LIVE', d: 'You do the work while a facilitator watches. Mistakes get corrected in the room, not in a comment thread a week later.', o: 'Corrected technique' },
+  { n: '04', t: 'Weekly assignment', m: 'SELF-PACED · 3–4 HRS', d: 'One artefact per week on a real capstone brief. This is the work that becomes your portfolio.', o: 'One portfolio artefact' },
+  { n: '05', t: 'Structured feedback', m: 'WITHIN 48 HRS', d: 'Scored against the published rubric with written notes. Not a grade — a revision list you can act on.', o: 'A specific list to fix' },
+  { n: '06', t: 'Reflection', m: '15 MIN · ASYNC', d: 'You write down what you decided and why, in the language you will use in an interview.', o: 'An interview-ready story' },
+];
+
+export const SPINE = [
+  { w: 'W00', t: 'Onboarding & diagnostic', d: 'Baseline assessment, tool setup, pathway confirmation, community induction.', p: 0 },
+  { w: 'W01', t: 'Digital product foundations', d: 'How real product teams work — PM, BA, Design, Engineering, QA, Marketing, Ops, and how they hand work over.', p: 0 },
+  { w: 'W02', t: 'Problem discovery', d: 'Defining user and business problems clearly before jumping to solutions.', p: 0 },
+  { w: 'W03', t: 'Product strategy & business context', d: 'Connecting problems to business goals, MVP scope, and why this and not something else.', p: 0 },
+  { w: 'W04', t: 'Requirements & solution definition', d: 'Turning a framed problem into something a delivery team can actually build.', p: 1 },
+  { w: 'W05', t: 'Process & experience mapping', d: 'Making the current and future state visible, and finding where it breaks.', p: 1 },
+  { w: 'W06', t: 'Documentation that survives delivery', d: 'Writing the artefact your team still trusts in week nine.', p: 1 },
+  { w: 'W07', t: 'Data, metrics & instrumentation', d: 'Deciding what to measure before you ship, not after.', p: 1 },
+  { w: 'W08', t: 'Working inside a delivery team', d: 'Ceremonies, trade-offs, and holding the line on scope.', p: 2 },
+  { w: 'W09', t: 'Quality, testing & sign-off', d: 'Proving it works before anyone else has to find out that it does not.', p: 2 },
+  { w: 'W10', t: 'Launch & go-to-market', d: 'Getting it into the world, and reading what happens next.', p: 2 },
+  { w: 'W11', t: 'Portfolio & interview readiness', d: 'Turning twelve weeks of work into a case study and a story bank.', p: 2 },
+  { w: 'W12', t: 'Capstone defence', d: 'You present to a panel and answer for every decision. This is where the credential is earned.', p: 3 },
+];
+
+export const PHASE = [
+  { l: 'Foundation', w: 'WEEKS 0–3', c: 'var(--seal-300)' },
+  { l: 'Core skills', w: 'WEEKS 4–7', c: 'var(--ink-300)' },
+  { l: 'Delivery', w: 'WEEKS 8–11', c: 'var(--seal-500)' },
+  { l: 'Capstone', w: 'WEEK 12', c: 'var(--moss-500)' },
+];
+
+export const WHO = {
+  yes: [
+    { t: 'Career switchers who are serious', d: 'Banking, ops, support, healthcare, education, consulting — you are making a move, not dabbling.' },
+    { t: 'Diaspora professionals rebuilding', d: 'You need a portfolio that speaks the language of the market you moved to.' },
+    { t: 'Stuck in product-adjacent roles', d: 'You already do the work. The Passport helps your title catch up to your reality.' },
+    { t: 'Early-career, filtering out', d: 'Evidence replaces the "3 years experience required" catch-22.' },
+    { t: 'People who will do the work', d: 'Every session. Every assignment. Every revision.' },
+  ],
+  no: [
+    { t: 'You are collecting certificates', d: 'We do not lead with credentials, and the work is not optional.' },
+    { t: 'You cannot commit 8–10 hours', d: 'Partial engagement produces weak portfolios. Weak portfolios do not impress employers.' },
+    { t: 'You expect a guaranteed job', d: 'We promise readiness, evidence, and confidence — not a hire.' },
+    { t: 'You want self-paced video', d: 'This is live and cohort-based. Upthrust is not a video library.' },
+  ],
+};
+
+export const BRIEFS = [
+  { id: 'C01', lv: 'Intermediate', r: 'Nigeria', i: 'Fintech', t: 'Digital Wallet Onboarding — Identity Verification Drop-off', d: 'A leading Nigerian digital wallet has a 58% drop-off at the BVN/NIN identity verification step.' },
+  { id: 'C02', lv: 'Advanced', r: 'UK / Diaspora', i: 'Fintech', t: 'Multi-Currency Savings for the African Diaspora', d: 'Save in GBP, USD and NGN simultaneously, with cross-border transfer on maturity.' },
+  { id: 'C03', lv: 'Advanced', r: 'Nigeria / West Africa', i: 'Health Tech', t: 'Community Health Navigation Platform', d: 'Helping lower-income users book, triage symptoms, and find affordable care nearby.' },
+  { id: 'C04', lv: 'Intermediate', r: 'Nigeria / Ghana', i: 'E-commerce / SME', t: 'SME Invoice, Inventory & Payment Tool', d: 'Replacing WhatsApp, Excel and paper for small business owners in Lagos and Accra.' },
+  { id: 'C05', lv: 'Advanced', r: 'Nigeria', i: 'Transport / Logistics', t: 'Last-Mile Delivery Operations Platform', d: '500+ deliveries a day, losing 23% to wrong addresses, no-shows and comms failures.' },
+  { id: 'C06', lv: 'Intermediate', r: 'UK / Canada', i: 'Proptech', t: 'Rental Application & Tenancy Management', d: 'Digitising the rental process from application and referencing through to rent collection.' },
+  { id: 'C07', lv: 'Intermediate', r: 'Nigeria / East Africa', i: 'Edtech', t: 'Student Learning & Progress Tracking', d: 'Courses across 12 countries, 67% mid-course drop-off, no instructor visibility.' },
+  { id: 'C08', lv: 'Advanced', r: 'Nigeria / West Africa', i: 'Government / NGO', t: 'Beneficiary Management & Grant Disbursement', d: '10,000 rural beneficiaries on Excel and paper. 18% of the programme lost to waste.' },
+];
+
+// The prototype's answer for payment plans reads "in full, two, or three".
+// The user has twice confirmed two-payment-only, so the plans themselves are
+// unchanged from the prototype and this answer stays as written until they
+// resolve the conflict.
+export const ACFAQ = [
+  { q: 'What exactly is the Career Capability Accelerator?', a: 'A twelve-week live cohort where you work through realistic product scenarios, build portfolio-grade deliverables, defend your decisions, and earn a Capability Passport. Four pathways run on one shared spine.' },
+  { q: 'How much time per week does this take?', a: '8–10 hours. Roughly three live, three to four on the weekly artefact, and the rest on feedback and reflection.' },
+  { q: 'What is the difference between Standard and Premium?', a: 'Standard is the full live programme with group feedback and a Capability Record. Premium adds individual written feedback, a 1:1 portfolio review, a mock interview, a Demo Day slot, and the Verified Passport.' },
+  { q: 'Can I switch pathways mid-programme?', a: 'Up to the end of Week 2, yes — the first three weeks are a shared spine. After that your capstone brief is already in motion.' },
+  { q: 'Do you offer payment plans?', a: 'Yes, on every pathway: in full, two payments, or three. Each programme page shows exactly what every option costs in your currency.' },
+];
+
+export const ASK: Record<ProgKey, { q: string; a: string }[]> = {
+  pm: [
+    { q: 'Can I do this alongside a full-time job?', a: 'Yes. Live sessions are evenings, and the 8–10 hours a week is designed around working professionals.' },
+    { q: 'Do I need to have shipped a product before?', a: 'No. Most people arrive from ops, analysis, or delivery roles and have never owned a roadmap.' },
+    { q: 'Will I have something to show recruiters?', a: 'Twelve artefacts, including a defended capstone — a roadmap, a PRD, a metrics plan, a launch review.' },
+    { q: 'Is AI part of this?', a: 'Yes, throughout, as a working tool. The AI Product Builder intensive goes deeper if you want it.' },
+  ],
+  ba: [
+    { q: 'Is this enough to move into a BA role?', a: 'It gives you the artefacts and the vocabulary. Alumni now work as BAs in Nigeria, the UK, and Canada.' },
+    { q: 'Do you cover CBAP or IIBA material?', a: 'The practice aligns with BABOK, and your facilitator is CBAP-certified — but this is a capability programme, not exam prep.' },
+    { q: 'What if I already do BA work informally?', a: 'Most of our cohort does. You will formalise it and get a record that proves it.' },
+    { q: 'How technical does it get?', a: 'You need SQL basics and comfort with data. No coding required.' },
+  ],
+  pd: [
+    { q: 'Do I need a portfolio to start?', a: 'No. You build one here — twelve pieces including research, journeys, screens, and a handoff spec.' },
+    { q: 'Is this visual design or product design?', a: 'Product design. Research, structure, flows, and testing — not brand or illustration.' },
+    { q: 'Which tools will I be working in?', a: 'Figma throughout, plus FigJam and Maze for research and testing.' },
+    { q: 'Will my work be critiqued?', a: 'Every week, against a published rubric, and you revise before it enters your portfolio.' },
+  ],
+  po: [
+    { q: 'Who is this actually for?', a: 'People in banking, fintech ops, settlement, or customer support who want to own payment operations.' },
+    { q: 'Do I need an accounting background?', a: 'No, but you should be comfortable in a spreadsheet. We teach the reconciliation logic from first principles.' },
+    { q: 'Is this Nigeria-specific?', a: 'The examples are African-market first, but the controls, recon, and incident practice travel anywhere.' },
+    { q: 'What do I leave with?', a: 'A reconciliation model, a controls matrix, an incident post-mortem, and a defended capstone.' },
+  ],
+  aipb: [
+    { q: 'Do I need to code?', a: 'Python basics help but are not required. You will use model APIs and prototyping tools, not train models.' },
+    { q: 'Is five weeks really enough to build something?', a: 'Yes, deliberately. Narrow scope, one working prototype, defended in week five.' },
+    { q: 'Should I take this or a 12-week pathway?', a: 'A pathway if you are switching careers. This if you already have a foundation and want AI capability on top.' },
+    { q: 'Can I bundle it?', a: 'Yes — 25% off when added to any 12-week pathway.' },
+  ],
+  baai: [
+    { q: 'How is this different from the BA pathway?', a: 'It assumes you already do BA work. Five weeks entirely on specifying and governing AI and automation.' },
+    { q: 'Do I need AI experience?', a: 'No. You need analysis experience. We supply the AI-specific practice.' },
+    { q: 'Is this about using AI or specifying it?', a: 'Both. Using AI to work faster, and doing the BA work AI projects actually require.' },
+    { q: 'Would a regulator accept the output?', a: 'That is the standard we write to — data lineage, human-in-the-loop, and auditable acceptance criteria.' },
+  ],
+};
+
+export const CAPS: Record<ProgKey, { a: string; c: string }[]> = {
+  pm: [
+    { a: 'Problem framing', c: 'Take a vague executive ask and return a problem statement the team can act on.' },
+    { a: 'Strategy & prioritisation', c: 'Say no to good ideas with a reason your stakeholders accept.' },
+    { a: 'Requirements & specs', c: 'Write a PRD with edge cases engineering does not have to guess at.' },
+    { a: 'Delivery partnership', c: 'Run a sprint without becoming the bottleneck or the ticket clerk.' },
+    { a: 'Measurement', c: 'Instrument a feature before launch and read the result honestly after.' },
+    { a: 'Stakeholder communication', c: 'Give an executive update that ends in a decision, not a status list.' },
+  ],
+  ba: [
+    { a: 'Elicitation', c: 'Run a stakeholder session that surfaces what people actually need.' },
+    { a: 'Requirements documentation', c: 'Produce a BRD a delivery team can build from without a translator.' },
+    { a: 'Process modelling', c: 'Map As-Is and To-Be so the gap is obvious to everyone in the room.' },
+    { a: 'Solution definition', c: 'Turn a business need into acceptance criteria that hold up in review.' },
+    { a: 'Testing & sign-off', c: 'Write a UAT pack that catches what scoping missed.' },
+    { a: 'Benefits & reporting', c: 'Show whether the change delivered what the business case promised.' },
+  ],
+  pd: [
+    { a: 'Research', c: 'Plan and run interviews that change the design rather than confirm it.' },
+    { a: 'Synthesis', c: 'Turn messy findings into a journey map a team can prioritise from.' },
+    { a: 'Structure & flows', c: 'Design an information architecture people navigate without instruction.' },
+    { a: 'Interface craft', c: 'Ship hi-fi screens on a design system, not one-off pixels.' },
+    { a: 'Testing', c: 'Watch five users fail, then fix the design instead of blaming them.' },
+    { a: 'Handoff & rationale', c: 'Hand engineers a spec and defend every decision in it.' },
+  ],
+  po: [
+    { a: 'Flow mapping', c: 'Trace money end to end and name every point it can go missing.' },
+    { a: 'Reconciliation', c: 'Build and run a recon model that balances at close of business.' },
+    { a: 'Exception handling', c: 'Investigate a failed transaction and resolve it without guesswork.' },
+    { a: 'Disputes & chargebacks', c: 'Run a dispute response that stands up to a provider and a regulator.' },
+    { a: 'Controls & risk', c: 'Design the control that stops the same incident happening twice.' },
+    { a: 'Ops reporting', c: 'Specify the dashboard your team actually runs the day on.' },
+  ],
+  aipb: [
+    { a: 'Use-case selection', c: 'Tell an AI opportunity worth building from one that just sounds good.' },
+    { a: 'Data feasibility', c: 'Check whether the data can carry the idea before anyone commits budget.' },
+    { a: 'Prototyping', c: 'Build a working AI-enabled product, not a deck about one.' },
+    { a: 'Failure design', c: 'Decide what happens when the model is confidently wrong.' },
+    { a: 'Evaluation', c: 'Measure whether the thing actually works, repeatedly.' },
+    { a: 'Defence', c: 'Present it to a panel and answer for every call you made.' },
+  ],
+  baai: [
+    { a: 'Automation audit', c: 'Identify which part of a process AI should touch, and which it should not.' },
+    { a: 'Data requirements', c: 'Specify what the model needs, where it comes from, and who owns it.' },
+    { a: 'Human-in-the-loop', c: 'Redesign a workflow so a person stays accountable for the decision.' },
+    { a: 'Acceptance criteria', c: 'Write AI acceptance criteria that survive an audit.' },
+    { a: 'Explainability', c: 'Make a model decision legible to someone who has to justify it.' },
+    { a: 'Governance handover', c: 'Hand over a spec a risk team and a regulator can both read.' },
+  ],
+};
+
+export const OUT: Record<ProgKey, string[]> = {
+  pm: ['Frame a problem worth solving', 'Defend a roadmap to leadership', 'Prove impact with real metrics', 'Run a launch end to end'],
+  ba: ['Turn vague asks into specs', 'Model a process others can follow', 'Write requirements teams can build', 'Sign off a release with UAT'],
+  pd: ['Research before you design', 'Design a journey that tests well', 'Hand off work engineers can build', 'Defend every design decision'],
+  po: ['Map money end to end', 'Reconcile at scale, daily', 'Resolve an incident calmly', 'Design the control that prevents it'],
+  aipb: ['Pick an AI use case that holds', 'Build a working prototype', 'Design for the model being wrong', 'Defend it to a panel'],
+  baai: ['Audit a process for automation', 'Specify data and ownership', 'Keep a human in the loop', 'Write criteria that pass audit'],
+};
+
+// `icon` is the ToolIcon registry key. A tool with no recognisable product
+// mark (a technique rather than a tool — "design tokens", "recon tools") gets
+// a monogram tile instead.
+export const TOOLS: Record<ProgKey, { l: string; icon: string }[]> = {
+  pm: [
+    { l: 'JIRA', icon: 'jira' }, { l: 'CONFLUENCE', icon: 'confluence' }, { l: 'MIXPANEL', icon: 'mixpanel' },
+    { l: 'FIGMA', icon: 'figma' }, { l: 'SQL BASICS', icon: 'sql' }, { l: 'NOTION', icon: 'notion' },
+  ],
+  ba: [
+    { l: 'JIRA', icon: 'jira' }, { l: 'CONFLUENCE', icon: 'confluence' }, { l: 'DRAW.IO', icon: 'drawio' },
+    { l: 'NOTION', icon: 'notion' }, { l: 'CLAUDE COWORK', icon: 'claude' }, { l: 'MIRO', icon: 'miro' },
+  ],
+  pd: [
+    { l: 'FIGMA', icon: 'figma' }, { l: 'FIGJAM', icon: 'figjam' }, { l: 'MAZE', icon: 'maze' },
+    { l: 'NOTION', icon: 'notion' }, { l: 'DESIGN TOKENS', icon: 'tokens' }, { l: 'CLAUDE DESIGN', icon: 'claude' },
+  ],
+  po: [
+    { l: 'EXCEL MODELS', icon: 'excel' }, { l: 'SQL', icon: 'sql' },
+    { l: 'RECON TOOLS', icon: 'recon' }, { l: 'JIRA', icon: 'jira' },
+  ],
+  aipb: [
+    { l: 'CLAUDE / GPT APIS', icon: 'claude' }, { l: 'CLAUDE CODE', icon: 'claudecode' }, { l: 'CODEX', icon: 'codex' },
+    { l: 'CLAUDE DESIGN', icon: 'claude' }, { l: 'FIGMA', icon: 'figma' }, { l: 'GIT', icon: 'git' },
+  ],
+  baai: [
+    { l: 'JIRA', icon: 'jira' }, { l: 'CONFLUENCE', icon: 'confluence' },
+    { l: 'PROMPT SPECS', icon: 'prompt' }, { l: 'AUDIT LOGS', icon: 'audit' },
+  ],
+};
+
+// Genesis's title is set in one place so it stays identical everywhere.
+export const FOUNDER_NAME = 'Genesis Nneji Enwenyeokwu';
+export const FOUNDER_TITLE = 'Founder and Lead Facilitator';
+export const FOUNDER_LI = 'https://www.linkedin.com/in/genesis-enwenyeokwu/';
+export const FOUNDER_IMG = '/images/founder-genesis.jpg';
+
+export const UPTHRUST_LI = 'https://www.linkedin.com/company/upthrustdigital/';
+
+export type Fac = {
+  id: string; n: string; r: string; w: string;
+  img?: string; li?: string;
+  anon?: number;  // renders the anonymous avatar, no photo slot and no profile link
+  eyebrow: string;
+};
+
+const GENESIS = (w: string): Fac => ({
+  id: 'ge', n: FOUNDER_NAME, r: FOUNDER_TITLE, w,
+  img: FOUNDER_IMG, li: FOUNDER_LI, eyebrow: 'PROGRAMME LEAD',
+});
+
+// Identity withheld deliberately — the reviewer is a working hiring manager and
+// the point of the exercise is that candidates defend to someone they don't know.
+const GUEST: Fac = {
+  id: 'gr', n: 'Guest reviewer', r: 'Hiring manager · identity withheld',
+  w: 'W12 · CAPSTONE DEFENCE', anon: 1, eyebrow: 'GUEST REVIEWER',
+};
+
+export const FACS: Record<ProgKey, Fac[]> = {
+  pm: [
+    GENESIS('ALL 12 WEEKS'),
+    { id: 'os', n: 'Oluwafemi Siji-Kenneth', r: 'Lead Product Manager', w: 'PATHWAY CRAFT · W04–W11', img: '/images/facilitators/oluwafemi-siji-kenneth.jpeg', li: 'https://www.linkedin.com/in/ifemora/', eyebrow: 'PATHWAY FACILITATOR' },
+    GUEST,
+  ],
+  ba: [
+    GENESIS('ALL 12 WEEKS'),
+    { id: 'aa', n: 'Ayomikun Akinbobola', r: 'Manager, System Integrations', w: 'PATHWAY CRAFT · W04–W11', img: '/images/facilitators/ayomikun-akinbobola.jpeg', li: 'https://www.linkedin.com/in/ayomikuna/', eyebrow: 'PATHWAY FACILITATOR' },
+    GUEST,
+  ],
+  pd: [
+    GENESIS('ALL 12 WEEKS'),
+    { id: 'mo', n: 'Michael Oyewusi', r: 'Senior Product Designer', w: 'PATHWAY CRAFT · W04–W11', img: '/images/facilitators/michael-oyewusi.jpg', li: 'https://www.linkedin.com/in/michael-oyewusi/', eyebrow: 'PATHWAY FACILITATOR' },
+    GUEST,
+  ],
+  po: [
+    GENESIS('ALL 12 WEEKS'),
+    { id: 'ks', n: 'Kola Salami', r: 'Operations Manager', w: 'PATHWAY CRAFT · W04–W11', img: '/images/facilitators/kola-salami.jpg', li: 'https://www.linkedin.com/in/kola-salami/', eyebrow: 'PATHWAY FACILITATOR' },
+    GUEST,
+  ],
+  // The intensives are facilitated solely by Genesis.
+  aipb: [GENESIS('ALL 5 WEEKS')],
+  baai: [GENESIS('ALL 5 WEEKS')],
+};
+
+export const LADDER: Record<ProgKey, string[]> = {
+  pm: ['Associate Product Manager', 'Product Manager', 'Senior Product Manager'],
+  ba: ['Junior Business Analyst', 'Business Analyst', 'Senior BA / Product Owner'],
+  pd: ['Junior Product Designer', 'Product Designer', 'Senior Product Designer'],
+  po: ['Payment Operations Analyst', 'Payment Operations Specialist', 'Payment Ops Manager'],
+  aipb: ['AI Product Associate', 'AI Product Manager', 'Head of AI Product'],
+  baai: ['BA · Automation projects', 'Senior BA · AI delivery', 'AI Governance Lead'],
+};
+
+export const MIX = [
+  { d: 'BA', t: 'Stakeholder map + RACI' },
+  { d: 'PM', t: 'Product opportunity brief' },
+  { d: 'PD', t: 'Journey map with pain points' },
+  { d: 'PO', t: 'Payment flow map' },
+  { d: 'BA', t: 'As-Is / To-Be maps' },
+  { d: 'PM', t: 'Prioritised roadmap' },
+  { d: 'PD', t: 'Wireflows for the core task' },
+  { d: 'PO', t: 'Reconciliation model' },
+  { d: 'BA', t: 'UAT pack' },
+  { d: 'PM', t: 'Metrics & instrumentation plan' },
+  { d: 'PD', t: 'Usability test findings' },
+  { d: 'PO', t: 'Controls matrix' },
+];
+
+export const ARTS: Record<ProgKey, { t: string; s: string; i: string }[]> = {
+  pm: [
+    { t: 'Product teardown + strategy analysis', s: '82', i: 'GE' }, { t: 'Problem brief', s: '79', i: 'AO' },
+    { t: 'Product strategy canvas', s: '84', i: 'GE' }, { t: 'Full PRD with edge cases', s: '77', i: 'GE' },
+    { t: 'User journey map', s: '83', i: 'AO' }, { t: 'Sprint backlog', s: '85', i: 'GE' },
+    { t: 'Metrics + kill criteria plan', s: '80', i: 'AO' }, { t: 'Launch brief', s: '86', i: 'GE' },
+    { t: 'Capstone project + presentation', s: '81', i: 'AO' }, { t: 'Portfolio case study', s: '84', i: 'GE' },
+    { t: 'Interview story bank', s: '82', i: 'AO' }, { t: 'Capability Passport', s: '87', i: 'GE' },
+  ],
+  ba: [
+    { t: 'Stakeholder map + RACI', s: '84', i: 'GE' }, { t: 'Business case', s: '78', i: 'GE' },
+    { t: 'Requirements elicitation notes', s: '81', i: 'AO' }, { t: 'Full BRD', s: '76', i: 'GE' },
+    { t: 'As-Is / To-Be process maps', s: '83', i: 'AO' }, { t: 'User stories with acceptance criteria', s: '84', i: 'GE' },
+    { t: 'UAT pack + test scenarios', s: '79', i: 'AO' }, { t: 'Post-launch reporting framework', s: '85', i: 'GE' },
+    { t: 'Capstone project + presentation', s: '88', i: 'AO' }, { t: 'Portfolio case study', s: '82', i: 'GE' },
+    { t: 'Interview story bank', s: '80', i: 'AO' }, { t: 'Capability Passport', s: '86', i: 'GE' },
+  ],
+  pd: [
+    { t: 'Product teardown from a user lens', s: '80', i: 'NE' }, { t: 'Research plan + interview notes', s: '83', i: 'NE' },
+    { t: 'Journey map with friction points', s: '85', i: 'AO' }, { t: 'Information architecture + flows', s: '78', i: 'NE' },
+    { t: 'Wireframe set for the core flow', s: '82', i: 'NE' }, { t: 'Hi-fi screens on a design system', s: '86', i: 'AO' },
+    { t: 'Interactive prototype', s: '84', i: 'NE' }, { t: 'Usability test findings + revisions', s: '81', i: 'AO' },
+    { t: 'Capstone project + presentation', s: '79', i: 'NE' }, { t: 'Portfolio case study', s: '85', i: 'NE' },
+    { t: 'Interview story bank', s: '83', i: 'AO' }, { t: 'Capability Passport', s: '87', i: 'NE' },
+  ],
+  po: [
+    { t: 'Payment flow map (end to end)', s: '81', i: 'PN' }, { t: 'Reconciliation model', s: '84', i: 'PN' },
+    { t: 'Settlement + payout schedule', s: '87', i: 'AO' }, { t: 'Failed transaction investigation log', s: '79', i: 'PN' },
+    { t: 'Chargeback and dispute runbook', s: '83', i: 'PN' }, { t: 'Controls matrix + segregation of duties', s: '80', i: 'AO' },
+    { t: 'Ops KPI and SLA dashboard spec', s: '85', i: 'PN' }, { t: 'Incident postmortem', s: '82', i: 'AO' },
+    { t: 'Capstone project + presentation', s: '84', i: 'PN' }, { t: 'Portfolio case study', s: '86', i: 'PN' },
+    { t: 'Interview story bank', s: '81', i: 'AO' }, { t: 'Capability Passport', s: '88', i: 'PN' },
+  ],
+  aipb: [
+    { t: 'AI opportunity brief', s: '83', i: 'GE' }, { t: 'Data feasibility read', s: '80', i: 'AO' },
+    { t: 'Working prototype', s: '86', i: 'GE' }, { t: 'Guardrails & fallback design', s: '84', i: 'AO' },
+    { t: 'Capstone defence', s: '87', i: 'GE' },
+  ],
+  baai: [
+    { t: 'Process automation audit', s: '82', i: 'GE' }, { t: 'Data requirements spec', s: '85', i: 'AO' },
+    { t: 'Human-in-the-loop redesign', s: '83', i: 'GE' }, { t: 'AI acceptance criteria', s: '86', i: 'AO' },
+    { t: 'Governance handover pack', s: '84', i: 'GE' },
+  ],
+};
+
+export const LOOP = [
+  { n: '01', t: 'Concept', m: '90 MIN LIVE' },
+  { n: '02', t: 'Real case', m: '30 MIN LIVE' },
+  { n: '03', t: 'Lab', m: '60 MIN LIVE' },
+  { n: '04', t: 'You build', m: '3–4 HRS' },
+  { n: '05', t: 'Scored', m: 'WITHIN 48 HRS' },
+  { n: '06', t: 'Revise', m: 'BEFORE IT COUNTS' },
+];
+
+export const AI: Record<'aipb' | 'baai', { n: string; alone: string; stages: { t: string; s: string; title: string; tag: string }[] }> = {
+  aipb: {
+    n: 'AI Product Builder', alone: 'aipb',
+    stages: [
+      { t: 'Opportunity', s: 'SCOPED', title: 'Find the use case that survives scrutiny.', tag: 'WEEK 01 · PROBLEM SELECTION' },
+      { t: 'Data reality', s: 'MAPPED', title: 'Check whether the data can carry the idea.', tag: 'WEEK 02 · FEASIBILITY' },
+      { t: 'Prototype', s: 'BUILT', title: 'Build it with the models, not slides about them.', tag: 'WEEK 03 · WORKING BUILD' },
+      { t: 'Guardrails', s: 'WIRED', title: 'Decide what happens when it gets things wrong.', tag: 'WEEK 04 · FAILURE DESIGN' },
+      { t: 'Ship + defend', s: 'SIGNED', title: 'Present it to a panel and answer for every call.', tag: 'WEEK 05 · CAPSTONE DEFENCE' },
+    ],
+  },
+  baai: {
+    n: 'BA for AI & Automation', alone: 'baai',
+    stages: [
+      { t: 'Process audit', s: 'MAPPED', title: 'Find the workflow AI should actually touch.', tag: 'WEEK 01 · PROCESS SELECTION' },
+      { t: 'Data spec', s: 'WRITTEN', title: 'Specify what the model needs and who owns it.', tag: 'WEEK 02 · DATA REQUIREMENTS' },
+      { t: 'Human loop', s: 'DESIGNED', title: 'Design where a person stays in the decision.', tag: 'WEEK 03 · WORKFLOW REDESIGN' },
+      { t: 'Acceptance', s: 'DEFINED', title: 'Write criteria that hold up in an audit.', tag: 'WEEK 04 · AI ACCEPTANCE CRITERIA' },
+      { t: 'Governance', s: 'SIGNED', title: 'Hand over a spec a regulator could read.', tag: 'WEEK 05 · CAPSTONE DEFENCE' },
+    ],
+  },
+};
+
+export const HERO_STATS = [
+  { n: '72h', l: 'LIVE TEACHING' },
+  { n: '12', l: 'ARTEFACTS BUILT' },
+  { n: '48h', l: 'FEEDBACK' },
+  { n: '25', l: 'MAX COHORT' },
+];
+
+export const LOOP_STATS = [
+  { n: '72', l: 'LIVE HOURS' }, { n: '12', l: 'SCORED SUBMISSIONS' },
+  { n: '2×', l: 'EVERY ARTEFACT REVISED' }, { n: '1', l: 'DEFENDED CAPSTONE' },
+];
+
+export const QUOTES = [
+  { id: '1', t: 'Every concept taught through real work, not slides.', n: 'Ayodele Yeye', r: 'Senior BA · Government of Nova Scotia' },
+  { id: '2', t: 'Novice to confident enough to land the job.', n: 'Uyoyou Taiye-Ayo', r: 'Senior BA · RBC' },
+  { id: '3', t: 'Real tools, real scenarios, real clarity.', n: 'Chioma Okorie', r: 'Business Analyst · MSVU' },
+];
+
+export const AC_STATS = [
+  { n: '12', l: 'WEEKS' }, { n: '25', l: 'MAX COHORT' }, { n: '8–10h', l: 'PER WEEK' },
+  { n: '4', l: 'PATHWAYS' }, { n: 'Live', l: 'ONLINE' },
+];
+
+// `this.money(n)` in the prototype.
+export function money(n: number): string {
+  return n.toLocaleString('en-US');
+}

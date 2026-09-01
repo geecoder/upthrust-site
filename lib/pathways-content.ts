@@ -4,6 +4,7 @@
 // NOT stored here — they come from lib/cohort-config.ts.
 
 import type { PathwaySlug } from './cohort-config';
+import type { FacilitatorEntry } from './intensives-content';
 
 export interface PathwayContent {
   code: string;
@@ -12,22 +13,30 @@ export interface PathwayContent {
   blurb: string;
   // "By Week 12 you can" — four numbered capability statements
   weekTwelve: [string, string, string, string];
-  // Marketing bullet list of artefacts (distinct from the week-ordered weekArt below)
+  // Marketing bullet list of artefacts — identical to weekArt below (the
+  // wording divergence between the two has been closed; kept as a separate
+  // field because app/accelerator/AcceleratorContent.tsx and
+  // components/home/DisciplineSwitcher.tsx both read `art` directly).
   art: string[];
   // Six capability areas assessed against the rubric
-  caps: string[];
+  caps: { area: string; desc: string }[];
   // Explicit week-ordered artefact array — 12 entries, true week order.
   // Do not zip against a separate week-title array by index.
   weekArt: [
     string, string, string, string, string, string,
     string, string, string, string, string, string,
   ];
+  // Parallel metadata to weekArt — same 12-entry, same order — score +
+  // reviewing-facilitator initials per artefact, used by a homepage gallery.
+  artScores: { score: string; initials: string }[];
   sampleWork: { docTitle: string; docMeta: string; reviewerNote: string };
   diagram: { label: string; caption: string };
   quote: { text: string; who: string };
   profiles: { title: string; body: string }[];
   notFor: string;
   tools: string[];
+  // Exactly three slots, matching the intensive facilitator-roster convention.
+  facilitators: [FacilitatorEntry, FacilitatorEntry, FacilitatorEntry];
   ladder: { role: string; width: string }[];
   ladderNote: string;
   faq: { q: string; a: string }[];
@@ -41,28 +50,36 @@ export const PATHWAY_CONTENT: Record<PathwaySlug, PathwayContent> = {
     blurb:
       'You will learn to write PRDs, define MVP scope, set success metrics, and lead cross-functional teams through real product decisions.',
     weekTwelve: [
-      'Frame a problem before proposing a solution',
-      'Set MVP scope and defend what you cut',
-      'Write a PRD with the edge cases handled',
-      'Define metrics and kill criteria up front',
+      'Frame a problem worth solving',
+      'Defend a roadmap to leadership',
+      'Prove impact with real metrics',
+      'Run a launch end to end',
     ],
     art: [
       'Product teardown + strategy analysis', 'Problem brief', 'Product strategy canvas',
       'Full PRD with edge cases', 'User journey map', 'Sprint backlog',
       'Metrics + kill criteria plan', 'Launch brief', 'Capstone project + presentation',
-      'Portfolio case study', 'Interview story bank', 'Capability Passport (Premium)',
+      'Portfolio case study', 'Interview story bank', 'Capability Passport',
     ],
     caps: [
-      'Problem framing & discovery', 'Product strategy & business context',
-      'Prioritisation & scope decisions', 'Requirements & documentation (PRD)',
-      'Metrics, measurement & kill criteria', 'Delivery leadership & stakeholder communication',
+      { area: 'Problem framing', desc: 'Take a vague executive ask and return a problem statement the team can act on.' },
+      { area: 'Strategy & prioritisation', desc: 'Say no to good ideas with a reason your stakeholders accept.' },
+      { area: 'Requirements & specs', desc: 'Write a PRD with edge cases engineering does not have to guess at.' },
+      { area: 'Delivery partnership', desc: 'Run a sprint without becoming the bottleneck or the ticket clerk.' },
+      { area: 'Measurement', desc: 'Instrument a feature before launch and read the result honestly after.' },
+      { area: 'Stakeholder communication', desc: 'Give an executive update that ends in a decision, not a status list.' },
     ],
     weekArt: [
       'Product teardown + strategy analysis', 'Problem brief', 'Product strategy canvas',
-      'Requirements outline + user stories', 'User journey map', 'Full PRD with edge cases',
-      'MVP scope + trade-off log', 'Sprint backlog', 'Acceptance criteria + edge case review',
-      'Metrics, kill criteria + launch brief', 'Portfolio case study + interview story bank',
-      'Capstone presented and defended',
+      'Full PRD with edge cases', 'User journey map', 'Sprint backlog',
+      'Metrics + kill criteria plan', 'Launch brief', 'Capstone project + presentation',
+      'Portfolio case study', 'Interview story bank', 'Capability Passport',
+    ],
+    artScores: [
+      { score: '82', initials: 'GE' }, { score: '79', initials: 'AO' }, { score: '84', initials: 'GE' },
+      { score: '77', initials: 'GE' }, { score: '83', initials: 'AO' }, { score: '85', initials: 'GE' },
+      { score: '80', initials: 'AO' }, { score: '86', initials: 'GE' }, { score: '81', initials: 'AO' },
+      { score: '84', initials: 'GE' }, { score: '82', initials: 'AO' }, { score: '87', initials: 'GE' },
     ],
     sampleWork: {
       docTitle: 'PRD · Multi-currency savings for diaspora',
@@ -83,19 +100,29 @@ export const PATHWAY_CONTENT: Record<PathwaySlug, PathwayContent> = {
       { title: 'The founder or consultant', body: 'You have shipped things. You need the vocabulary and artefacts a product team will recognise.' },
     ],
     notFor: 'If you want a title without owning trade-offs, this is the wrong pathway. Every week ends in a decision you have to defend.',
-    tools: ['Jira', 'Confluence', 'Figma (read)', 'Miro', 'Amplitude', 'Google Analytics', 'Notion', 'Looker Studio', 'SQL basics'],
+    tools: ['JIRA', 'CONFLUENCE', 'MIXPANEL', 'FIGMA', 'SQL BASICS', 'NOTION'],
+    facilitators: [
+      {
+        status: 'confirmed',
+        name: 'Genesis Enwenyeokwu',
+        role: 'Product Lead · Rova',
+        weeks: 'W01–06',
+        bio: 'Product Lead at Rova, building diaspora financial products. Leads the opening six weeks — problem framing through the full PRD.',
+      },
+      { status: 'tbc', role: 'Senior PM · fintech', weeks: 'W07–11' },
+      { status: 'tbc', role: 'Guest reviewer · Hiring manager', weeks: 'W12' },
+    ],
     ladder: [
       { role: 'Associate Product Manager', width: '58%' },
-      { role: 'Product Manager', width: '78%' },
-      { role: 'Senior Product Manager', width: '92%' },
-      { role: 'Product Lead / Head of Product', width: '100%' },
+      { role: 'Product Manager', width: '80%' },
+      { role: 'Senior Product Manager', width: '100%' },
     ],
     ladderNote: 'Cohort graduates target the first two rungs. The bars show how far the twelve artefacts take you against what each rung is asked to produce.',
     faq: [
-      { q: 'Do I need to be technical?', a: 'No. You need to be able to reason about trade-offs and write clearly. You will read enough of a system to ask good questions, not build it.' },
-      { q: 'How is this different from the BA pathway?', a: 'PM owns what gets built and why. BA owns the precision of what gets built. If you would rather set direction than specify detail, PM is the fit.' },
-      { q: 'What does the capstone look like?', a: 'You pick one of eight real briefs, then produce a problem brief, strategy canvas, full PRD, metrics plan, and launch brief — and defend the whole thing in Week 12.' },
-      { q: 'Will I use AI tools?', a: 'Yes, where they help — drafting, synthesis, competitive scans. You will still be marked on your own reasoning, because that is what an interview tests.' },
+      { q: 'Can I do this alongside a full-time job?', a: 'Yes. Live sessions are evenings, and the 8–10 hours a week is designed around working professionals.' },
+      { q: 'Do I need to have shipped a product before?', a: 'No. Most people arrive from ops, analysis, or delivery roles and have never owned a roadmap.' },
+      { q: 'Will I have something to show recruiters?', a: 'Twelve artefacts, including a defended capstone — a roadmap, a PRD, a metrics plan, a launch review.' },
+      { q: 'Is AI part of this?', a: 'Yes, throughout, as a working tool. The AI Product Builder intensive goes deeper if you want it.' },
     ],
   },
   'business-analysis': {
@@ -105,29 +132,36 @@ export const PATHWAY_CONTENT: Record<PathwaySlug, PathwayContent> = {
     blurb:
       'You will learn to elicit requirements, map processes, write user stories engineers actually use, and run UAT that catches what others miss.',
     weekTwelve: [
-      'Elicit requirements from stakeholders who disagree',
-      'Model the As-Is and defend a To-Be process',
-      'Write a BRD a delivery team can build from',
-      'Run UAT that finds what scoping missed',
+      'Turn vague asks into specs',
+      'Model a process others can follow',
+      'Write requirements teams can build',
+      'Sign off a release with UAT',
     ],
     art: [
       'Stakeholder map + RACI', 'Business case', 'Requirements elicitation notes', 'Full BRD',
       'As-Is / To-Be process maps', 'User stories with acceptance criteria', 'UAT pack + test scenarios',
       'Post-launch reporting framework', 'Capstone project + presentation', 'Portfolio case study',
-      'Interview story bank', 'Capability Passport (Premium)',
+      'Interview story bank', 'Capability Passport',
     ],
     caps: [
-      'Requirements elicitation & analysis', 'Stakeholder management & facilitation',
-      'Business process modelling', 'Solution design & documentation (BRD)',
-      'UAT planning & test scenario writing', 'Agile delivery & backlog contribution',
+      { area: 'Elicitation', desc: 'Run a stakeholder session that surfaces what people actually need.' },
+      { area: 'Requirements documentation', desc: 'Produce a BRD a delivery team can build from without a translator.' },
+      { area: 'Process modelling', desc: 'Map As-Is and To-Be so the gap is obvious to everyone in the room.' },
+      { area: 'Solution definition', desc: 'Turn a business need into acceptance criteria that hold up in review.' },
+      { area: 'Testing & sign-off', desc: 'Write a UAT pack that catches what scoping missed.' },
+      { area: 'Benefits & reporting', desc: 'Show whether the change delivered what the business case promised.' },
     ],
     weekArt: [
-      'Stakeholder map + RACI', 'Problem statement + business case', 'Business context analysis',
-      'Requirements elicitation notes + user stories', 'As-Is / To-Be process maps',
-      'Full BRD (functional + non-functional)', 'Requirement prioritisation log (MoSCoW)',
-      'Backlog refinement + acceptance criteria', 'UAT pack + test scenarios',
-      'Post-launch reporting framework', 'Portfolio case study + interview story bank',
-      'Capstone presented and defended',
+      'Stakeholder map + RACI', 'Business case', 'Requirements elicitation notes', 'Full BRD',
+      'As-Is / To-Be process maps', 'User stories with acceptance criteria', 'UAT pack + test scenarios',
+      'Post-launch reporting framework', 'Capstone project + presentation', 'Portfolio case study',
+      'Interview story bank', 'Capability Passport',
+    ],
+    artScores: [
+      { score: '84', initials: 'GE' }, { score: '78', initials: 'GE' }, { score: '81', initials: 'AO' },
+      { score: '76', initials: 'GE' }, { score: '83', initials: 'AO' }, { score: '84', initials: 'GE' },
+      { score: '79', initials: 'AO' }, { score: '85', initials: 'GE' }, { score: '88', initials: 'AO' },
+      { score: '82', initials: 'GE' }, { score: '80', initials: 'AO' }, { score: '86', initials: 'GE' },
     ],
     sampleWork: {
       docTitle: 'BRD · Wallet onboarding — identity verification',
@@ -148,19 +182,29 @@ export const PATHWAY_CONTENT: Record<PathwaySlug, PathwayContent> = {
       { title: 'The junior BA without a portfolio', body: 'You have the title but not the evidence. Twelve reviewed artefacts fix that.' },
     ],
     notFor: 'If you find precision tedious, this is the wrong pathway. The work rewards people who enjoy getting the detail exactly right.',
-    tools: ['Jira', 'Confluence', 'Visio / Lucidchart', 'BPMN 2.0', 'Excel (advanced)', 'SQL basics', 'Postman', 'Azure DevOps', 'Miro'],
+    tools: ['JIRA', 'CONFLUENCE', 'VISIO / LUCID', 'EXCEL MODELS', 'SQL BASICS', 'MIRO'],
+    facilitators: [
+      {
+        status: 'confirmed',
+        name: 'Genesis Enwenyeokwu',
+        role: 'CBAP · Product Lead',
+        weeks: 'W01–06',
+        bio: 'CBAP-certified Business Analyst and Product Lead at Rova. Leads the opening six weeks — stakeholder mapping through the full BRD.',
+      },
+      { status: 'tbc', role: 'Senior BA · banking', weeks: 'W07–11' },
+      { status: 'tbc', role: 'Guest reviewer · Hiring manager', weeks: 'W12' },
+    ],
     ladder: [
-      { role: 'Junior Business Analyst', width: '55%' },
-      { role: 'Business Analyst', width: '76%' },
-      { role: 'Senior Business Analyst', width: '92%' },
-      { role: 'Lead BA / Product Owner', width: '100%' },
+      { role: 'Junior Business Analyst', width: '58%' },
+      { role: 'Business Analyst', width: '80%' },
+      { role: 'Senior BA / Product Owner', width: '100%' },
     ],
     ladderNote: 'Three of our alumni now hold senior BA roles in Canada and the UK. The bars show what each rung is expected to produce against what you build here.',
     faq: [
-      { q: 'Is CBAP or ECBA covered?', a: 'The curriculum follows BABOK practice closely, so it is strong preparation, but this is not an exam-prep course. You leave with a portfolio, not a syllabus.' },
-      { q: 'How much writing is involved?', a: 'A lot. A BRD, user stories, acceptance criteria, test scenarios. If you cannot write clearly you will find this hard — and that is exactly the skill employers screen for.' },
-      { q: 'Do I need to know SQL?', a: 'No, but you will learn enough to check data yourself instead of waiting on an engineer.' },
-      { q: 'How is this different from the PM pathway?', a: 'BA owns precision — requirements, process, proof. PM owns direction. Many people do both eventually; start where your instincts already are.' },
+      { q: 'Is this enough to move into a BA role?', a: 'It gives you the artefacts and the vocabulary. Alumni now work as BAs in Nigeria, the UK, and Canada.' },
+      { q: 'Do you cover CBAP or IIBA material?', a: 'The practice aligns with BABOK, and your facilitator is CBAP-certified — but this is a capability programme, not exam prep.' },
+      { q: 'What if I already do BA work informally?', a: 'Most of our cohort does. You will formalise it and get a record that proves it.' },
+      { q: 'How technical does it get?', a: 'You need SQL basics and comfort with data. No coding required.' },
     ],
   },
   'product-design': {
@@ -170,28 +214,36 @@ export const PATHWAY_CONTENT: Record<PathwaySlug, PathwayContent> = {
     blurb:
       'You will learn to run research that changes a decision, structure a flow, build to a design system, and defend an interface with evidence rather than taste.',
     weekTwelve: [
-      'Run research that changes a product decision',
-      'Structure a flow and its information architecture',
-      'Build hi-fi screens on a real design system',
-      'Test with users and revise on what you saw',
+      'Research before you design',
+      'Design a journey that tests well',
+      'Hand off work engineers can build',
+      'Defend every design decision',
     ],
     art: [
       'Product teardown from a user lens', 'Research plan + interview notes', 'Journey map with friction points',
       'Information architecture + flows', 'Wireframe set for the core flow', 'Hi-fi screens on a design system',
       'Interactive prototype', 'Usability test findings + revisions', 'Capstone project + presentation',
-      'Portfolio case study', 'Interview story bank', 'Capability Passport (Premium)',
+      'Portfolio case study', 'Interview story bank', 'Capability Passport',
     ],
     caps: [
-      'User research & synthesis', 'Information architecture & flows',
-      'Interaction design & prototyping', 'Visual craft & design system use',
-      'Usability testing & iteration', 'Design communication & critique',
+      { area: 'Research', desc: 'Plan and run interviews that change the design rather than confirm it.' },
+      { area: 'Synthesis', desc: 'Turn messy findings into a journey map a team can prioritise from.' },
+      { area: 'Structure & flows', desc: 'Design an information architecture people navigate without instruction.' },
+      { area: 'Interface craft', desc: 'Ship hi-fi screens on a design system, not one-off pixels.' },
+      { area: 'Testing', desc: 'Watch five users fail, then fix the design instead of blaming them.' },
+      { area: 'Handoff & rationale', desc: 'Hand engineers a spec and defend every decision in it.' },
     ],
     weekArt: [
-      'Product teardown from a user lens', 'Research plan + interview notes', 'Opportunity framing + design brief',
-      'User stories translated to screen requirements', 'Journey map with friction points',
+      'Product teardown from a user lens', 'Research plan + interview notes', 'Journey map with friction points',
       'Information architecture + flows', 'Wireframe set for the core flow', 'Hi-fi screens on a design system',
-      'Usability test findings + revisions', 'Interactive prototype + handoff notes',
-      'Portfolio case study + interview story bank', 'Capstone presented and defended',
+      'Interactive prototype', 'Usability test findings + revisions', 'Capstone project + presentation',
+      'Portfolio case study', 'Interview story bank', 'Capability Passport',
+    ],
+    artScores: [
+      { score: '80', initials: 'NE' }, { score: '83', initials: 'NE' }, { score: '85', initials: 'AO' },
+      { score: '78', initials: 'NE' }, { score: '82', initials: 'NE' }, { score: '86', initials: 'AO' },
+      { score: '84', initials: 'NE' }, { score: '81', initials: 'AO' }, { score: '79', initials: 'NE' },
+      { score: '85', initials: 'NE' }, { score: '83', initials: 'AO' }, { score: '87', initials: 'NE' },
     ],
     sampleWork: {
       docTitle: 'Flow · Wallet onboarding — identity step',
@@ -212,19 +264,29 @@ export const PATHWAY_CONTENT: Record<PathwaySlug, PathwayContent> = {
       { title: 'The researcher or content person', body: 'You understand users already. You want to own the interface, not just inform it.' },
     ],
     notFor: 'If you want a visual-only portfolio, this is the wrong pathway. Every screen you present has to be justified by something you observed.',
-    tools: ['Figma', 'FigJam', 'Maze / Useberry', 'Design tokens', 'Auto-layout', 'Prototyping', 'Accessibility (WCAG AA)', 'Notion', 'Loom'],
+    tools: ['FIGMA', 'FIGJAM', 'MAZE', 'NOTION', 'DESIGN TOKENS', 'WCAG 2.2'],
+    facilitators: [
+      { status: 'tbc', role: 'Product Design Lead', weeks: 'W01–07' },
+      { status: 'tbc', role: 'UX Researcher', weeks: 'W08–11' },
+      {
+        status: 'confirmed',
+        name: 'Genesis Enwenyeokwu',
+        role: 'Product Lead · Rova',
+        weeks: 'W12',
+        bio: 'Product Lead at Rova. Leads Week 12 — the capstone defence panel.',
+      },
+    ],
     ladder: [
-      { role: 'Junior Product Designer', width: '56%' },
-      { role: 'Product Designer', width: '78%' },
-      { role: 'Senior Product Designer', width: '92%' },
-      { role: 'Design Lead', width: '100%' },
+      { role: 'Junior Product Designer', width: '58%' },
+      { role: 'Product Designer', width: '80%' },
+      { role: 'Senior Product Designer', width: '100%' },
     ],
     ladderNote: 'This is a first cohort, so we quote no placement numbers. The bars show what each rung is asked to produce against what you build in twelve weeks.',
     faq: [
-      { q: 'Do I need an existing portfolio to join?', a: 'No. You need to be comfortable in Figma. You will leave with one deep case study, which is worth more than five shallow ones.' },
-      { q: 'Is this UI or UX?', a: 'Both, in the order real teams work: research, structure, flow, then interface. Pretty screens with no reasoning do not pass the Week 12 defence.' },
-      { q: 'Why is Design only starting now?', a: 'We ran PM and BA first to prove the delivery model. Design opens with the same twelve-week spine and the same review discipline.' },
-      { q: 'Will I work with the PM and BA cohorts?', a: 'Yes. Some labs are cross-pathway on the same brief, which is the closest thing to a real product team.' },
+      { q: 'Do I need a portfolio to start?', a: 'No. You build one here — twelve pieces including research, journeys, screens, and a handoff spec.' },
+      { q: 'Is this visual design or product design?', a: 'Product design. Research, structure, flows, and testing — not brand or illustration.' },
+      { q: 'Which tools will I be working in?', a: 'Figma throughout, plus FigJam and Maze for research and testing.' },
+      { q: 'Will my work be critiqued?', a: 'Every week, against a published rubric, and you revise before it enters your portfolio.' },
     ],
   },
   'payment-operations': {
@@ -234,28 +296,36 @@ export const PATHWAY_CONTENT: Record<PathwaySlug, PathwayContent> = {
     blurb:
       'You will learn to map payment flows end to end, run reconciliation and settlement, investigate failed transactions, and design controls that hold up to an audit.',
     weekTwelve: [
-      'Map a payment flow end to end, including failure',
-      'Reconcile ledger, processor, and bank statements',
-      'Investigate a failed transaction to root cause',
-      'Design controls an auditor will accept',
+      'Map money end to end',
+      'Reconcile at scale, daily',
+      'Resolve an incident calmly',
+      'Design the control that prevents it',
     ],
     art: [
       'Payment flow map (end to end)', 'Reconciliation model', 'Settlement + payout schedule',
       'Failed transaction investigation log', 'Chargeback and dispute runbook',
       'Controls matrix + segregation of duties', 'Ops KPI and SLA dashboard spec', 'Incident postmortem',
-      'Capstone project + presentation', 'Portfolio case study', 'Interview story bank', 'Capability Passport (Premium)',
+      'Capstone project + presentation', 'Portfolio case study', 'Interview story bank', 'Capability Passport',
     ],
     caps: [
-      'Payment flow & scheme knowledge', 'Reconciliation & settlement',
-      'Exception & dispute handling', 'Controls, audit & segregation of duties',
-      'Operational reporting & SLAs', 'Incident response & postmortems',
+      { area: 'Flow mapping', desc: 'Trace money end to end and name every point it can go missing.' },
+      { area: 'Reconciliation', desc: 'Build and run a recon model that balances at close of business.' },
+      { area: 'Exception handling', desc: 'Investigate a failed transaction and resolve it without guesswork.' },
+      { area: 'Disputes & chargebacks', desc: 'Run a dispute response that stands up to a provider and a regulator.' },
+      { area: 'Controls & risk', desc: 'Design the control that stops the same incident happening twice.' },
+      { area: 'Ops reporting', desc: 'Specify the dashboard your team actually runs the day on.' },
     ],
     weekArt: [
-      'Payment flow map (end to end)', 'Failure mode inventory', 'Business case for an operational fix',
-      'Requirements for a reconciliation report', 'As-Is / To-Be operations process maps', 'Reconciliation model',
-      'Settlement + payout schedule', 'Chargeback and dispute runbook', 'Failed transaction investigation log',
-      'Controls matrix + ops KPI and SLA spec', 'Portfolio case study + interview story bank',
-      'Capstone presented and defended',
+      'Payment flow map (end to end)', 'Reconciliation model', 'Settlement + payout schedule',
+      'Failed transaction investigation log', 'Chargeback and dispute runbook',
+      'Controls matrix + segregation of duties', 'Ops KPI and SLA dashboard spec', 'Incident postmortem',
+      'Capstone project + presentation', 'Portfolio case study', 'Interview story bank', 'Capability Passport',
+    ],
+    artScores: [
+      { score: '81', initials: 'PN' }, { score: '84', initials: 'PN' }, { score: '87', initials: 'AO' },
+      { score: '79', initials: 'PN' }, { score: '83', initials: 'PN' }, { score: '80', initials: 'AO' },
+      { score: '85', initials: 'PN' }, { score: '82', initials: 'AO' }, { score: '84', initials: 'PN' },
+      { score: '86', initials: 'PN' }, { score: '81', initials: 'AO' }, { score: '88', initials: 'PN' },
     ],
     sampleWork: {
       docTitle: 'Recon · Wallet top-up — processor vs ledger',
@@ -276,19 +346,29 @@ export const PATHWAY_CONTENT: Record<PathwaySlug, PathwayContent> = {
       { title: 'The support lead who escalates money issues', body: 'You see every failure first. You want to own the runbook instead of raising the ticket.' },
     ],
     notFor: 'If you want a purely strategic role, this is the wrong pathway. The work is operational, detailed, and accountable to a number that has to balance.',
-    tools: ['Excel (advanced)', 'SQL', 'Postman', 'Paystack / Flutterwave', 'Stripe dashboard', 'Jira Service Mgmt', 'Metabase', 'Sheets + pivot', 'BPMN 2.0'],
+    tools: ['EXCEL MODELS', 'SQL', 'PAYSTACK / FLUTTERWAVE', 'ISO 20022', 'RECON TOOLS', 'JIRA'],
+    facilitators: [
+      { status: 'tbc', role: 'Payment Ops Lead', weeks: 'W01–07' },
+      { status: 'tbc', role: 'Settlement & recon', weeks: 'W08–11' },
+      {
+        status: 'confirmed',
+        name: 'Genesis Enwenyeokwu',
+        role: 'Product Lead · Rova',
+        weeks: 'W12',
+        bio: 'Product Lead at Rova, building diaspora financial products with real payment-ops exposure. Leads Week 12 — the capstone defence panel.',
+      },
+    ],
     ladder: [
       { role: 'Payment Operations Analyst', width: '58%' },
-      { role: 'Payment Operations Specialist', width: '78%' },
-      { role: 'Senior Ops / Recon Lead', width: '92%' },
-      { role: 'Head of Payment Operations', width: '100%' },
+      { role: 'Payment Operations Specialist', width: '80%' },
+      { role: 'Payment Ops Manager', width: '100%' },
     ],
     ladderNote: 'This is a first cohort, so we quote no placement numbers. The bars show what each rung is asked to own against what you build in twelve weeks.',
     faq: [
-      { q: 'Is this a finance or a tech role?', a: 'Both. You sit between the ledger and the engineers. You will read API responses and reconcile a statement in the same afternoon.' },
-      { q: 'Do I need payments experience?', a: 'It helps but is not required. Ops, finance, or support experience with a genuine interest in how money moves is enough.' },
-      { q: 'Which rails do you cover?', a: 'Cards, bank transfers and wallets, with African rails as the primary context and cross-border settlement as the harder case.' },
-      { q: 'Is there coding?', a: 'Enough SQL to answer your own questions, and enough Postman to see what an API actually returned. No software engineering.' },
+      { q: 'Who is this actually for?', a: 'People in banking, fintech ops, settlement, or customer support who want to own payment operations.' },
+      { q: 'Do I need an accounting background?', a: 'No, but you should be comfortable in a spreadsheet. We teach the reconciliation logic from first principles.' },
+      { q: 'Is this Nigeria-specific?', a: 'The examples are African-market first, but the controls, recon, and incident practice travel anywhere.' },
+      { q: 'What do I leave with?', a: 'A reconciliation model, a controls matrix, an incident post-mortem, and a defended capstone.' },
     ],
   },
 };

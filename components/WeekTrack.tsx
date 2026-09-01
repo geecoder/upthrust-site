@@ -107,9 +107,14 @@ export interface WeekTrackProps {
   weekArtefacts: string[]; // exactly 12 entries, index 0 = Week 1 ... index 11 = Week 12
   feedbackSlaHours: number; // e.g. COHORT.feedbackSlaHours
   resetKey: string; // parent passes the pathway slug; resets pWeek=0 + autoplay=true on change
+  // Reports the selected week upward. The hero's artefact stack shows a
+  // rolling window ending at this week, so the two stay in step — one `wi`
+  // driving both, as in the prototype. The track keeps ownership of the state
+  // (all the autoplay/lock rules live here); this is a read-only mirror.
+  onWeekChange?: (weekIndex: number) => void;
 }
 
-export default function WeekTrack({ pathwayLabel, weekArtefacts, feedbackSlaHours, resetKey }: WeekTrackProps) {
+export default function WeekTrack({ pathwayLabel, weekArtefacts, feedbackSlaHours, resetKey, onWeekChange }: WeekTrackProps) {
   const [pWeek, setPWeek] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
   const [locked, setLocked] = useState(false); // permanent hand-over to the user
@@ -187,6 +192,13 @@ export default function WeekTrack({ pathwayLabel, weekArtefacts, feedbackSlaHour
     if (locked || reducedMotion) return;
     setAutoplay((a) => !a);
   };
+
+  useEffect(() => {
+    onWeekChange?.(pWeek);
+    // Intentionally keyed on pWeek only — a parent passing an inline callback
+    // would otherwise re-fire this on every one of its own renders.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pWeek]);
 
   const isPlaying = autoplay && !locked;
   const statusText = isPlaying ? 'PLAYING · SELECT ANY WEEK TO TAKE OVER' : 'PAUSED · YOU ARE DRIVING';

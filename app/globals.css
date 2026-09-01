@@ -6,9 +6,10 @@
    UPTHRUST — DESIGN SYSTEM
    Fraunces display + Inter Tight UI/body + JetBrains Mono labels
    Token source: docs/design/Upthrust-prototype-standalone.html
+   Fonts are self-hosted via next/font (see app/layout.tsx) — no runtime
+   Google Fonts CDN request. --font-fraunces/-inter-tight/-jetbrains-mono
+   below are the CSS variables next/font generates on <html>.
    ============================================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
   /* ======================================================================
@@ -65,9 +66,9 @@
   --s-0: 0px; --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
   --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
 
-  --font-display: 'Fraunces', 'Times New Roman', Georgia, serif;
-  --font-ui: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --font-display: var(--font-fraunces), 'Times New Roman', Georgia, serif;
+  --font-ui: var(--font-inter-tight), 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-jetbrains-mono), 'SF Mono', Consolas, monospace;
 
   --fs-12: 0.75rem; --fs-13: 0.8125rem; --fs-14: 0.875rem; --fs-15: 0.9375rem;
   --fs-16: 1rem; --fs-18: 1.125rem; --fs-20: 1.25rem; --fs-24: 1.5rem;
@@ -87,7 +88,10 @@
   --ink: var(--ink-800);
   --ink-soft: var(--ink-500);
   --ink-muted: var(--ink-400);
-  --paper: var(--bone);       /* existing code treats "paper" as the warm marketing surface (= Bone) */
+  /* --paper stays #FAFAF7, the cooler card/product surface, because that is
+     what it means in the prototype and in the design system above. It used to
+     be aliased to --bone here, which silently warmed every card surface on
+     the site. */
   --paper-soft: var(--bone-dim);
   --paper-line: var(--border-soft);
   --amber: var(--seal-500);
@@ -110,7 +114,7 @@
   --micro: 0.6875rem;
 
   /* Layout */
-  --max-w: 1240px;
+  --max-w: 1440px;
   --max-w-narrow: 720px;
   --max-w-medium: 920px;
 }
@@ -118,8 +122,16 @@
 /* Ledger grid — signature texture behind hero sections only */
 .ledger-grid {
   background-image:
-    repeating-linear-gradient(to right, rgba(11, 26, 43, 0.05) 0 1px, transparent 1px 24px),
-    repeating-linear-gradient(to bottom, rgba(11, 26, 43, 0.05) 0 1px, transparent 1px 24px);
+    repeating-linear-gradient(to right, rgba(11, 26, 43, 0.05) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(to bottom, rgba(11, 26, 43, 0.05) 0 1px, transparent 1px 28px);
+}
+
+/* Same texture, inverted for dark (ink-800/ink-900) sections — the dark-ink
+   grid lines used on light backgrounds would be invisible here. */
+.ledger-grid-dark {
+  background-image:
+    repeating-linear-gradient(to right, rgba(244, 239, 230, 0.05) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(to bottom, rgba(244, 239, 230, 0.05) 0 1px, transparent 1px 28px);
 }
 
 /* Reset */
@@ -199,7 +211,7 @@ code, kbd, samp,
 
 /* ── Layout ─────────────────────────────────────────────── */
 
-.container        { width: 100%; max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+.container        { width: 100%; max-width: var(--max-w); margin: 0 auto; padding: 0 40px; }
 .container-narrow { max-width: var(--max-w-narrow); margin: 0 auto; padding: 0 24px; }
 .container-medium { max-width: var(--max-w-medium); margin: 0 auto; padding: 0 24px; }
 
@@ -330,6 +342,73 @@ code, kbd, samp,
 .text-pretty   { text-wrap: pretty; }
 .rule          { height: 1px; background: var(--paper-line); width: 100%; margin: 48px 0; }
 .sr-only       { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.sr-only:focus {
+  position: fixed; top: 12px; left: 12px; width: auto; height: auto; margin: 0; overflow: visible; clip: auto;
+  z-index: 200; padding: 10px 16px; background: var(--ink-800); color: var(--bone);
+  font-family: var(--font-mono); font-size: 0.8125rem; border-radius: var(--radius-1);
+  box-shadow: var(--focus-ring);
+}
+
+:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-1); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* Home page cohort ticker — pure CSS, doubled content for a seamless loop.
+   Paused automatically by the prefers-reduced-motion rule above. */
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track { animation: marqueeScroll 32s linear infinite; }
+.marquee-track:hover { animation-play-state: paused; }
+
+/* Scroll-reveal — matches the prototype's own [data-rv]/v3rise pattern:
+   every wrapped block starts invisible and fades+rises into place the first
+   time it crosses into view (see components/RevealOnScroll.tsx). The
+   prefers-reduced-motion rule above already zeroes animation-duration
+   site-wide, so this degrades to an instant, un-animated appearance rather
+   than being disabled separately. */
+@keyframes v3rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+[data-rv] { opacity: 0; }
+[data-rv].in { animation: v3rise 620ms cubic-bezier(.22,1,.36,1) both; }
+
+/* ArtefactStack's card-stack entrance — the prototype's own v3card keyframe,
+   used exactly once there (the programme-page hero's stacked artefact
+   preview): each card starts rotated, dropped, and transparent, then
+   settles to rest. Plays on mount, not on scroll.
+
+   This animates opacity to 1, and each card in the stack has its own
+   different resting opacity (the fade ramp toward the front card). Those two
+   cannot live on the same element — the animation's `both` fill state would
+   win and flatten the ramp. So the keyframe goes on an outer positioning
+   wrapper and the resting opacity on the inner card, exactly as the
+   prototype splits them. */
+@keyframes v3card {
+  from { opacity: 0; transform: translateY(26px) rotate(-2deg); }
+  to { opacity: 1; transform: none; }
+}
+.v3card { animation: v3card 500ms cubic-bezier(.22,1,.36,1) both; }
+
+/* v3drop — a short fade+drop-in, used by the nav's Programmes dropdown on
+   open and (nested with the infinite v3pulse dot below) the hero's live
+   status badge on mount. */
+@keyframes v3drop {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+.v3drop { animation: v3drop 220ms cubic-bezier(.22,1,.36,1) both; }
+
+/* v3pulse — infinite, used only on the small "live" status dot. */
+@keyframes v3pulse {
+  from { opacity: .35; transform: scale(.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.v3pulse { animation: v3pulse 1100ms ease-in-out infinite alternate; }
 
 .mt-1 { margin-top: 8px; }
 .mt-2 { margin-top: 16px; }
@@ -642,4 +721,182 @@ section h1, section h2, section h3 { text-align: left; }
 }
 .testimonials-scroll::-webkit-scrollbar {
   display: none;
+}
+
+/* ==========================================================================
+   PROTOTYPE LAYER
+   Everything below is transcribed from Upthrust-v3-prototype-standalone.html.
+   The prototype's own <style> block is the last word on base styles,
+   keyframes, and reveal behaviour, so it comes last here and wins.
+
+   Its markup expresses hover states through a `style-hover` attribute the
+   prototype's template engine applies with JS. Real CSS :hover rules are the
+   web platform's equivalent, so each distinct style-hover value in the
+   prototype gets one class below and the markup carries that class.
+   ========================================================================== */
+
+body { margin: 0; background: var(--bone); overflow-x: hidden; }
+::selection { background: var(--seal-500); color: var(--bone); }
+
+@keyframes v3rise  { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes v3fade  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes v3bar   { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes v3pulse { from { opacity: .35; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+@keyframes v3marq  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes v3card  { from { opacity: 0; transform: translateY(26px) rotate(-2deg); } to { opacity: 1; transform: none; } }
+@keyframes v3sweep { from { transform: translateX(-110%); } to { transform: translateX(340%); } }
+@keyframes v3drop  { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
+[data-rv] { opacity: 0; }
+[data-rv].in { animation: v3rise 620ms cubic-bezier(.22, 1, .36, 1) both; }
+
+/* The prototype's own container: 1440px, 40px gutters. */
+.pv-wrap { max-width: 1440px; margin: 0 auto; padding: 0 40px; }
+
+/* ── style-hover equivalents ─────────────────────────────── */
+.pv-h-seal:hover        { color: var(--seal-600); }
+.pv-h-seal7:hover       { color: var(--seal-700); }
+.pv-h-bone:hover        { color: var(--bone); }
+.pv-h-paperdim:hover    { background: var(--paper-dim); }
+.pv-h-paper:hover       { background: var(--paper); }
+.pv-h-white:hover       { background: var(--white); }
+.pv-h-bonedim:hover     { background: var(--bone-dim); }
+.pv-h-ink800:hover      { background: var(--ink-800); }
+.pv-h-seal600:hover     { background: var(--seal-600); }
+.pv-h-bonefaint:hover   { background: rgba(244, 239, 230, .06); }
+.pv-h-lift2:hover       { transform: translateY(-2px); }
+.pv-h-lift3:hover       { transform: translateY(-3px); }
+.pv-h-lift4:hover       { transform: translateY(-4px); }
+.pv-h-lift4sh:hover     { transform: translateY(-4px); box-shadow: var(--shadow-3); }
+.pv-h-sh2:hover         { box-shadow: var(--shadow-2); }
+.pv-h-ink800-lift:hover { background: var(--ink-800); transform: translateY(-2px); }
+.pv-h-seal600-lift:hover{ background: var(--seal-600); transform: translateY(-2px); }
+.pv-h-bonedim-lift:hover{ background: var(--bone-dim); transform: translateY(-2px); }
+
+/* Keyboard focus. The prototype has no focus styling of its own; a site
+   people actually navigate needs one, and the seal ring is the token the
+   design system already reserves for it. */
+.pv-wrap :focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--seal-500);
+  outline-offset: 2px;
+}
+
+/* Parked above the viewport rather than at left:-9999px. A far-left offset
+   adds real horizontal scroll area to the document, which is what forces the
+   overflow-x:hidden band-aids elsewhere; translating up costs nothing. */
+.pv-skip {
+  position: absolute; left: 0; top: 0; z-index: 200;
+  transform: translateY(-140%);
+  background: var(--ink-900); color: var(--bone);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  padding: 12px 18px;
+  transition: transform 160ms cubic-bezier(.22, 1, .36, 1);
+}
+.pv-skip:focus { transform: none; }
+
+/* ── Responsive ────────────────────────────────────────────
+   The prototype is a fixed desktop artboard: multi-column grids and 40px
+   gutters written as inline styles. Inline styles outrank a plain class, so
+   the gutter overrides below are !important — that is the only way to reach
+   past `style={{ padding: '56px 40px 62px' }}` from a stylesheet. Only the
+   horizontal longhands are touched, so every section keeps its own vertical
+   rhythm.
+
+   Breakpoints: 1180 (tablet landscape), 860 (tablet portrait / large phone),
+   600 (phone), 420 (small phone). */
+
+/* Large desktop and down — trim the gutter before the grids change. */
+@media (max-width: 1380px) {
+  .pv-wrap { padding-left: 28px !important; padding-right: 28px !important; }
+}
+
+@media (max-width: 1180px) {
+  .pv-wrap { padding-left: 24px !important; padding-right: 24px !important; }
+
+  .pv-2col, .pv-2col-a, .pv-2col-b { grid-template-columns: minmax(0, 1fr) !important; }
+  .pv-5col   { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .pv-6col   { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .pv-4col   { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .pv-3col   { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .pv-footgrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .pv-faccards { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; max-width: none !important; }
+
+  /* A right border on a column that is now full width reads as a stray
+     hairline down the page edge. */
+  .pv-paypanel > :first-child { border-right: 0 !important; border-bottom: 1px solid var(--border-soft) !important; }
+}
+
+@media (max-width: 860px) {
+  .pv-wrap { padding-left: 20px !important; padding-right: 20px !important; }
+
+  .pv-3col, .pv-4col, .pv-5col, .pv-6col, .pv-13col,
+  .pv-faccards { grid-template-columns: minmax(0, 1fr) !important; }
+  .pv-tierrow, .pv-shiftrow, .pv-quoterow, .pv-weekrow { grid-template-columns: minmax(0, 1fr) !important; }
+  .pv-statrow { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 24px !important; }
+
+  /* Desktop nav gives way to the mobile sheet. */
+  .pv-navlinks { display: none !important; }
+  .pv-burger   { display: inline-flex !important; }
+  .pv-menupanel { width: min(92vw, 620px) !important; left: auto !important; right: 0 !important; }
+
+  /* The programme hero's rolling stack is five absolutely-positioned cards
+     54px apart. Stacked on a narrow screen they collide, so the ghost layers
+     drop out and the live card is shown at its natural height. */
+  .pv-herostack { min-height: 0 !important; }
+  .pv-artstack  { height: auto !important; }
+  .pv-artstack > * { position: static !important; top: auto !important; }
+  .pv-artstack > *:not(:last-child) { display: none !important; }
+  .pv-artstack > *:last-child > * { height: auto !important; opacity: 1 !important; }
+
+  .pv-stack { height: auto !important; }
+  .pv-stack > * { position: static !important; margin-bottom: 10px; }
+}
+
+@media (max-width: 700px) {
+  /* The tier comparison has three real columns of content; below this width
+     it scrolls sideways in its own box rather than crushing every label. */
+  .pv-cmp { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .pv-cmp > * { min-width: 470px; }
+}
+
+@media (max-width: 600px) {
+  .pv-wrap { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* The rotating programme name has a 280px floor so the line does not reflow
+     as it cycles. Narrower than that and it wraps to its own line rather than
+     being clipped by the hero's overflow. */
+  .pv-rotrow  { flex-wrap: wrap !important; }
+  .pv-rotname { min-width: 100% !important; }
+
+  .pv-plans { grid-template-columns: minmax(0, 1fr) !important; }
+  .pv-plans, .pv-planrow { flex-direction: column !important; }
+
+  /* Full-bleed primary actions read better than half-width buttons here. */
+  .pv-cta { width: 100% !important; }
+}
+
+@media (max-width: 420px) {
+  .pv-statrow { grid-template-columns: minmax(0, 1fr) !important; }
+  .pv-bankrow { grid-template-columns: minmax(0, 1fr) auto !important; }
+}
+
+/* Coarse pointers get a real hit area on the thin controls. */
+@media (hover: none) and (pointer: coarse) {
+  .pv-dot { min-height: 24px; }
+}
+
+/* Respect a reduced-motion preference: the prototype leans on eight
+   keyframes and several always-running intervals. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-rv] { opacity: 1 !important; }
 }
