@@ -17,6 +17,7 @@ import {
   type CurKey, type ProgKey,
 } from './data';
 import { CUR_REGION_NAME } from './region-map';
+import { buildReference, referencePrefix } from '@/lib/payments/enrolment-reference';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -42,7 +43,7 @@ export type BankInput = {
   proofEmail: string;
 };
 
-export function detail(k: ProgKey, S: DetailState, bank?: BankInput) {
+export function detail(k: ProgKey, S: DetailState, bank?: BankInput, payToken?: string) {
   const p = P[k];
   const cur = CUR[S.cur];
   const int = p.fam === 'int';
@@ -50,6 +51,12 @@ export function detail(k: ProgKey, S: DetailState, bank?: BankInput) {
   const n = arts.length;
   const wi = Math.min(S.pWeek, n - 1);
   const low = p.seats <= 16;
+  // The AI intensive is offered as an add-on to Product Management and
+  // Business Analysis only — Product Design and Payment Operations have no
+  // paired intensive, so no add-on card and no add-on in the totals.
+  const canAddOn = !int && (k === 'pm' || k === 'ba');
+  const addOnOn = S.cAdd && canAddOn;
+
   const pr = priceFor(k, S.cur);
   const tierFull = int ? pr.alone : (S.cTier === 'prem' ? pr.prem : pr.std);
   const tierEach = int ? pr.alone : (S.cTier === 'prem' ? pr.premP2 : pr.stdP2);
@@ -231,16 +238,17 @@ export function detail(k: ProgKey, S: DetailState, bank?: BankInput) {
             ? ' · split across two payments at no extra cost'
             : ' · paying in full would save ' + cur.c + ' ' + money(tierEach * 2 - tierFull)))),
 
+    canAddOn,
     addOn: {
       name: k === 'pm' ? 'AI Product Builder' : 'BA for AI & Automation',
       slug: (k === 'pm' ? 'aipb' : 'baai') as ProgKey,
       line: k === 'pm' ? 'Ship a working AI product in five weeks.' : 'Specify AI work that survives an audit.',
       alone: cur.c + ' ' + money(pr.alone),
       bundle: cur.c + ' ' + money(pr.bundle),
-      on: S.cAdd,
-      btn: S.cAdd ? '✓ Added to your enrolment' : 'Add for ' + cur.c + ' ' + money(pr.bundle),
-      btnBg: S.cAdd ? 'var(--moss-500)' : 'var(--seal-500)',
-      bd: S.cAdd ? 'var(--moss-500)' : 'rgba(244,239,230,.22)',
+      on: addOnOn,
+      btn: addOnOn ? '✓ Added to your enrolment' : 'Add for ' + cur.c + ' ' + money(pr.bundle),
+      btnBg: addOnOn ? 'var(--moss-500)' : 'var(--seal-500)',
+      bd: addOnOn ? 'var(--moss-500)' : 'rgba(244,239,230,.22)',
     },
 
     // Every region pays by bank transfer. The prototype routed Nigeria to
@@ -254,10 +262,20 @@ export function detail(k: ProgKey, S: DetailState, bank?: BankInput) {
     payMethod: cur.c + ' bank transfer',
     payCta: 'Get bank transfer details',
 
-    // Format preview only. The reference that reconciliation depends on is
-    // minted per attempt in lib/payments/reference.ts when the enrolment
-    // intent is created.
-    payRef: 'UP-' + p.code + '-C2-' + (1000 + (k.length * 373) % 8999),
+    // Encodes programme, tier, plan and whether the AI intensive is bundled
+    // in, then a crypto-random token. See lib/payments/enrolment-reference.ts
+    // for why the prototype's formula could not be kept.
+    payRef: (() => {
+      const parts = {
+        code: p.code,
+        tier: (int ? 'single' : S.cTier) as 'std' | 'prem' | 'single',
+        plan: (int ? 'full' : S.cPlan) as 'full' | 'p2',
+        withAddOn: addOnOn,
+      };
+      // The token is minted in the browser, so the very first server render has
+      // none. The panel only opens on a click, long after hydration.
+      return payToken ? buildReference(parts, payToken) : referencePrefix(parts) + '-••••••';
+    })(),
 
     bankConfigured: !!bank?.configured,
     bankTitle: bank?.title || '',
@@ -269,8 +287,8 @@ export function detail(k: ProgKey, S: DetailState, bank?: BankInput) {
     proofEmail: bank?.proofEmail || '',
     payOpen: S.payOpen,
 
-    due: cur.c + ' ' + money(dueNow + (S.cAdd && !int ? pr.bundle : 0)),
-    total: cur.c + ' ' + money(tierFull + (S.cAdd && !int ? pr.bundle : 0)),
+    due: cur.c + ' ' + money(dueNow + (addOnOn ? pr.bundle : 0)),
+    total: cur.c + ' ' + money(tierFull + (addOnOn ? pr.bundle : 0)),
     dueNote: int ? 'Single payment · five weeks' : (S.cPlan === 'full' ? 'Paid in full · nothing further' : 'Then one more payment in October'),
     credLine: int ? 'Capability Record · Passport via a pathway' : (S.cTier === 'prem' ? 'Verified Capability Passport' : 'Capability Record'),
     proc: 'PROCESSED VIA ' + cur.proc,

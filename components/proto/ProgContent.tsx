@@ -17,8 +17,12 @@
 // MINUTES" line (there is no seat hold), and the payment CTAs (they hand off to
 // the real /enrol flow rather than being inert).
 
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PROG_HREF, type ProgKey } from '@/lib/proto/data';
+import { getSessionToken } from '@/lib/payments/enrolment-reference';
+import { trackEvent } from '@/lib/analytics';
+import { TRACKING_EVENTS } from '@/lib/tracking-events';
+import { P, PROG_HREF, type ProgKey } from '@/lib/proto/data';
 import { detail, type BankInput } from '@/lib/proto/detail';
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
 import { AnonAvatar, Photo } from '@/components/proto/Photo';
@@ -31,9 +35,54 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
   const { s, set } = useProto();
   const router = useRouter();
 
-  const d = detail(progKey, s, bank);
+  // Minted in the browser so every payer gets their own reference.
+  const [payToken, setPayToken] = useState('');
+  useEffect(() => { setPayToken(getSessionToken()); }, []);
 
-  const enrol = () => scrollToId('v3-pay');
+  const payPanelRef = useRef<HTMLDivElement>(null);
+
+  // Top of the enrolment funnel — fired once per page view, when the pricing
+  // section actually comes into view rather than merely existing in the DOM.
+  const pricingSeen = useRef(false);
+  useEffect(() => {
+    const el = document.getElementById('v3-pay');
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting && !pricingSeen.current) {
+          pricingSeen.current = true;
+          trackEvent(TRACKING_EVENTS.pricingSectionViewed, { programme: P[progKey].n });
+          io.disconnect();
+        }
+      }
+    }, { threshold: 0.2 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [progKey]);
+
+  const d = detail(progKey, s, bank, payToken);
+
+  const enrol = () => {
+    trackEvent(TRACKING_EVENTS.enrolCtaClicked, {
+      programme: d.name, tier: d.tierName, plan: d.planName, region: d.regionName, amount_due: d.due,
+    });
+    scrollToId('v3-pay');
+  };
+
+  // Opening the panel is the strongest intent signal on the page: it is the
+  // step where someone asks for the account to pay into.
+  const openPay = () => {
+    set({ payOpen: true });
+    trackEvent(TRACKING_EVENTS.bankDetailsRequested, {
+      programme: d.name, tier: d.tierName, plan: d.planName,
+      add_on: d.addOn.on ? d.addOn.name : null,
+      region: d.regionName, currency: d.payMethod, amount_due: d.due, reference: d.payRef,
+    });
+    // The panel renders below the fold, so without this the button looks inert.
+    window.setTimeout(() => {
+      payPanelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+  };
   const goHome = () => router.push('/');
   const goAssess = () => router.push('/assessment');
 
@@ -43,6 +92,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
   const goEnrolFlow = () => router.push(enrolHref);
 
   const copy = async (k: string, v: string) => {
+    trackEvent(TRACKING_EVENTS.bankDetailCopied, { programme: d.name, field: k, region: d.regionName });
     try { await navigator.clipboard.writeText(v); } catch { /* clipboard unavailable — the value is on screen */ }
     set({ copied: k });
     window.setTimeout(() => set({ copied: '' }), 1600);
@@ -304,9 +354,9 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
           </div>
 
           {d.isPath && (
-            <div>
-              <div className="pv-3col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.05fr', gap: 14, margin: '30px 0 0', alignItems: 'start' }}>
-                <button onClick={() => set({ cTier: 'std' })} aria-pressed={d.tStd.on} className="pv-h-sh2" style={{ font: 'inherit', textAlign: 'left', background: d.tStd.bg, border: `1px solid ${d.tStd.bd}`, borderRadius: 6, padding: '22px 20px', cursor: 'pointer', transition: 'all 180ms cubic-bezier(.22,1,.36,1)' }}>
+            <>
+              <div className="pv-3col" style={{ display: 'grid', gridTemplateColumns: d.canAddOn ? '1fr 1fr 1.05fr' : '1fr 1fr', gap: 14, margin: '30px 0 0', alignItems: 'start' }}>
+                <button onClick={() => { set({ cTier: 'std' }); trackEvent(TRACKING_EVENTS.tierSelected, { programme: d.name, tier: 'Standard', region: d.regionName }); }} aria-pressed={d.tStd.on} className="pv-h-sh2" style={{ font: 'inherit', textAlign: 'left', background: d.tStd.bg, border: `1px solid ${d.tStd.bd}`, borderRadius: 6, padding: '22px 20px', cursor: 'pointer', transition: 'all 180ms cubic-bezier(.22,1,.36,1)' }}>
                   <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--fg-3)' }}>TIER 01</span>
                   <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 600, letterSpacing: '-.024em', marginTop: 8 }}>Standard</span>
                   <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 30, fontWeight: 600, letterSpacing: '-.03em', marginTop: 14, fontVariantNumeric: 'tabular-nums' }}>{d.tStd.price}</span>
@@ -318,7 +368,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                   <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.08em', color: 'var(--fg-3)', marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border-hair)' }}>ENDS WITH A CAPABILITY RECORD</span>
                 </button>
 
-                <button onClick={() => set({ cTier: 'prem' })} aria-pressed={d.tPrem.on} className="pv-h-sh2" style={{ font: 'inherit', textAlign: 'left', position: 'relative', background: d.tPrem.bg, border: `1px solid ${d.tPrem.bd}`, borderRadius: 6, padding: '22px 20px', cursor: 'pointer', transition: 'all 180ms cubic-bezier(.22,1,.36,1)' }}>
+                <button onClick={() => { set({ cTier: 'prem' }); trackEvent(TRACKING_EVENTS.tierSelected, { programme: d.name, tier: 'Premium', region: d.regionName }); }} aria-pressed={d.tPrem.on} className="pv-h-sh2" style={{ font: 'inherit', textAlign: 'left', position: 'relative', background: d.tPrem.bg, border: `1px solid ${d.tPrem.bd}`, borderRadius: 6, padding: '22px 20px', cursor: 'pointer', transition: 'all 180ms cubic-bezier(.22,1,.36,1)' }}>
                   <span style={{ position: 'absolute', top: 0, right: 0, background: 'var(--ink-900)', color: 'var(--bone)', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.1em', padding: '4px 8px' }}>MOST COMPLETE</span>
                   <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--fg-3)' }}>TIER 02</span>
                   <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 600, letterSpacing: '-.024em', marginTop: 8 }}>Premium</span>
@@ -332,6 +382,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                   <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.08em', color: 'var(--seal-600)', marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border-hair)' }}>ENDS WITH A VERIFIED PASSPORT</span>
                 </button>
 
+                {d.canAddOn && (
                 <div style={{ background: 'var(--ink-900)', color: 'var(--bone)', border: `1px solid ${d.addOn.bd}`, borderRadius: 6, padding: '22px 20px', transition: 'border-color 200ms' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.1em', color: 'var(--bone)', background: 'var(--seal-500)', padding: '3px 6px' }}>OPTIONAL · +5 WEEKS</span>
@@ -342,8 +393,17 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                     <span style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 600, letterSpacing: '-.026em', fontVariantNumeric: 'tabular-nums', color: 'var(--seal-300)' }}>{d.addOn.bundle}</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-300)', textDecoration: 'line-through' }}>{d.addOn.alone}</span>
                   </span>
-                  <button onClick={() => set({ cAdd: !s.cAdd })} aria-pressed={d.addOn.on} style={{ font: 'inherit', fontSize: 13, fontWeight: 500, height: 40, width: '100%', marginTop: 14, background: d.addOn.btnBg, color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 180ms' }}>{d.addOn.btn}</button>
+                  <button
+                    onClick={() => {
+                      const next = !s.cAdd;
+                      set({ cAdd: next });
+                      trackEvent(TRACKING_EVENTS.addOnToggled, { programme: d.name, add_on: d.addOn.name, added: next, region: d.regionName });
+                    }}
+                    aria-pressed={d.addOn.on}
+                    style={{ font: 'inherit', fontSize: 13, fontWeight: 500, height: 40, width: '100%', marginTop: 14, background: d.addOn.btnBg, color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 180ms' }}
+                  >{d.addOn.btn}</button>
                 </div>
+                )}
               </div>
 
               <div className="pv-2col" style={{ display: 'grid', gridTemplateColumns: '1.15fr .85fr', gap: 20, margin: '20px 0 0', alignItems: 'start' }}>
@@ -370,7 +430,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.06em', color: 'var(--ink-300)', marginTop: 8 }}>{d.dueNote}</div>
                   <div className="pv-planrow" style={{ display: 'flex', gap: 6, marginTop: 18 }}>
                     {d.planTabs.map(p => (
-                      <button key={p.k} onClick={() => set({ cPlan: p.k })} aria-pressed={s.cPlan === p.k} style={{ font: 'inherit', flex: 1, textAlign: 'left', background: p.bg, border: `1px solid ${p.bd}`, borderRadius: 3, padding: '10px 9px', cursor: 'pointer', transition: 'all 150ms' }}>
+                      <button key={p.k} onClick={() => { set({ cPlan: p.k }); trackEvent(TRACKING_EVENTS.planSelected, { programme: d.name, plan: p.l, tier: d.tierName, region: d.regionName }); }} aria-pressed={s.cPlan === p.k} style={{ font: 'inherit', flex: 1, textAlign: 'left', background: p.bg, border: `1px solid ${p.bd}`, borderRadius: 3, padding: '10px 9px', cursor: 'pointer', transition: 'all 150ms' }}>
                         <span style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--fg-1)' }}>{p.l}</span>
                         <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-2)', marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>{p.amt}</span>
                         <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.04em', color: p.nfg, marginTop: 5, fontVariantNumeric: 'tabular-nums' }}>{p.note}</span>
@@ -381,13 +441,37 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginTop: 18, paddingTop: 14, borderTop: '1px solid rgba(244,239,230,.18)', fontSize: 12 }}>
                     <span style={{ color: 'var(--ink-300)' }}>Credential</span><span style={{ fontWeight: 600, textAlign: 'right', color: 'var(--bone)' }}>{d.credLine}</span>
                   </div>
-                  <button onClick={() => set({ payOpen: true })} aria-expanded={d.payOpen} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 48, width: '100%', marginTop: 18, background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 150ms' }}>{d.payCta} →</button>
+                  <button onClick={openPay} aria-expanded={d.payOpen} aria-controls="v3-pay-panel" className="pv-h-seal600" style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 48, width: '100%', marginTop: 18, background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 150ms' }}>{d.payCta} →</button>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.06em', color: 'var(--ink-400)', marginTop: 10, textAlign: 'center' }}>{d.payMethod}</div>
                 </div>
               </div>
 
+            </>
+          )}
+
+          {d.isInt && (
+            <div className="pv-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, margin: '30px 0 0' }}>
+              <div style={{ background: 'var(--paper)', border: '1px solid var(--border-strong)', borderRadius: 6, padding: '26px 24px', display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--fg-3)' }}>ON ITS OWN</span>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 600, letterSpacing: '-.032em', marginTop: 12, fontVariantNumeric: 'tabular-nums' }}>{d.addOn.alone}</span>
+                <span style={{ fontSize: 14, color: 'var(--fg-2)', marginTop: 8 }}>Five weeks, live, with the capstone defence.</span>
+                <span style={{ flex: 1, minHeight: 14 }} />
+                <button onClick={openPay} aria-expanded={d.payOpen} aria-controls="v3-pay-panel" className="pv-h-ink800" style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 46, marginTop: 16, background: 'var(--ink-900)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer' }}>Enrol standalone · {d.due}</button>
+              </div>
+              <div style={{ background: 'var(--ink-900)', color: 'var(--bone)', border: '1px solid var(--seal-500)', borderRadius: 6, padding: '26px 24px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                <span style={{ position: 'absolute', top: 0, right: 0, background: 'var(--seal-500)', color: 'var(--bone)', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.1em', padding: '4px 8px' }}>BEST VALUE</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--seal-300)' }}>ADDED TO A 12-WEEK PATHWAY</span>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 600, letterSpacing: '-.032em', marginTop: 12, fontVariantNumeric: 'tabular-nums', color: 'var(--bone)' }}>{d.addOn.bundle}</span>
+                <span style={{ fontSize: 14, color: 'var(--ink-200)', marginTop: 8 }}>Same programme, 25% off because you are already with us.</span>
+                <span style={{ flex: 1, minHeight: 14 }} />
+                <button onClick={goHome} style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 46, marginTop: 16, background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer' }}>Pick a pathway first →</button>
+              </div>
+            </div>
+          )}
+
+          {/* One transfer panel, shared by pathways and intensives. */}
               {d.payOpen && (
-                <div style={{ margin: '20px 0 0', border: '1px solid var(--ink-900)', background: 'var(--paper)', animation: 'v3rise 300ms cubic-bezier(.22,1,.36,1) both' }}>
+                <div id="v3-pay-panel" ref={payPanelRef} style={{ margin: '20px 0 0', border: '1px solid var(--ink-900)', background: 'var(--paper)', animation: 'v3rise 300ms cubic-bezier(.22,1,.36,1) both', scrollMarginTop: 84 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '16px 24px', background: 'var(--ink-900)', color: 'var(--bone)', flexWrap: 'wrap' }}>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.12em', color: 'var(--seal-300)' }}>COMPLETE YOUR ENROLMENT</span>
                     <button onClick={() => set({ payOpen: false })} aria-label="Close" style={{ font: 'inherit', fontSize: 18, background: 'none', border: 0, cursor: 'pointer', color: 'var(--ink-300)', lineHeight: 1 }}>×</button>
@@ -463,6 +547,11 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                             <a
                               href={`mailto:${d.proofEmail}?subject=${encodeURIComponent(`Payment confirmation — ${d.name} — ${d.payRef}`)}&body=${encodeURIComponent(`Full name:\n\nTrack: ${d.name}\nTier: ${d.tierName}\nPlan: ${d.planName}\nAmount paid: ${d.due}\nReference: ${d.payRef}\n\n(Please attach a screenshot or receipt of the transfer.)`)}`}
                               className="pv-h-ink800"
+                              onClick={() => trackEvent(TRACKING_EVENTS.paymentDeclared, {
+                                programme: d.name, tier: d.tierName, plan: d.planName,
+                                add_on: d.addOn.on ? d.addOn.name : null,
+                                region: d.regionName, amount_due: d.due, reference: d.payRef,
+                              })}
                               style={{ display: 'grid', placeItems: 'center', font: 'inherit', fontSize: 15, fontWeight: 500, height: 50, width: '100%', marginTop: 16, background: 'var(--ink-900)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', textDecoration: 'none' }}
                             >
                               Email payment confirmation
@@ -491,28 +580,6 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                   </div>
                 </div>
               )}
-            </div>
-          )}
-
-          {d.isInt && (
-            <div className="pv-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, margin: '30px 0 0' }}>
-              <div style={{ background: 'var(--paper)', border: '1px solid var(--border-strong)', borderRadius: 6, padding: '26px 24px', display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--fg-3)' }}>ON ITS OWN</span>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 600, letterSpacing: '-.032em', marginTop: 12, fontVariantNumeric: 'tabular-nums' }}>{d.addOn.alone}</span>
-                <span style={{ fontSize: 14, color: 'var(--fg-2)', marginTop: 8 }}>Five weeks, live, with the capstone defence.</span>
-                <span style={{ flex: 1, minHeight: 14 }} />
-                <button onClick={goEnrolFlow} style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 46, marginTop: 16, background: 'var(--ink-900)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer' }}>Enrol standalone</button>
-              </div>
-              <div style={{ background: 'var(--ink-900)', color: 'var(--bone)', border: '1px solid var(--seal-500)', borderRadius: 6, padding: '26px 24px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                <span style={{ position: 'absolute', top: 0, right: 0, background: 'var(--seal-500)', color: 'var(--bone)', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.1em', padding: '4px 8px' }}>BEST VALUE</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--seal-300)' }}>ADDED TO A 12-WEEK PATHWAY</span>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 600, letterSpacing: '-.032em', marginTop: 12, fontVariantNumeric: 'tabular-nums', color: 'var(--bone)' }}>{d.addOn.bundle}</span>
-                <span style={{ fontSize: 14, color: 'var(--ink-200)', marginTop: 8 }}>Same programme, 25% off because you are already with us.</span>
-                <span style={{ flex: 1, minHeight: 14 }} />
-                <button onClick={goHome} style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 46, marginTop: 16, background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer' }}>Pick a pathway first →</button>
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
