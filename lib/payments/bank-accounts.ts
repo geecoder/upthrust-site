@@ -31,7 +31,47 @@ export type BankDetails = {
   proofEmail: string;
 };
 
-const env = (k: string) => (process.env[k] || '').trim();
+// Committed defaults so the transfer panel works the moment this deploys.
+//
+// The brief asked for these in environment configuration, and an env var still
+// wins over anything here — set BANK_* on the host and these are ignored, so
+// rotating a bank never needs a code change. But .env.local does not travel to
+// the host, so with env-only the live site showed "details on request" and
+// nobody could pay.
+//
+// What actually matters is preserved: this module is `server-only`, so none of
+// it reaches the JavaScript bundle, and each page sends only the visitor's own
+// region. These are payee details printed on a public pricing page for
+// customers to pay into — not credentials.
+const DEFAULTS: Record<string, string> = {
+  BANK_PAYEE_NAME: 'Genesis Nneji Enwenyeokwu',
+
+  BANK_GBP_BANK: 'Wise Payments Limited, London',
+  BANK_GBP_ACCOUNT: '10436148',
+  BANK_GBP_SORT: '23-14-70',
+  BANK_GBP_IBAN: 'GB75 TRWI 2314 7010 4361 48',
+  BANK_GBP_SWIFT: 'TRWIGB2LXXX',
+
+  BANK_USD_BANK: 'Community Federal Savings Bank, New York',
+  BANK_USD_ACCOUNT: '8312597680',
+  BANK_USD_ROUTING: '026073150',
+  BANK_USD_TYPE: 'Checking',
+  BANK_USD_SWIFT: 'CMFGUS33',
+
+  BANK_CAD_BANK: 'Peoples Trust, Vancouver',
+  BANK_CAD_ACCOUNT: '200110442271',
+  BANK_CAD_INSTITUTION: '621',
+  BANK_CAD_TRANSIT: '16001',
+  BANK_CAD_SWIFT: 'TRWICAW1XXX',
+
+  BANK_NGN_BANK: 'Access Bank Nigeria',
+  BANK_NGN_ACCOUNT: '0709683023',
+  BANK_NGN_TYPE: 'Savings',
+
+  PAYMENT_PROOF_EMAIL: 'info@upthrustdigital.com',
+};
+
+const env = (k: string) => ((process.env[k] || '').trim() || DEFAULTS[k] || '');
 
 /** A region resolves only if every row it needs is actually populated. */
 function build(title: string, rows: (BankRow | null)[], payee: string): BankDetails {

@@ -4,6 +4,7 @@
 // groups it defines in FOOT, the contact / where-we-operate row, and the
 // legal bar.
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FOOT, PROG_HREF, UPTHRUST_LI } from '@/lib/proto/data';
 import { useProto } from '@/lib/proto/store';
@@ -27,10 +28,14 @@ export function ProtoFooter() {
 
       <div className="pv-wrap pv-footgrid" style={{ position: 'relative', padding: '52px 40px 0', display: 'grid', gridTemplateColumns: '1.3fr repeat(3, minmax(0,.9fr))', gap: 44, alignItems: 'start' }}>
         <div>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-            <span style={{ width: 26, height: 26, border: '1px solid rgba(244,239,230,.4)', display: 'grid', placeItems: 'center', fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 14, color: 'var(--bone)' }}>U</span>
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, letterSpacing: '-.022em', color: 'var(--bone)' }}>Upthrust</span>
-          </span>
+          {/* Light variant: the navy wordmark is invisible on ink-900. */}
+          <Image
+            src="/brand/upthrust-logo-full-light.png"
+            alt="Upthrust"
+            width={424}
+            height={96}
+            style={{ height: 34, width: 'auto', display: 'block' }}
+          />
           <p style={{ fontSize: 15, lineHeight: 1.55, color: 'var(--ink-200)', margin: '16px 0 0', maxWidth: '26em' }}>Live cohort programmes where professionals build evidence of capability, not another certificate.</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, margin: '20px 0 0' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--seal-500)', animation: 'v3pulse 1.6s ease-in-out infinite alternate' }} />

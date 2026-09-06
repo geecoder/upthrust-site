@@ -5,6 +5,7 @@ import { getPaymentRail, RailUnavailableError } from '@/lib/payments/rail';
 import { isKvConfigured } from '@/lib/kv';
 import { amountDue } from '@/lib/pricing';
 import { currencyFor } from '@/lib/config';
+import { getRegionFromRequest } from '@/lib/geoServer';
 
 export const runtime = 'nodejs'; // crypto.randomInt + raw-body-friendly, matches the webhook route's needs
 
@@ -31,7 +32,10 @@ export async function POST(request: NextRequest) {
       { status: 400 },
     );
   }
-  const { programmeSlug, tier, plan, region, leadName, leadEmail } = parsed.data;
+  const { programmeSlug, tier, plan, leadName, leadEmail } = parsed.data;
+
+  // Resolved from this request's geo headers, never from the body.
+  const region = await getRegionFromRequest();
 
   if (!isKvConfigured()) {
     return NextResponse.json(

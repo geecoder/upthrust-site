@@ -5,6 +5,7 @@
 // same single seal Enrol button.
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { P, PROG_HREF, type ProgKey } from '@/lib/proto/data';
 import { scrollToId, useProto } from '@/lib/proto/store';
@@ -58,10 +59,19 @@ export function ProtoNav() {
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 80, background: 'var(--bone)', borderBottom: '1px solid var(--border-strong)' }}>
-      <div className="pv-wrap" style={{ height: 64, display: 'flex', alignItems: 'center', gap: 32 }}>
-        <button onClick={goHome} style={{ font: 'inherit', display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 0, padding: 0, cursor: 'pointer' }}>
-          <span style={{ width: 24, height: 24, background: 'var(--ink-900)', color: 'var(--bone)', display: 'grid', placeItems: 'center', fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 14 }}>U</span>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 19, letterSpacing: '-.022em' }}>Upthrust</span>
+      <div className="pv-wrap pv-navbar" style={{ height: 64, display: 'flex', alignItems: 'center', gap: 32 }}>
+        {/* The real brand lockup. The prototype drew its own "U" tile and
+            "Upthrust" wordmark because it had no asset to work from. */}
+        <button onClick={goHome} aria-label="Upthrust — home" style={{ font: 'inherit', display: 'flex', alignItems: 'center', background: 'none', border: 0, padding: 0, cursor: 'pointer', flex: 'none' }}>
+          <Image
+            src="/brand/upthrust-logo-full.png"
+            alt="Upthrust"
+            width={424}
+            height={96}
+            priority
+            className="pv-logo"
+            style={{ height: 30, width: 'auto', display: 'block' }}
+          />
         </button>
         <span style={{ flex: 1 }} />
 

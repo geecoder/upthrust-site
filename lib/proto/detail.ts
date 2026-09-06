@@ -243,13 +243,16 @@ export function detail(k: ProgKey, S: DetailState, bank?: BankInput) {
       bd: S.cAdd ? 'var(--moss-500)' : 'rgba(244,239,230,.22)',
     },
 
-    isNg: S.cur === 'ng',
-    isIntl: S.cur !== 'ng',
+    // Every region pays by bank transfer. The prototype routed Nigeria to
+    // Paystack; that rail is not in use, so there is no NG/international split
+    // any more and no card checkout to fall back to.
+    isNg: false,
+    isIntl: true,
     tierName: int ? 'Single tier' : (S.cTier === 'prem' ? 'Premium' : 'Standard'),
     planName: int ? 'Single payment' : (S.cPlan === 'full' ? 'Paid in full' : 'Two payments'),
     regionName: CUR_REGION_NAME[S.cur],
-    payMethod: S.cur === 'ng' ? 'Paystack · secure online payment' : (cur.c + ' bank transfer'),
-    payCta: S.cur === 'ng' ? 'Pay securely with Paystack' : 'Get bank transfer details',
+    payMethod: cur.c + ' bank transfer',
+    payCta: 'Get bank transfer details',
 
     // Format preview only. The reference that reconciliation depends on is
     // minted per attempt in lib/payments/reference.ts when the enrolment

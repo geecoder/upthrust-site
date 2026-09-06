@@ -866,6 +866,11 @@ input:focus-visible,
 @media (max-width: 600px) {
   .pv-wrap { padding-left: 16px !important; padding-right: 16px !important; }
 
+  /* The full brand lockup is wider than the mark the prototype drew, so the
+     header needs the room back or the menu button falls off a 320px screen. */
+  .pv-navbar { gap: 12px !important; }
+  .pv-logo   { height: 26px !important; }
+
   /* The rotating programme name has a 280px floor so the line does not reflow
      as it cycles. Narrower than that and it wraps to its own line rather than
      being clipped by the hero's overflow. */
@@ -880,6 +885,7 @@ input:focus-visible,
 }
 
 @media (max-width: 420px) {
+  .pv-logo { height: 22px !important; }
   .pv-statrow { grid-template-columns: minmax(0, 1fr) !important; }
   .pv-bankrow { grid-template-columns: minmax(0, 1fr) auto !important; }
 }

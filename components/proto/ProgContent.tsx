@@ -407,27 +407,13 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                     </div>
 
                     <div style={{ padding: '26px 24px' }}>
-                      {/* Nigeria keeps the prototype's Paystack option. Every
-                          region, Nigeria included, also gets the transfer block
-                          below — real accounts now exist in all four currencies. */}
-                      {d.isNg && (
-                        <div style={{ paddingBottom: 22, marginBottom: 22, borderBottom: '1px solid var(--border-soft)' }}>
-                          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.12em', color: 'var(--seal-600)' }}>OPTION 01 · SECURE ONLINE PAYMENT</div>
-                          <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 600, letterSpacing: '-.022em', marginTop: 10 }}>Pay by card, transfer or USSD</div>
-                          <p style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--fg-2)', margin: '8px 0 0' }}>You will be taken to Paystack to complete payment. Your place is confirmed the moment payment succeeds.</p>
-                          <div style={{ display: 'flex', gap: 8, margin: '18px 0 0', flexWrap: 'wrap' }}>
-                            {['CARD', 'BANK TRANSFER', 'USSD'].map(m => (
-                              <span key={m} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.06em', border: '1px solid var(--border-strong)', padding: '6px 10px', color: 'var(--fg-2)' }}>{m}</span>
-                            ))}
-                          </div>
-                          <button onClick={goEnrolFlow} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 50, width: '100%', marginTop: 20, background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer' }}>Continue to Paystack · {d.due}</button>
-                          {/* The prototype prints "PLACE HELD FOR 30 MINUTES WHILE YOU PAY" here.
-                              There is no seat hold, so that line is not shipped. */}
-                        </div>
-                      )}
-
+                      {/* Bank transfer is the only rail. The prototype sent
+                          Nigeria to a Paystack checkout; that is not in use, so
+                          every region pays into the account for its currency.
+                          The prototype's "PLACE HELD FOR 30 MINUTES" line is
+                          also absent — there is no seat hold. */}
                       <div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.12em', color: 'var(--seal-600)' }}>{d.isNg ? 'OPTION 02 · TRANSFER TO' : 'TRANSFER TO'}</div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.12em', color: 'var(--seal-600)' }}>TRANSFER TO</div>
 
                         {d.bankConfigured ? (
                           <>

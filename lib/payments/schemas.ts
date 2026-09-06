@@ -18,11 +18,15 @@ export const REGIONS = ['NG', 'GB', 'CA', 'US', 'OTHER'] as const;
 export const TIERS = ['standard', 'premium'] as const;
 export const PLANS = ['full', 'installment'] as const;
 
+// `region` is deliberately absent. The amount was already recomputed here
+// rather than trusted from the client — but it was recomputed *from a
+// client-supplied region*, which is the same hole one step removed: posting
+// region "NG" bought a UK enrolment at Nigerian prices. The route now resolves
+// the region from the request's own geo headers and ignores anything sent.
 export const enrolInitSchema = z.object({
   programmeSlug: z.enum(PROGRAMME_SLUGS),
   tier: z.enum(TIERS).nullable(), // null for intensives
   plan: z.enum(PLANS),
-  region: z.enum(REGIONS),
   // Same rules the assessment form applies in the browser, re-applied here.
   // The client-side check is a courtesy to whoever is filling the form; this
   // is the one that actually holds, since anything can POST to this route.

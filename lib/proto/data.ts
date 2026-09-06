@@ -36,7 +36,7 @@ export const P: Record<ProgKey, { n: string; l: string; wk: string; fam: 'path' 
 // table for all four pathways with a three-payment tier, and production is
 // per-pathway with two payments. See PATH_PRICE below.
 export const CUR: Record<CurKey, { c: string; proc: string; int: [number, number] }> = {
-  ng: { c: 'NGN', proc: 'PAYSTACK', int: [250000, 180000] },
+  ng: { c: 'NGN', proc: 'BANK TRANSFER', int: [250000, 180000] },
   uk: { c: 'GBP', proc: 'BANK TRANSFER', int: [395, 295] },
   ca: { c: 'CAD', proc: 'BANK TRANSFER', int: [690, 520] },
   us: { c: 'USD', proc: 'BANK TRANSFER', int: [495, 375] },

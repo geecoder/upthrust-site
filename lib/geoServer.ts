@@ -14,14 +14,17 @@ import {
 // flashing the wrong price).
 //
 // Order of precedence:
-//   1. A manual override cookie. This deliberately outranks geo-IP: the
-//      switcher exists precisely for people on a VPN, or paying from a
-//      different country than they're sitting in. If detection won, the
-//      override would be useless to the only people who need it.
-//   2. An edge geo header, whichever platform is serving us.
-//   3. Accept-Language's region subtag — weak, but better than nothing on a
-//      host with no geo header at all.
-//   4. USD.
+//   1. An edge geo header, whichever platform is serving us.
+//   2. Accept-Language's region subtag — weak, but better than nothing on a
+//      host with no geo header at all. On Vercel this never runs in
+//      production, where x-vercel-ip-country is always present.
+//   3. USD.
+//
+// There is deliberately no override here. An earlier revision let a
+// `upthrust_region` cookie outrank geo-IP so the currency switcher could work
+// for someone on a VPN. That switcher is gone, and pricing is now tied solely
+// to where the visitor actually is — leaving the cookie in place would mean
+// anyone could pin a cheaper region from devtools and pay the wrong amount.
 
 // Checked in order. Netlify's x-nf-geo is JSON; the rest are bare ISO codes.
 const GEO_HEADERS = [
@@ -42,14 +45,6 @@ function countryFromNetlify(raw: string | null): string | null {
 }
 
 export async function getRegionFromRequest(): Promise<Region> {
-  try {
-    const cookieStore = await cookies();
-    const override = cookieStore.get(REGION_COOKIE)?.value;
-    if (isRegion(override)) return override;
-  } catch {
-    // Outside a request scope (static generation) — fall through.
-  }
-
   try {
     const headersList = await headers();
 
