@@ -590,14 +590,14 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px,3.2vw,42px)', fontWeight: 600, letterSpacing: '-.032em', lineHeight: 1.05, margin: 0 }}>Good to know<br />before you enrol.</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginTop: 22 }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--seal-500)' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.08em', color: 'var(--fg-3)' }}>THE FOUR WE GET ASKED MOST</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.08em', color: 'var(--fg-3)' }}>{d.askLabel}</span>
             </div>
             <button onClick={enrol} className="pv-h-seal" style={{ font: 'inherit', fontSize: 14, fontWeight: 500, background: 'none', border: 0, padding: '20px 0 0', cursor: 'pointer', color: 'var(--seal-600)' }}><span style={{ borderBottom: '1px solid var(--seal-300)' }}>Still unsure? Talk to us first →</span></button>
           </div>
           <div data-rv="" data-d="80" style={{ borderTop: '2px solid var(--ink-900)' }}>
             {d.ask.map(f => (
               <div key={f.q} style={{ borderBottom: '1px solid var(--border-soft)', background: f.bg, transition: 'background 200ms' }}>
-                <button onClick={() => set({ askOpen: f.i })} aria-expanded={f.open} className="pv-h-paper" style={{ font: 'inherit', width: '100%', textAlign: 'left', background: 'none', border: 0, padding: '18px 16px', cursor: 'pointer', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 26px', gap: 14, alignItems: 'baseline' }}>
+                <button onClick={() => set({ askOpen: f.open ? -1 : f.i })} aria-expanded={f.open} className="pv-h-paper" style={{ font: 'inherit', width: '100%', textAlign: 'left', background: 'none', border: 0, padding: '18px 16px', cursor: 'pointer', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 26px', gap: 14, alignItems: 'baseline' }}>
                   <span style={{ fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 600, letterSpacing: '-.016em', lineHeight: 1.25 }}>{f.q}</span>
                   <span style={{ fontSize: 18, color: 'var(--fg-3)', justifySelf: 'end', lineHeight: 1 }}>{f.mark}</span>
                 </button>

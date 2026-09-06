@@ -293,6 +293,7 @@ export function detail(k: ProgKey, S: DetailState, bank?: BankInput, payToken?: 
     credLine: int ? 'Capability Record · Passport via a pathway' : (S.cTier === 'prem' ? 'Verified Capability Passport' : 'Capability Record'),
     proc: 'PROCESSED VIA ' + cur.proc,
 
+    askLabel: 'THE ' + (ASK[k] || []).length + ' WE GET ASKED MOST',
     ask: (ASK[k] || []).map((x, i) => ({
       i, q: x.q, a: x.a,
       open: S.askOpen === i,

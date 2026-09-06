@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python -)"
+      "Bash(python -)",
+      "Bash(python \"C:/Users/genes/AppData/Local/Temp/claude/c--Users-genes-upthrust-site/50aec972-b4db-4a84-8ecb-fa66bd28296f/scratchpad/faq.py\")"
     ]
   }
 }
