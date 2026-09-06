@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { P, PROG_HREF, type ProgKey } from '@/lib/proto/data';
 import { scrollToId, useProto } from '@/lib/proto/store';
+import { analytics } from '@/lib/analytics';
 
 const MENU_PATHS: ProgKey[] = ['pm', 'ba', 'pd', 'po'];
 const MENU_INTS: ProgKey[] = ['aipb', 'baai'];
@@ -49,6 +50,9 @@ export function ProtoNav() {
   const goEnrol = () => {
     set({ menu: false });
     setSheet(false);
+    // The only nav item tracked as a business CTA — the rest are ordinary
+    // navigation and are covered by $mp_web_page_view.
+    analytics.ctaClicked({ cta_name: 'Enrol', cta_location: 'navigation', destination: '/#v3-pick' });
     if (pathname !== '/') {
       router.push('/');
       window.setTimeout(() => scrollToId('v3-pick'), 90);

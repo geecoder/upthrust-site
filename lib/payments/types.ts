@@ -19,6 +19,14 @@ export interface EnrolmentIntent {
   leadEmail: string;
   status: EnrolmentStatus;
   createdAt: string; // ISO
+  /**
+   * The Mixpanel device id of the browser that created this enrolment, when
+   * one was available. Analytics context only — never rendered, never used
+   * for authorisation, and absent if the visitor blocks analytics. It exists
+   * so the server-side Enrolment Completed event lands on the same user
+   * journey that produced the enrolment rather than a detached profile.
+   */
+  analyticsDistinctId?: string | null;
 }
 
 export interface InitResult {

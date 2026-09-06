@@ -3,7 +3,7 @@ import { Fraunces, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ProtoNav } from '@/components/proto/ProtoNav';
 import { ProtoFooter } from '@/components/proto/ProtoFooter';
-import AnalyticsProvider from '@/components/AnalyticsProvider';
+import AnalyticsProvider from '@/components/analytics/AnalyticsProvider';
 import { SITE } from '@/lib/config';
 import { getRegionFromRequest } from '@/lib/geoServer';
 import { OrganizationJsonLd } from '@/components/seo/OrganizationJsonLd';

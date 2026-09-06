@@ -287,6 +287,18 @@ export function detail(k: ProgKey, S: DetailState, bank?: BankInput, payToken?: 
     proofEmail: bank?.proofEmail || '',
     payOpen: S.payOpen,
 
+    // Numeric equivalents of `due`/`total`, for analytics and anything else
+    // that needs a number rather than a formatted string.
+    amounts: {
+      currency: cur.c,
+      tierFull,
+      tierEach,
+      addOn: addOnOn ? pr.bundle : 0,
+      dueNow: dueNow + (addOnOn ? pr.bundle : 0),
+      total: tierFull + (addOnOn ? pr.bundle : 0),
+      addOnBundle: pr.bundle,
+    },
+
     due: cur.c + ' ' + money(dueNow + (addOnOn ? pr.bundle : 0)),
     total: cur.c + ' ' + money(tierFull + (addOnOn ? pr.bundle : 0)),
     dueNote: int ? 'Single payment · five weeks' : (S.cPlan === 'full' ? 'Paid in full · nothing further' : 'Then one more payment in October'),

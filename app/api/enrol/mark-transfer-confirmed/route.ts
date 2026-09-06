@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { markTransferConfirmedSchema } from '@/lib/payments/schemas';
 import { markTransferConfirmed } from '@/lib/payments/bankTransfer';
 import { isKvConfigured } from '@/lib/kv';
+import { getEnrolmentIntent } from '@/lib/payments/reference';
+import { reportEnrolmentCompleted } from '@/lib/analytics/enrolment';
 
 export const runtime = 'nodejs';
 
@@ -33,10 +35,19 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    // Read the status first so a second confirmation of the same reference is
+    // recognised as already-counted and does not emit a duplicate conversion.
+    const before = await getEnrolmentIntent(parsed.data.reference);
+
     const intent = await markTransferConfirmed(parsed.data.reference);
     if (!intent) {
       return NextResponse.json({ error: 'No enrolment found for that reference (it may have expired)' }, { status: 404 });
     }
+
+    // Analytics is deliberately awaited but never allowed to fail the request:
+    // reportEnrolmentCompleted swallows its own errors and returns a boolean.
+    await reportEnrolmentCompleted(intent, 'bank_transfer', before?.status);
+
     return NextResponse.json({ status: intent.status, intent });
   } catch (err) {
     console.error('mark-transfer-confirmed failed', err);

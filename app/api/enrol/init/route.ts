@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       { status: 400 },
     );
   }
-  const { programmeSlug, tier, plan, leadName, leadEmail } = parsed.data;
+  const { programmeSlug, tier, plan, leadName, leadEmail, analyticsDistinctId } = parsed.data;
 
   // Resolved from this request's geo headers, never from the body.
   const region = await getRegionFromRequest();
@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
   try {
     const intent = await createEnrolmentIntent({
       programmeSlug, tier, plan, region, amount, currency, leadName, leadEmail,
+      analyticsDistinctId: analyticsDistinctId ?? null,
     });
 
     const rail = getPaymentRail(region);

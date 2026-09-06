@@ -3,11 +3,12 @@
 // The prototype's `isAssess` block: four stages driven by `aStage` —
 // intro (lead capture) → quiz (12 scenarios) → computing (1400ms) → result.
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DIMS, P, PROG_HREF, Q, type ProgKey } from '@/lib/proto/data';
 import { useProto, useProtoRoute } from '@/lib/proto/store';
 import { validateLeadEmail, validateLeadName } from '@/lib/validation/lead';
+import { analytics, slugForKey } from '@/lib/analytics';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
 const TRACKS: ProgKey[] = ['pm', 'ba', 'pd', 'po'];
@@ -42,9 +43,22 @@ export function AssessContent() {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
 
+  // Wall-clock start, for Assessment Completed's duration_seconds.
+  const startedAt = useRef<number | null>(null);
+  // Guards against a step being counted twice by a rerender or Strict Mode.
+  const stepsSent = useRef<Set<number>>(new Set());
+  const completedSent = useRef(false);
+
   const start = () => {
     setSubmitted(true);
-    if (canStart) { set({ aStage: 'quiz', qi: 0, answers: [] }); return; }
+    if (canStart) {
+      startedAt.current = Date.now();
+      stepsSent.current = new Set();
+      completedSent.current = false;
+      analytics.assessmentStarted({ source_page: '/assessment', total_steps: Q.length });
+      set({ aStage: 'quiz', qi: 0, answers: [] });
+      return;
+    }
     // Send the caret to the first thing that needs fixing rather than leaving
     // the person to hunt for the message.
     (nameError ? nameRef : emailRef).current?.focus();
@@ -53,11 +67,35 @@ export function AssessContent() {
   const answerQ = (i: number) => {
     const ans = s.answers.slice();
     ans[s.qi] = i;
+
+    // The answer itself is deliberately not sent — only which scenario was
+    // completed, so drop-off can be measured without recording responses.
+    if (!stepsSent.current.has(s.qi)) {
+      stepsSent.current.add(s.qi);
+      analytics.assessmentStepCompleted({
+        step_number: s.qi + 1,
+        total_steps: Q.length,
+        scenario_id: `scenario-${String(s.qi + 1).padStart(2, '0')}`,
+      });
+    }
+
     if (s.qi >= Q.length - 1) {
       set({ answers: ans, aStage: 'computing' });
       window.setTimeout(() => set({ aStage: 'result' }), 1400);
     } else set({ answers: ans, qi: s.qi + 1 });
   };
+
+  useEffect(() => {
+    if (s.aStage !== 'result' || completedSent.current) return;
+    completedSent.current = true;
+    analytics.assessmentCompleted({
+      recommended_program: slugForKey(rTop),
+      total_steps: Q.length,
+      duration_seconds: startedAt.current
+        ? Math.max(0, Math.round((Date.now() - startedAt.current) / 1000))
+        : 0,
+    });
+  }, [s.aStage, rTop]);
 
   const first = (s.leadName || 'Your').trim().split(' ')[0].toUpperCase();
 
@@ -236,8 +274,8 @@ export function AssessContent() {
                 ))}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '32px 0 0', flexWrap: 'wrap' }}>
-                <button onClick={() => router.push(PROG_HREF[rTop])} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 150ms' }}>Open {P[rTop].n} →</button>
-                <button onClick={() => router.push('/')} style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 22px', background: 'none', color: 'var(--fg-1)', border: '1px solid var(--border-strong)', borderRadius: 4, cursor: 'pointer' }}>See all six programmes</button>
+                <button onClick={() => { analytics.ctaClicked({ cta_name: `Open ${P[rTop].n}`, cta_location: 'assessment_result', destination: PROG_HREF[rTop], program_slug: slugForKey(rTop) }); router.push(PROG_HREF[rTop]); }} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 150ms' }}>Open {P[rTop].n} →</button>
+                <button onClick={() => { analytics.ctaClicked({ cta_name: 'See all six programmes', cta_location: 'assessment_result', destination: '/' }); router.push('/'); }} style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 22px', background: 'none', color: 'var(--fg-1)', border: '1px solid var(--border-strong)', borderRadius: 4, cursor: 'pointer' }}>See all six programmes</button>
                 <button onClick={() => set({ aStage: 'intro', qi: 0, answers: [] })} style={{ font: 'inherit', fontSize: 14, background: 'none', border: 0, padding: 0, cursor: 'pointer', color: 'var(--fg-3)' }}>Retake</button>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.06em', color: 'var(--seal-600)', marginLeft: 'auto' }}>{P[rTop].seats} of {P[rTop].cap} places left</span>
               </div>

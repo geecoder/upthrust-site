@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { ACFAQ, BRIEFS, LOOPX, PHASE, SHIFT, SPINE, WHO } from '@/lib/proto/data';
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
 import { Photo } from '@/components/proto/Photo';
+import { analytics } from '@/lib/analytics';
 
 const AC_STATS = [
   { n: '12', l: 'WEEKS' }, { n: '25', l: 'MAX COHORT' }, { n: '8–10h', l: 'PER WEEK' },
@@ -23,8 +24,15 @@ export function AccelContent() {
   const router = useRouter();
 
   const pt = s.proofT;
-  const goHome = () => router.push('/');
-  const goPricing = () => { router.push('/'); window.setTimeout(() => scrollToId('v3-pick'), 90); };
+  const goHome = (location: 'accelerator_hero' | 'accelerator_bottom' = 'accelerator_bottom') => () => {
+    analytics.ctaClicked({ cta_name: 'Compare programmes', cta_location: location, destination: '/' });
+    router.push('/');
+  };
+  const goPricing = (location: 'accelerator_hero' | 'accelerator_bottom' = 'accelerator_bottom') => () => {
+    analytics.ctaClicked({ cta_name: 'See programmes & pricing', cta_location: location, destination: '/#v3-pick' });
+    router.push('/');
+    window.setTimeout(() => scrollToId('v3-pick'), 90);
+  };
 
   const shift = SHIFT.map(x => ({ a: x.a, b: x.b, n: Math.round(x.n * pt) + '%' }));
   const loopSel = LOOPX[s.acLoop] || LOOPX[0];
@@ -289,8 +297,8 @@ export function AccelContent() {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,4.2vw,60px)', fontWeight: 600, letterSpacing: '-.04em', lineHeight: 1, margin: '16px 0 0', color: 'var(--bone)' }}>Pick the pathway<br />that fits you.</h2>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <button onClick={goHome} className="pv-h-seal600-lift" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>See all six programmes</button>
-            <button onClick={goPricing} className="pv-h-lift2" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'none', color: 'var(--bone)', border: '1px solid rgba(244,239,230,.3)', borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>See programmes &amp; pricing</button>
+            <button onClick={goHome('accelerator_bottom')} className="pv-h-seal600-lift" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>See all six programmes</button>
+            <button onClick={goPricing('accelerator_bottom')} className="pv-h-lift2" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'none', color: 'var(--bone)', border: '1px solid rgba(244,239,230,.3)', borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>See programmes &amp; pricing</button>
           </div>
         </div>
       </section>

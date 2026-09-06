@@ -16,6 +16,7 @@ import {
   type ProgKey, CUR, money, priceFor,
 } from '@/lib/proto/data';
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
+import { analytics, programContext } from '@/lib/analytics';
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -56,9 +57,25 @@ export function HomeContent() {
   const pt = s.proofT;
   const totalSeats = PROG_IDS.reduce((a, k) => a + P[k].seats, 0);
 
-  const goProg = (k: ProgKey) => router.push(PROG_HREF[k]);
-  const scrollPick = () => scrollToId('v3-pick');
-  const goAssess = () => router.push('/assessment');
+  // Programme tiles are the main interest signal on the home page.
+  const goProg = (k: ProgKey, location: 'homepage_programmes' | 'homepage_bottom' = 'homepage_programmes') => {
+    const ctx = programContext(k);
+    analytics.ctaClicked({
+      cta_name: 'Explore programme', cta_location: location,
+      destination: PROG_HREF[k], program_slug: ctx.program_slug,
+    });
+    router.push(PROG_HREF[k]);
+  };
+
+  const scrollPick = (location: 'homepage_hero' | 'homepage_bottom') => () => {
+    analytics.ctaClicked({ cta_name: 'Pick a programme', cta_location: location, destination: '#v3-pick' });
+    scrollToId('v3-pick');
+  };
+
+  const goAssess = (location: 'homepage_hero' | 'homepage_bottom') => () => {
+    analytics.ctaClicked({ cta_name: 'Take an assessment', cta_location: location, destination: '/assessment' });
+    router.push('/assessment');
+  };
 
   // ── board ────────────────────────────────────────────────
   const boardStart = Math.max(0, Math.min(s.stackN - 3, 6));
@@ -179,8 +196,8 @@ export function HomeContent() {
             </div>
 
             <div style={{ display: 'flex', gap: 12, margin: '34px 0 0', flexWrap: 'wrap', animation: 'v3rise 700ms cubic-bezier(.22,1,.36,1) 280ms both' }}>
-              <button onClick={scrollPick} className="pv-h-ink800-lift pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 54, padding: '0 28px', background: 'var(--ink-900)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms cubic-bezier(.22,1,.36,1)' }}>Pick a programme</button>
-              <button onClick={goAssess} className="pv-h-bonedim-lift pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 54, padding: '0 26px', background: 'none', color: 'var(--fg-1)', border: '1px solid var(--border-strong)', borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms cubic-bezier(.22,1,.36,1)' }}>Take an assessment</button>
+              <button onClick={scrollPick('homepage_hero')} className="pv-h-ink800-lift pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 54, padding: '0 28px', background: 'var(--ink-900)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms cubic-bezier(.22,1,.36,1)' }}>Pick a programme</button>
+              <button onClick={goAssess('homepage_hero')} className="pv-h-bonedim-lift pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 54, padding: '0 26px', background: 'none', color: 'var(--fg-1)', border: '1px solid var(--border-strong)', borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms cubic-bezier(.22,1,.36,1)' }}>Take an assessment</button>
             </div>
 
             <div className="pv-statrow" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,auto)', gap: '0 40px', margin: '46px 0 0', justifyContent: 'start', animation: 'v3rise 700ms cubic-bezier(.22,1,.36,1) 380ms both' }}>
@@ -452,7 +469,7 @@ export function HomeContent() {
                   <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--seal-300)', marginTop: 6 }}>BUNDLED · SAVE 25%</span>
                 </span>
               </div>
-              <button onClick={() => goProg(s.aiKey)} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 48, width: '100%', marginTop: 24, background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 150ms' }}>See this intensive →</button>
+              <button onClick={() => goProg(s.aiKey, 'homepage_programmes')} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 15, fontWeight: 500, height: 48, width: '100%', marginTop: 24, background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 150ms' }}>See this intensive →</button>
             </div>
           </div>
         </div>
@@ -521,8 +538,8 @@ export function HomeContent() {
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <button onClick={scrollPick} className="pv-h-seal600-lift" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 54, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Pick a programme</button>
-            <button onClick={goAssess} className="pv-h-lift2" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 54, padding: '0 26px', background: 'none', color: 'var(--bone)', border: '1px solid rgba(244,239,230,.3)', borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Take an assessment</button>
+            <button onClick={scrollPick('homepage_bottom')} className="pv-h-seal600-lift" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 54, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Pick a programme</button>
+            <button onClick={goAssess('homepage_bottom')} className="pv-h-lift2" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 54, padding: '0 26px', background: 'none', color: 'var(--bone)', border: '1px solid rgba(244,239,230,.3)', borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Take an assessment</button>
             <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginTop: 6, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.08em', color: 'var(--ink-300)' }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--seal-500)', animation: 'v3pulse 1.6s ease-in-out infinite alternate' }} />{totalSeats} PLACES LEFT ACROSS SIX PROGRAMMES
             </div>

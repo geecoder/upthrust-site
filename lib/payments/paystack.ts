@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from 'crypto';
+import { reportEnrolmentCompleted, reportPaymentFailed } from '@/lib/analytics/enrolment';
 import { SITE } from '@/lib/config';
-import { updateEnrolmentStatus, getEnrolmentIntent } from './reference';
+import { getEnrolmentIntent, updateEnrolmentStatus } from './reference';
 import { RailUnavailableError } from './rail-error';
 import type { PaymentRail, EnrolmentIntent, InitResult, VerifyResult, WebhookResult } from './types';
 
@@ -82,13 +83,31 @@ export const paystackRail: PaymentRail = {
     if (a.length !== b.length || !timingSafeEqual(a, b)) return { handled: false };
 
     const event = JSON.parse(rawBody);
-    if (event.event === 'charge.success') {
-      const reference = event.data?.reference as string | undefined;
-      if (reference) {
-        await updateEnrolmentStatus(reference, 'paystack_verified');
-        return { handled: true, reference };
+    const reference = event.data?.reference as string | undefined;
+
+    if (event.event === 'charge.success' && reference) {
+      // Read first: Paystack retries webhooks, and a redelivery must not be
+      // counted as a second sale.
+      const before = await getEnrolmentIntent(reference);
+      const intent = await updateEnrolmentStatus(reference, 'paystack_verified');
+      if (intent) {
+        await reportEnrolmentCompleted(intent, 'paystack', before?.status);
       }
+      return { handled: true, reference };
     }
+
+    if (event.event === 'charge.failed' && reference) {
+      const intent = await getEnrolmentIntent(reference);
+      if (intent) {
+        // A short classification only — never Paystack's raw error payload.
+        const reason = typeof event.data?.gateway_response === 'string'
+          ? event.data.gateway_response.slice(0, 60).toLowerCase().replace(/[^a-z0-9]+/g, '_')
+          : 'declined';
+        await reportPaymentFailed(intent, 'paystack', reason);
+      }
+      return { handled: true, reference };
+    }
+
     return { handled: true };
   },
 };

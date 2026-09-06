@@ -39,6 +39,9 @@ export const enrolInitSchema = z.object({
     const msg = validateLeadEmail(v);
     if (msg) ctx.addIssue({ code: 'custom', message: msg });
   }),
+  // Analytics correlation only. Optional by design: a visitor who blocks
+  // Mixpanel must still be able to enrol.
+  analyticsDistinctId: z.string().trim().max(128).optional().nullable(),
 });
 
 export type EnrolInitInput = z.infer<typeof enrolInitSchema>;

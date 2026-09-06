@@ -4,22 +4,19 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { HeroSwirl } from '@/components/HeroSwirl';
 import { TALLY_FORMS, tallyEmbedUrl } from '@/lib/config';
-import { trackEvent } from '@/lib/mixpanel';
-import { TRACKING_EVENTS } from '@/lib/tracking-events';
+import { analytics } from '@/lib/analytics';
 
 export default function ConsultationPage() {
   const tallyIframeRef = useRef<HTMLIFrameElement>(null);
   const tallyStartedRef = useRef(false);
+  const tallySubmittedRef = useRef(false);
 
+  // First meaningful interaction with the embedded form — the iframe taking
+  // focus. Not fired on page load, and only once per session.
   function trackTallyFormStarted() {
     if (tallyStartedRef.current) return;
     tallyStartedRef.current = true;
-    trackEvent(TRACKING_EVENTS.formStarted, {
-      form_name: 'Consultation Booking',
-      source_page: window.location.pathname,
-      number_of_fields: undefined,
-      submission_status: 'started',
-    });
+    analytics.consultationFormStarted({ source_page: window.location.pathname });
   }
 
   useEffect(() => {
@@ -45,9 +42,13 @@ export default function ConsultationPage() {
       let payload = '';
       try { payload = typeof event.data === 'string' ? event.data : JSON.stringify(event.data); } catch { payload = ''; }
       if (!/submit|submitted|form_submitted/i.test(payload)) return;
-      const properties = { form_name: 'Consultation Booking', source_page: window.location.pathname, number_of_fields: undefined, submission_status: 'submitted' };
-      trackEvent(TRACKING_EVENTS.formSubmitted, properties);
-      trackEvent(TRACKING_EVENTS.consultationSubmitted, properties);
+      // Tally can post more than one message matching this for a single
+      // submission, so the event is emitted at most once per page.
+      if (tallySubmittedRef.current) return;
+      tallySubmittedRef.current = true;
+      // Fired only on Tally's own confirmation of a completed submission,
+      // never on a click. Carries no name, email or answer content.
+      analytics.consultationSubmitted({ source_page: window.location.pathname });
     }
     window.addEventListener('blur', handleWindowBlur);
     window.addEventListener('message', handleTallyMessage);

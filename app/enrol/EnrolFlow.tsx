@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, type CSSProperties } from 'react';
+import { useState, useEffect, useRef, type CSSProperties } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -12,6 +12,7 @@ import { amountDue, type Tier, type Plan } from '@/lib/pricing';
 import { useRegion } from '@/lib/useRegion';
 import type { BankDetailRow } from '@/lib/payments/types';
 import { validateLeadEmail, validateLeadName } from '@/lib/validation/lead';
+import { analytics, cohortFor, getDistinctId, normalisePlan, normaliseTier, programContextForSlug } from '@/lib/analytics';
 
 type Stage = 'configure' | 'payment' | 'confirmation';
 
@@ -73,6 +74,7 @@ export default function EnrolFlow({ initialRegion }: { initialRegion: Region }) 
   const [region] = useRegion(initialRegion);
   const [lead, setLead] = useState({ name: '', email: '' });
   const [leadTouched, setLeadTouched] = useState<{ name?: boolean; email?: boolean }>({});
+  const enrolmentStartedFor = useRef<string | null>(null);
   const [agreed, setAgreed] = useState(false);
 
   const [paymentOutcome, setPaymentOutcome] = useState<PaymentOutcome | null>(null);
@@ -104,6 +106,23 @@ export default function EnrolFlow({ initialRegion }: { initialRegion: Region }) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (enrolmentStartedFor.current === programmeSlug) return;
+    enrolmentStartedFor.current = programmeSlug;
+    const ctx = programContextForSlug(programmeSlug);
+    if (!ctx) return;
+    analytics.enrolmentStarted({
+      ...ctx,
+      cohort: cohortFor(programmeSlug).cohort,
+      tier: normaliseTier(tier, isIntensiveSlug(programmeSlug)),
+      payment_plan: normalisePlan(plan),
+      currency: currencyFor(region),
+    });
+    // Intentionally keyed on the programme alone: changing tier or plan is
+    // configuration within one enrolment, not a new enrolment.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [programmeSlug]);
+
   const isIntensive = isIntensiveSlug(programmeSlug);
   const programme = isIntensive ? getIntensive(programmeSlug) : getPathway(programmeSlug);
   const rail = railFor(region);
@@ -132,6 +151,7 @@ export default function EnrolFlow({ initialRegion }: { initialRegion: Region }) 
           region,
           leadName: lead.name,
           leadEmail: lead.email,
+          analyticsDistinctId: getDistinctId(),
         }),
       });
       const data = await res.json();
@@ -140,6 +160,16 @@ export default function EnrolFlow({ initialRegion }: { initialRegion: Region }) 
         return;
       }
       if (data.authorizationUrl) {
+      const checkoutProps = {
+        program_slug: programmeSlug,
+        tier: normaliseTier(tier, isIntensive),
+        payment_plan: normalisePlan(plan),
+        amount_due_now: due,
+        total_amount: isIntensive ? due : dueFull,
+        currency: currencyFor(region),
+        cohort: cohortFor(programmeSlug).cohort,
+      } as const;
+        analytics.checkoutStarted({ ...checkoutProps, payment_method: 'paystack', order_id: data.reference });
         window.location.href = data.authorizationUrl;
       } else {
         setApiError('Paystack did not return a checkout link. Please try again.');
@@ -165,6 +195,7 @@ export default function EnrolFlow({ initialRegion }: { initialRegion: Region }) 
           region,
           leadName: lead.name,
           leadEmail: lead.email,
+          analyticsDistinctId: getDistinctId(),
         }),
       });
       const data = await res.json();
@@ -172,6 +203,16 @@ export default function EnrolFlow({ initialRegion }: { initialRegion: Region }) 
         setApiError(data.error || 'Something went wrong. Please try again.');
         return;
       }
+      const checkoutProps = {
+        program_slug: programmeSlug,
+        tier: normaliseTier(tier, isIntensive),
+        payment_plan: normalisePlan(plan),
+        amount_due_now: due,
+        total_amount: isIntensive ? due : dueFull,
+        currency: currencyFor(region),
+        cohort: cohortFor(programmeSlug).cohort,
+      } as const;
+      analytics.checkoutStarted({ ...checkoutProps, payment_method: 'bank_transfer', order_id: data.reference });
       setTransferInit({ reference: data.reference, bankDetails: data.bankDetails ?? [] });
     } catch {
       setApiError('Something went wrong. Please check your connection and try again.');

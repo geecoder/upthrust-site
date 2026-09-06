@@ -1,4 +1,4 @@
-import { trackEvent, type AnalyticsProperties } from '@/lib/analytics';
+import { trackEvent, type AnalyticsProperties } from '@/lib/analytics-legacy';
 
 export const TRACKING_EVENTS = {
   // Enrolment funnel on the pathway pages. These four are the ones that answer

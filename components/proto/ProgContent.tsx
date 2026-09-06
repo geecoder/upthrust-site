@@ -20,8 +20,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getSessionToken } from '@/lib/payments/enrolment-reference';
-import { trackEvent } from '@/lib/analytics';
-import { TRACKING_EVENTS } from '@/lib/tracking-events';
+import { analytics, cohortFor, normalisePlan, normaliseTier, programContext, slugForKey } from '@/lib/analytics';
 import { P, PROG_HREF, type ProgKey } from '@/lib/proto/data';
 import { detail, type BankInput } from '@/lib/proto/detail';
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
@@ -41,30 +40,29 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
 
   const payPanelRef = useRef<HTMLDivElement>(null);
 
-  // Top of the enrolment funnel — fired once per page view, when the pricing
-  // section actually comes into view rather than merely existing in the DOM.
-  const pricingSeen = useRef(false);
+  // Program Viewed. Keyed on the programme so a client-side route change
+  // between two programme pages fires again, while Strict Mode's double-invoke
+  // and ordinary rerenders do not.
+  const viewedFor = useRef<ProgKey | null>(null);
   useEffect(() => {
-    const el = document.getElementById('v3-pay');
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver((entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting && !pricingSeen.current) {
-          pricingSeen.current = true;
-          trackEvent(TRACKING_EVENTS.pricingSectionViewed, { programme: P[progKey].n });
-          io.disconnect();
-        }
-      }
-    }, { threshold: 0.2 });
-    io.observe(el);
-    return () => io.disconnect();
+    if (viewedFor.current === progKey) return;
+    viewedFor.current = progKey;
+    analytics.programViewed({ ...programContext(progKey), page_path: window.location.pathname });
   }, [progKey]);
 
   const d = detail(progKey, s, bank, payToken);
 
-  const enrol = () => {
-    trackEvent(TRACKING_EVENTS.enrolCtaClicked, {
-      programme: d.name, tier: d.tierName, plan: d.planName, region: d.regionName, amount_due: d.due,
+  // Derived once and reused by every event on this page.
+  const ctx = programContext(progKey);
+  const aTier = normaliseTier(s.cTier, d.isInt);
+  const aPlan = normalisePlan(d.isInt ? 'full' : s.cPlan);
+  const money = d.amounts;
+  const cohort = cohortFor(ctx.program_slug);
+
+  const enrol = (location: 'program_hero' | 'program_bottom' | 'program_curriculum' | 'program_faq') => () => {
+    analytics.ctaClicked({
+      cta_name: 'Enrol', cta_location: location, destination: '#v3-pay',
+      program_slug: ctx.program_slug, tier: aTier,
     });
     scrollToId('v3-pay');
   };
@@ -73,10 +71,23 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
   // step where someone asks for the account to pay into.
   const openPay = () => {
     set({ payOpen: true });
-    trackEvent(TRACKING_EVENTS.bankDetailsRequested, {
-      programme: d.name, tier: d.tierName, plan: d.planName,
-      add_on: d.addOn.on ? d.addOn.name : null,
-      region: d.regionName, currency: d.payMethod, amount_due: d.due, reference: d.payRef,
+    analytics.ctaClicked({
+      cta_name: d.isInt ? 'Enrol standalone' : 'Get bank transfer details',
+      cta_location: 'program_pricing', destination: '#v3-pay-panel',
+      program_slug: ctx.program_slug, tier: aTier,
+    });
+    // Bank transfer has no external checkout: obtaining the account details
+    // *is* proceeding to payment, which is what Checkout Started marks.
+    analytics.checkoutStarted({
+      program_slug: ctx.program_slug,
+      tier: aTier,
+      payment_plan: aPlan,
+      amount_due_now: money.dueNow,
+      total_amount: money.total,
+      currency: money.currency,
+      cohort: cohort.cohort,
+      payment_method: 'bank_transfer',
+      order_id: d.payRef,
     });
     // The panel renders below the fold, so without this the button looks inert.
     window.setTimeout(() => {
@@ -92,7 +103,6 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
   const goEnrolFlow = () => router.push(enrolHref);
 
   const copy = async (k: string, v: string) => {
-    trackEvent(TRACKING_EVENTS.bankDetailCopied, { programme: d.name, field: k, region: d.regionName });
     try { await navigator.clipboard.writeText(v); } catch { /* clipboard unavailable — the value is on screen */ }
     set({ copied: k });
     window.setTimeout(() => set({ copied: '' }), 1600);
@@ -129,9 +139,9 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
             </div>
 
             <div style={{ display: 'flex', gap: 10, margin: '32px 0 0', flexWrap: 'wrap' }}>
-              <button onClick={enrol} className="pv-h-seal600-lift pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Enrol · from {d.from}</button>
+              <button onClick={enrol('program_hero')} className="pv-h-seal600-lift pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Enrol · from {d.from}</button>
               {/* Label says assessment; the prototype's handler is goHome. Following the label. */}
-              <button onClick={goAssess} className="pv-h-lift2 pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 24px', background: 'none', color: d.heroFg, border: `1px solid ${d.btnbd}`, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Take an assessment</button>
+              <button onClick={() => { analytics.ctaClicked({ cta_name: 'Take an assessment', cta_location: 'program_hero', destination: '/assessment', program_slug: ctx.program_slug }); goAssess(); }} className="pv-h-lift2 pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 24px', background: 'none', color: d.heroFg, border: `1px solid ${d.btnbd}`, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Take an assessment</button>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '22px 0 0', flexWrap: 'wrap' }}>
@@ -222,13 +232,35 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', color: 'var(--ink-300)' }}>{d.wkHint}</span>
               <button onClick={() => set({ wkAuto: !s.wkAuto })} style={{ font: 'inherit', fontSize: 12, fontWeight: 500, height: 34, padding: '0 14px', background: 'none', color: 'var(--bone)', border: '1px solid rgba(244,239,230,.3)', borderRadius: 3, cursor: 'pointer' }}>{d.wkBtn}</button>
-              <button onClick={() => set({ currOpen: !s.currOpen })} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 13, fontWeight: 500, height: 34, padding: '0 16px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 3, cursor: 'pointer', transition: 'background 150ms' }}>{d.currBtn}</button>
+              <button
+                onClick={() => {
+                  const opening = !s.currOpen;
+                  set({ currOpen: opening });
+                  if (opening) {
+                    analytics.ctaClicked({
+                      cta_name: 'View curriculum', cta_location: 'program_curriculum',
+                      program_slug: ctx.program_slug, tier: aTier,
+                    });
+                  }
+                }}
+                className="pv-h-seal600" style={{ font: 'inherit', fontSize: 13, fontWeight: 500, height: 34, padding: '0 16px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 3, cursor: 'pointer', transition: 'background 150ms' }}>{d.currBtn}</button>
             </div>
           </div>
 
           <div style={{ display: 'flex', gap: 5, margin: '30px 0 0', flexWrap: 'wrap' }}>
             {d.weeks.map(w => (
-              <button key={w.n} onClick={() => set({ pWeek: w.i, wkAuto: false })} aria-label={`Week ${w.n}`} style={{ font: 'inherit', flex: 1, minWidth: 52, textAlign: 'left', background: w.bg, border: `1px solid ${w.bd}`, padding: '12px 10px 10px', cursor: 'pointer', transition: 'background 260ms cubic-bezier(.65,0,.35,1), border-color 260ms' }}>
+              <button
+                key={w.n}
+                onClick={() => {
+                  set({ pWeek: w.i, wkAuto: false });
+                  analytics.curriculumInteracted({
+                    program_slug: ctx.program_slug,
+                    week_number: w.i + 1,
+                    curriculum_phase: d.allWeeks[w.i]?.phase,
+                    artefact_name: d.allWeeks[w.i]?.t,
+                  });
+                }}
+                aria-label={`Week ${w.n}`} style={{ font: 'inherit', flex: 1, minWidth: 52, textAlign: 'left', background: w.bg, border: `1px solid ${w.bd}`, padding: '12px 10px 10px', cursor: 'pointer', transition: 'background 260ms cubic-bezier(.65,0,.35,1), border-color 260ms' }}>
                 <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.08em', color: w.nfg }}>{w.n}</span>
                 <span style={{ display: 'block', height: 2, background: w.phase, marginTop: 9 }} />
               </button>
@@ -279,7 +311,18 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
               </div>
               <div className="pv-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 32px' }}>
                 {d.allWeeks.map(w => (
-                  <button key={w.n} onClick={() => set({ pWeek: w.i, wkAuto: false })} className="pv-h-bonefaint" style={{ font: 'inherit', textAlign: 'left', display: 'grid', gridTemplateColumns: '56px minmax(0,1fr) auto', gap: 14, alignItems: 'center', background: w.bg, border: 0, borderBottom: '1px solid rgba(244,239,230,.12)', padding: '13px 10px', cursor: 'pointer', transition: 'background 180ms' }}>
+                  <button
+                    key={w.n}
+                    onClick={() => {
+                      set({ pWeek: w.i, wkAuto: false });
+                      analytics.curriculumInteracted({
+                        program_slug: ctx.program_slug,
+                        week_number: w.i + 1,
+                        curriculum_phase: w.phase,
+                        artefact_name: w.t,
+                      });
+                    }}
+                    className="pv-h-bonefaint" style={{ font: 'inherit', textAlign: 'left', display: 'grid', gridTemplateColumns: '56px minmax(0,1fr) auto', gap: 14, alignItems: 'center', background: w.bg, border: 0, borderBottom: '1px solid rgba(244,239,230,.12)', padding: '13px 10px', cursor: 'pointer', transition: 'background 180ms' }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}><span style={{ width: 7, height: 7, background: w.c }} /><span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-300)' }}>{w.n}</span></span>
                     <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--bone)' }}>{w.t}</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.08em', color: 'var(--ink-400)', whiteSpace: 'nowrap' }}>{w.phase}</span>
@@ -287,7 +330,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                 ))}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 22, flexWrap: 'wrap' }}>
-                <button onClick={enrol} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 14, fontWeight: 500, height: 44, padding: '0 20px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer' }}>See pricing for {d.name} →</button>
+                <button onClick={enrol('program_curriculum')} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 14, fontWeight: 500, height: 44, padding: '0 20px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer' }}>See pricing for {d.name} →</button>
                 <button onClick={() => set({ currOpen: false })} style={{ font: 'inherit', fontSize: 14, fontWeight: 500, height: 44, padding: '0 18px', background: 'none', color: 'var(--bone)', border: '1px solid rgba(244,239,230,.3)', borderRadius: 4, cursor: 'pointer' }}>Collapse</button>
               </div>
             </div>
@@ -356,7 +399,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
           {d.isPath && (
             <>
               <div className="pv-3col" style={{ display: 'grid', gridTemplateColumns: d.canAddOn ? '1fr 1fr 1.05fr' : '1fr 1fr', gap: 14, margin: '30px 0 0', alignItems: 'start' }}>
-                <button onClick={() => { set({ cTier: 'std' }); trackEvent(TRACKING_EVENTS.tierSelected, { programme: d.name, tier: 'Standard', region: d.regionName }); }} aria-pressed={d.tStd.on} className="pv-h-sh2" style={{ font: 'inherit', textAlign: 'left', background: d.tStd.bg, border: `1px solid ${d.tStd.bd}`, borderRadius: 6, padding: '22px 20px', cursor: 'pointer', transition: 'all 180ms cubic-bezier(.22,1,.36,1)' }}>
+                <button onClick={() => { set({ cTier: 'std' }); analytics.pricingTierSelected({ program_slug: ctx.program_slug, tier: 'standard', amount: money.tierFull, currency: money.currency, cohort: cohort.cohort }); }} aria-pressed={d.tStd.on} className="pv-h-sh2" style={{ font: 'inherit', textAlign: 'left', background: d.tStd.bg, border: `1px solid ${d.tStd.bd}`, borderRadius: 6, padding: '22px 20px', cursor: 'pointer', transition: 'all 180ms cubic-bezier(.22,1,.36,1)' }}>
                   <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--fg-3)' }}>TIER 01</span>
                   <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 600, letterSpacing: '-.024em', marginTop: 8 }}>Standard</span>
                   <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 30, fontWeight: 600, letterSpacing: '-.03em', marginTop: 14, fontVariantNumeric: 'tabular-nums' }}>{d.tStd.price}</span>
@@ -368,7 +411,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                   <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.08em', color: 'var(--fg-3)', marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border-hair)' }}>ENDS WITH A CAPABILITY RECORD</span>
                 </button>
 
-                <button onClick={() => { set({ cTier: 'prem' }); trackEvent(TRACKING_EVENTS.tierSelected, { programme: d.name, tier: 'Premium', region: d.regionName }); }} aria-pressed={d.tPrem.on} className="pv-h-sh2" style={{ font: 'inherit', textAlign: 'left', position: 'relative', background: d.tPrem.bg, border: `1px solid ${d.tPrem.bd}`, borderRadius: 6, padding: '22px 20px', cursor: 'pointer', transition: 'all 180ms cubic-bezier(.22,1,.36,1)' }}>
+                <button onClick={() => { set({ cTier: 'prem' }); analytics.pricingTierSelected({ program_slug: ctx.program_slug, tier: 'premium', amount: money.tierFull, currency: money.currency, cohort: cohort.cohort }); }} aria-pressed={d.tPrem.on} className="pv-h-sh2" style={{ font: 'inherit', textAlign: 'left', position: 'relative', background: d.tPrem.bg, border: `1px solid ${d.tPrem.bd}`, borderRadius: 6, padding: '22px 20px', cursor: 'pointer', transition: 'all 180ms cubic-bezier(.22,1,.36,1)' }}>
                   <span style={{ position: 'absolute', top: 0, right: 0, background: 'var(--ink-900)', color: 'var(--bone)', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.1em', padding: '4px 8px' }}>MOST COMPLETE</span>
                   <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--fg-3)' }}>TIER 02</span>
                   <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 600, letterSpacing: '-.024em', marginTop: 8 }}>Premium</span>
@@ -397,7 +440,14 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                     onClick={() => {
                       const next = !s.cAdd;
                       set({ cAdd: next });
-                      trackEvent(TRACKING_EVENTS.addOnToggled, { programme: d.name, add_on: d.addOn.name, added: next, region: d.regionName });
+                      analytics.addOnSelected({
+                        program_slug: ctx.program_slug,
+                        addon_slug: slugForKey(d.addOn.slug),
+                        addon_name: d.addOn.name,
+                        amount: money.addOnBundle,
+                        currency: money.currency,
+                        selected: next,
+                      });
                     }}
                     aria-pressed={d.addOn.on}
                     style={{ font: 'inherit', fontSize: 13, fontWeight: 500, height: 40, width: '100%', marginTop: 14, background: d.addOn.btnBg, color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 180ms' }}
@@ -430,7 +480,17 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.06em', color: 'var(--ink-300)', marginTop: 8 }}>{d.dueNote}</div>
                   <div className="pv-planrow" style={{ display: 'flex', gap: 6, marginTop: 18 }}>
                     {d.planTabs.map(p => (
-                      <button key={p.k} onClick={() => { set({ cPlan: p.k }); trackEvent(TRACKING_EVENTS.planSelected, { programme: d.name, plan: p.l, tier: d.tierName, region: d.regionName }); }} aria-pressed={s.cPlan === p.k} style={{ font: 'inherit', flex: 1, textAlign: 'left', background: p.bg, border: `1px solid ${p.bd}`, borderRadius: 3, padding: '10px 9px', cursor: 'pointer', transition: 'all 150ms' }}>
+                      <button key={p.k} onClick={() => {
+                          set({ cPlan: p.k });
+                          const each = p.k === 'full' ? money.tierFull : money.tierEach;
+                          analytics.paymentPlanSelected({
+                            program_slug: ctx.program_slug, tier: aTier,
+                            payment_plan: normalisePlan(p.k),
+                            amount_due_now: each + money.addOn,
+                            total_amount: (p.k === 'full' ? money.tierFull : money.tierEach * 2) + money.addOn,
+                            currency: money.currency,
+                          });
+                        }} aria-pressed={s.cPlan === p.k} style={{ font: 'inherit', flex: 1, textAlign: 'left', background: p.bg, border: `1px solid ${p.bd}`, borderRadius: 3, padding: '10px 9px', cursor: 'pointer', transition: 'all 150ms' }}>
                         <span style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--fg-1)' }}>{p.l}</span>
                         <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-2)', marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>{p.amt}</span>
                         <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '.04em', color: p.nfg, marginTop: 5, fontVariantNumeric: 'tabular-nums' }}>{p.note}</span>
@@ -547,10 +607,12 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                             <a
                               href={`mailto:${d.proofEmail}?subject=${encodeURIComponent(`Payment confirmation — ${d.name} — ${d.payRef}`)}&body=${encodeURIComponent(`Full name:\n\nTrack: ${d.name}\nTier: ${d.tierName}\nPlan: ${d.planName}\nAmount paid: ${d.due}\nReference: ${d.payRef}\n\n(Please attach a screenshot or receipt of the transfer.)`)}`}
                               className="pv-h-ink800"
-                              onClick={() => trackEvent(TRACKING_EVENTS.paymentDeclared, {
-                                programme: d.name, tier: d.tierName, plan: d.planName,
-                                add_on: d.addOn.on ? d.addOn.name : null,
-                                region: d.regionName, amount_due: d.due, reference: d.payRef,
+                              onClick={() => analytics.ctaClicked({
+                                cta_name: 'Email payment confirmation',
+                                cta_location: 'program_pricing',
+                                destination: 'mailto',
+                                program_slug: ctx.program_slug,
+                                tier: aTier,
                               })}
                               style={{ display: 'grid', placeItems: 'center', font: 'inherit', fontSize: 15, fontWeight: 500, height: 50, width: '100%', marginTop: 16, background: 'var(--ink-900)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', textDecoration: 'none' }}
                             >
@@ -592,12 +654,24 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--seal-500)' }} />
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.08em', color: 'var(--fg-3)' }}>{d.askLabel}</span>
             </div>
-            <button onClick={enrol} className="pv-h-seal" style={{ font: 'inherit', fontSize: 14, fontWeight: 500, background: 'none', border: 0, padding: '20px 0 0', cursor: 'pointer', color: 'var(--seal-600)' }}><span style={{ borderBottom: '1px solid var(--seal-300)' }}>Still unsure? Talk to us first →</span></button>
+            <button onClick={enrol('program_faq')} className="pv-h-seal" style={{ font: 'inherit', fontSize: 14, fontWeight: 500, background: 'none', border: 0, padding: '20px 0 0', cursor: 'pointer', color: 'var(--seal-600)' }}><span style={{ borderBottom: '1px solid var(--seal-300)' }}>Still unsure? Talk to us first →</span></button>
           </div>
           <div data-rv="" data-d="80" style={{ borderTop: '2px solid var(--ink-900)' }}>
             {d.ask.map(f => (
               <div key={f.q} style={{ borderBottom: '1px solid var(--border-soft)', background: f.bg, transition: 'background 200ms' }}>
-                <button onClick={() => set({ askOpen: f.open ? -1 : f.i })} aria-expanded={f.open} className="pv-h-paper" style={{ font: 'inherit', width: '100%', textAlign: 'left', background: 'none', border: 0, padding: '18px 16px', cursor: 'pointer', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 26px', gap: 14, alignItems: 'baseline' }}>
+                <button
+                  onClick={() => {
+                    const opening = !f.open;
+                    set({ askOpen: opening ? f.i : -1 });
+                    if (opening) {
+                      analytics.faqExpanded({
+                        faq_id: `${ctx.program_slug}-${f.i + 1}`,
+                        faq_question: f.q,
+                        program_slug: ctx.program_slug,
+                      });
+                    }
+                  }}
+                  aria-expanded={f.open} className="pv-h-paper" style={{ font: 'inherit', width: '100%', textAlign: 'left', background: 'none', border: 0, padding: '18px 16px', cursor: 'pointer', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 26px', gap: 14, alignItems: 'baseline' }}>
                   <span style={{ fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 600, letterSpacing: '-.016em', lineHeight: 1.25 }}>{f.q}</span>
                   <span style={{ fontSize: 18, color: 'var(--fg-3)', justifySelf: 'end', lineHeight: 1 }}>{f.mark}</span>
                 </button>
@@ -645,7 +719,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <button onClick={enrol} className="pv-h-seal600-lift pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Enrol · from {d.from}</button>
+            <button onClick={enrol('program_bottom')} className="pv-h-seal600-lift pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Enrol · from {d.from}</button>
             <button onClick={goHome} className="pv-h-lift2 pv-cta" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'none', color: 'var(--bone)', border: '1px solid rgba(244,239,230,.3)', borderRadius: 4, cursor: 'pointer', transition: 'transform 150ms' }}>Compare all six</button>
           </div>
         </div>

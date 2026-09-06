@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { ABOUT, FOUNDER_IMG, FOUNDER_LI, FOUNDER_NAME, FOUNDER_TITLE } from '@/lib/proto/data';
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
 import { Photo } from '@/components/proto/Photo';
+import { analytics } from '@/lib/analytics';
 
 export function AboutContent() {
   useProtoRoute('about');
@@ -15,8 +16,15 @@ export function AboutContent() {
   const router = useRouter();
 
   const pt = s.proofT;
-  const goHome = () => router.push('/');
-  const goPricing = () => { router.push('/'); window.setTimeout(() => scrollToId('v3-pick'), 90); };
+  const goHome = () => {
+    analytics.ctaClicked({ cta_name: 'Compare programmes', cta_location: 'about_bottom', destination: '/' });
+    router.push('/');
+  };
+  const goPricing = () => {
+    analytics.ctaClicked({ cta_name: 'See programmes & pricing', cta_location: 'about_bottom', destination: '/#v3-pick' });
+    router.push('/');
+    window.setTimeout(() => scrollToId('v3-pick'), 90);
+  };
 
   const stats = ABOUT.stats.map(x => ({
     n: (x.raw ? String(x.n) : Math.round(x.n * pt).toLocaleString('en-US')) + x.s,
