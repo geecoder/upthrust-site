@@ -866,6 +866,19 @@ input:focus-visible,
 @media (max-width: 600px) {
   .pv-wrap { padding-left: 16px !important; padding-right: 16px !important; }
 
+  /* The taster dialog becomes a full-height sheet. A centred card in a 24px
+     gutter wastes a phone screen on a form this tall. */
+  .pv-modal-scrim { padding: 0 !important; align-items: stretch !important; }
+  .pv-modal-panel {
+    max-width: none !important;
+    max-height: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  .pv-modal-panel > div:first-child { border-radius: 0 !important; }
+
   /* The full brand lockup is wider than the mark the prototype drew, so the
      header needs the room back or the menu button falls off a 320px screen. */
   .pv-navbar { gap: 12px !important; }

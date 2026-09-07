@@ -258,9 +258,16 @@ The registration itself is captured by Tally, not by this application, so the
 event carries no name, email, phone, country, or the programme the visitor
 chose inside the form — none of that is visible to the parent page.
 
-**Source** — client · `components/proto/TasterForm.tsx`, which embeds Tally
-form `Zj7Y5V` ("Program Registration") on the landing page, the assessment
-page (intro and result) and each programme's pricing panel.
+**Also fires** — `CTA Clicked` with `cta_name: "Attend the free taster
+session"` when the button is pressed, before the dialog opens. That gives the
+three-step funnel: button pressed → form engaged → registration confirmed.
+
+**Source** — client · `components/proto/TasterButton.tsx` opens the shared
+dialog in `components/proto/TasterModal.tsx`, which embeds Tally form
+`Zj7Y5V` ("Program Registration"). The button appears on the landing page, the
+assessment page (intro and result) and each programme's pricing panel; the
+dialog is provided once in `app/layout.tsx`, so there is one instance and the
+iframe only exists while it is open.
 
 > **Why the form is embedded rather than posted to.** Tally keys its fields by
 > UUID with no custom names, so a hand-rolled POST would have to guess at

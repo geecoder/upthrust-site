@@ -9,7 +9,7 @@ import { DIMS, P, PROG_HREF, Q, type ProgKey } from '@/lib/proto/data';
 import { useProto, useProtoRoute } from '@/lib/proto/store';
 import { validateLeadEmail, validateLeadName } from '@/lib/validation/lead';
 import { analytics, slugForKey } from '@/lib/analytics';
-import { TasterForm } from '@/components/proto/TasterForm';
+import { TasterButton } from '@/components/proto/TasterButton';
 import { DATES } from '@/lib/cohort-config';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -198,7 +198,9 @@ export function AssessContent() {
                 Free, live, on {DATES.tasterDayMonth} — a week before the cohort starts. No assessment required.
               </p>
             </div>
-            <TasterForm variant="full" location="assessment" />
+            <div style={{ background: 'var(--paper)', border: '1px solid var(--ink-900)', borderRadius: 6, padding: '26px 24px', boxShadow: 'var(--shadow-2)' }}>
+              <TasterButton source="assessment" ctaLocation="assessment_intro" />
+            </div>
           </div>
         </section>
       )}
@@ -301,7 +303,9 @@ export function AssessContent() {
                     The free taster is on {DATES.tasterDayMonth}. Your pathway is already selected — change it if you would rather see another.
                   </p>
                 </div>
-                <TasterForm variant="panel" location="assessment" programSlug={slugForKey(rTop)} />
+                <div style={{ background: 'var(--paper)', border: '1px solid var(--ink-900)', borderRadius: 6, padding: '22px 20px' }}>
+                  <TasterButton source="assessment" ctaLocation="assessment_result" programSlug={slugForKey(rTop)} tone="dark" />
+                </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '32px 0 0', flexWrap: 'wrap' }}>

@@ -19,7 +19,7 @@ import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
 import { COHORT, DATES } from '@/lib/cohort-config';
 import { analytics, programContext } from '@/lib/analytics';
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder';
-import { TasterForm } from '@/components/proto/TasterForm';
+import { TasterButton } from '@/components/proto/TasterButton';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -330,8 +330,20 @@ export function HomeContent() {
               ))}
             </div>
           </div>
-          <div data-rv="" data-d="80">
-            <TasterForm variant="full" location="landing" />
+          <div data-rv="" data-d="80" style={{ background: 'var(--paper)', border: '1px solid var(--ink-900)', borderRadius: 6, padding: '28px 26px', boxShadow: 'var(--shadow-2)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.12em', color: 'var(--fg-3)' }}>WHAT THE EVENING COVERS</div>
+            <div style={{ margin: '14px 0 22px', borderTop: '2px solid var(--ink-900)' }}>
+              {[
+                'One real teaching block, not a sales webinar',
+                'The week-by-week artefact you would actually build',
+                'Live Q&A with the people who run the cohort',
+              ].map((x) => (
+                <div key={x} style={{ display: 'flex', gap: 10, alignItems: 'baseline', padding: '11px 0', borderBottom: '1px solid var(--border-soft)', fontSize: 15, lineHeight: 1.5 }}>
+                  <span aria-hidden="true" style={{ color: 'var(--seal-500)' }}>→</span><span>{x}</span>
+                </div>
+              ))}
+            </div>
+            <TasterButton source="landing" ctaLocation="homepage_programmes" />
           </div>
         </div>
       </section>

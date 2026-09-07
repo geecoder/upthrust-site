@@ -8,6 +8,7 @@ import { SITE } from '@/lib/config';
 import { getRegionFromRequest } from '@/lib/geoServer';
 import { OrganizationJsonLd } from '@/components/seo/OrganizationJsonLd';
 import { ProtoProvider } from '@/lib/proto/store';
+import { TasterProvider } from '@/components/proto/TasterModal';
 import { REGION_TO_CUR } from '@/lib/proto/region-map';
 
 // Self-hosted via next/font — no runtime Google Fonts CDN request. Each
@@ -97,13 +98,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <OrganizationJsonLd />
         <AnalyticsProvider />
         <ProtoProvider initialCur={REGION_TO_CUR[region]}>
-          <div style={{ background: 'var(--bone)', minHeight: '100vh', fontFamily: 'var(--font-ui)', color: 'var(--fg-1)' }}>
-            <ProtoNav />
-            <main id="main-content">
-              {children}
-            </main>
-            <ProtoFooter />
-          </div>
+          {/* One taster dialog for the whole site — every button opens this. */}
+          <TasterProvider>
+            <div style={{ background: 'var(--bone)', minHeight: '100vh', fontFamily: 'var(--font-ui)', color: 'var(--fg-1)' }}>
+              <ProtoNav />
+              <main id="main-content">
+                {children}
+              </main>
+              <ProtoFooter />
+            </div>
+          </TasterProvider>
         </ProtoProvider>
       </body>
     </html>

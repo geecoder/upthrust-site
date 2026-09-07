@@ -27,7 +27,7 @@ import { DATES } from '@/lib/cohort-config';
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
 import { AnonAvatar, Photo } from '@/components/proto/Photo';
 import { ToolIcon } from '@/components/proto/ToolIcon';
-import { TasterForm } from '@/components/proto/TasterForm';
+import { TasterButton } from '@/components/proto/TasterButton';
 
 const WRAP = 'pv-wrap';
 
@@ -543,7 +543,13 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                 The taster runs on {DATES.tasterDayMonth}, a week before {d.name} starts. It costs nothing and commits you to nothing.
               </p>
             </div>
-            <TasterForm variant="panel" location="program_pricing" programSlug={ctx.program_slug} />
+            <div style={{ background: 'var(--paper)', border: '1px solid var(--ink-900)', borderRadius: 6, padding: '22px 20px' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.12em', color: 'var(--fg-3)' }}>FREE · {DATES.tasterDayMonth.toUpperCase()}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 600, letterSpacing: '-.022em', lineHeight: 1.18, margin: '10px 0 16px' }}>
+                See it run before you pay for it.
+              </div>
+              <TasterButton source="program_pricing" ctaLocation="program_pricing" programSlug={ctx.program_slug} tone="dark" />
+            </div>
           </div>
 
           {/* One transfer panel, shared by pathways and intensives. */}
