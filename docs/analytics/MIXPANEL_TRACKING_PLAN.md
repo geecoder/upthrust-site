@@ -245,22 +245,31 @@ Two events so completed registrations can be measured against form starts.
 (typing or changing the pathway). Once per form instance, never on page load.
 `source_page`: `landing` \| `assessment` \| `program_pricing`.
 
-**`Taster Session Registered`** — **only after the server accepts and stores
-the registration.** Never on submit, and not emitted when the server reports
-that no storage sink is configured.
+**`Taster Session Registered`** — on Tally's own `postMessage` confirming a
+completed submission, from a `tally.so` origin. **Never on a click.**
+De-duplicated by a ref, since Tally can post more than one matching message.
 
 | Property | Notes |
 |---|---|
 | `source_page` | which of the three placements |
-| `program_slug` | the pathway selected |
-| `program_name` | |
-| `has_phone` | boolean — **never the number itself** |
+| `program_slug` | the programme page it was embedded on, where there is one |
 
-Name, email and phone are **never** sent.
+The registration itself is captured by Tally, not by this application, so the
+event carries no name, email, phone, country, or the programme the visitor
+chose inside the form — none of that is visible to the parent page.
 
-**Source** — client · `components/proto/TasterForm.tsx`, rendered on the
-landing page, the assessment page (intro and result), and each programme's
-pricing panel.
+**Source** — client · `components/proto/TasterForm.tsx`, which embeds Tally
+form `Zj7Y5V` ("Program Registration") on the landing page, the assessment
+page (intro and result) and each programme's pricing panel.
+
+> **Why the form is embedded rather than posted to.** Tally keys its fields by
+> UUID with no custom names, so a hand-rolled POST would have to guess at
+> `852d427b-…=Adaeze` and would break silently on any change to Tally's
+> payload. The repository already contained that mistake: the old assessment
+> posted `{'First Name': …}` to the form URL with `mode: 'no-cors'`, which
+> cannot read a response — so it could never report that nothing was being
+> recorded. Embedding hands the pipeline to Tally, which is the only version
+> verifiable by construction.
 
 ---
 

@@ -543,7 +543,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
                 The taster runs on {DATES.tasterDayMonth}, a week before {d.name} starts. It costs nothing and commits you to nothing.
               </p>
             </div>
-            <TasterForm variant="panel" location="program_pricing" defaultProgramme={progKey} />
+            <TasterForm variant="panel" location="program_pricing" programSlug={ctx.program_slug} />
           </div>
 
           {/* One transfer panel, shared by pathways and intensives. */}

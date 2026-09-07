@@ -147,10 +147,8 @@ export type ConsultationFormStartedProps = { source_page: string; program_intere
 export type TasterFormStartedProps = { source_page: 'landing' | 'assessment' | 'program_pricing' };
 export type TasterSessionRegisteredProps = {
   source_page: 'landing' | 'assessment' | 'program_pricing';
-  program_slug: ProgramSlug;
-  program_name: string;
-  /** Whether the optional phone number was supplied. Never the number itself. */
-  has_phone: boolean;
+  /** The programme page the form was embedded on, where there is one. */
+  program_slug?: ProgramSlug;
 };
 export type ConsultationSubmittedProps = { source_page: string; program_interest?: string };
 

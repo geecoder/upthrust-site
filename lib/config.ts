@@ -5,6 +5,10 @@ import type { PathwaySlug, IntensiveSlug, ProgrammeSlug } from './cohort-config'
 import { isIntensiveSlug } from './cohort-config';
 
 export const TALLY_FORMS = {
+  // "Program Registration" — the taster-session sign-up. Its fields are
+  // first name, last name, email, program of interest (four pathways only),
+  // country of residence (required) and an optional phone number.
+  taster: 'Zj7Y5V',
   consultation: '5BeeKM',
   waitlist: 'Zj11AA',
   designCohort2: 'rjJJ8X',

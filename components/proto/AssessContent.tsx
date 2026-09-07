@@ -301,7 +301,7 @@ export function AssessContent() {
                     The free taster is on {DATES.tasterDayMonth}. Your pathway is already selected — change it if you would rather see another.
                   </p>
                 </div>
-                <TasterForm variant="panel" location="assessment" defaultProgramme={rTop} />
+                <TasterForm variant="panel" location="assessment" programSlug={slugForKey(rTop)} />
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '32px 0 0', flexWrap: 'wrap' }}>
