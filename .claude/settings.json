@@ -4,7 +4,10 @@
       "Bash(python -)",
       "Bash(python \"C:/Users/genes/AppData/Local/Temp/claude/c--Users-genes-upthrust-site/50aec972-b4db-4a84-8ecb-fa66bd28296f/scratchpad/faq.py\")",
       "WebFetch(domain:tally.so)",
-      "Bash(node __TRACKED_VAR__/resp3.mjs)"
+      "Bash(node __TRACKED_VAR__/resp3.mjs)",
+      "Bash(git fetch *)",
+      "Bash(gh pr *)",
+      "Bash(echo \" main..branch: $\\(git rev-list --left-right --count origin/main...origin/port/prototype-fidelity-real-payment-details\\) \\(behind/ahead\\)\")"
     ]
   }
 }
