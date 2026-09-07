@@ -42,8 +42,8 @@ function buildRecord(
     pathway,
     pathwayLabel: p.label,
     cohortLine: `${p.label} pathway · Cohort ${p.cohort} · 2026`,
-    capabilityLevels: caps.map((area, i) => ({
-      area,
+    capabilityLevels: caps.map((c, i) => ({
+      area: c.area,
       level: i < proficientCount ? 'Proficient' : 'Developing',
     })),
     defenceScore,

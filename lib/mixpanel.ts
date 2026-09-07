@@ -1,12 +1,12 @@
 'use client';
 
 import mixpanel from 'mixpanel-browser';
-import { initAnalytics } from '@/lib/analytics';
+import { initAnalytics } from '@/lib/analytics-legacy';
 
 export type {
   AnalyticsProperties as MixpanelProperties,
   AnalyticsValue as MixpanelValue,
-} from '@/lib/analytics';
+} from '@/lib/analytics-legacy';
 
 export {
   captureUtmAttribution as captureAttribution,
@@ -20,7 +20,7 @@ export {
   trackTestEvent,
   getAnalyticsDiagnostics,
   sendMixpanelHttpFallbackTest,
-} from '@/lib/analytics';
+} from '@/lib/analytics-legacy';
 
 export function identifyUser(userId: string, properties = {}) {
   if (typeof window === 'undefined' || !userId) return;

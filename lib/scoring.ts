@@ -57,9 +57,8 @@ export function calculateResult(answers: Answer[]): AssessmentResult {
     if (!scenario) continue;
     const option = scenario.options.find((o) => o.id === answer.optionId);
     if (!option) continue;
-    for (const [track, points] of Object.entries(option.scores)) {
-      scores[track as Track] += points as number;
-    }
+    // Each option maps to exactly one track, worth one point. No split scoring.
+    scores[option.track] += 1;
   }
 
   const total = TRACKS.reduce((sum, t) => sum + scores[t], 0) || 1;
@@ -89,8 +88,9 @@ export function calculateResult(answers: Answer[]): AssessmentResult {
     resultType = hybridType(primary, secondary);
   }
 
-  // Pick 3 quotable answers from the most predictive scenarios (in priority order)
-  const predictiveScenarios = [12, 10, 11, 3, 8];
+  // Quote the answers to scenarios 1, 6, and 12 (indices 0, 5, 11) back to the
+  // user on the result page, in question order.
+  const predictiveScenarios = [1, 6, 12];
   const quotableAnswers: AssessmentResult['quotableAnswers'] = [];
   for (const sid of predictiveScenarios) {
     if (quotableAnswers.length >= 3) break;

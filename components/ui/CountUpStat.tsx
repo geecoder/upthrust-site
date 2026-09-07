@@ -13,12 +13,26 @@ function parseValue(raw: string) {
   return { prefix, target, suffix, digits };
 }
 
-export function CountUpStat({ value, style }: { value: string; style?: React.CSSProperties }) {
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+export function CountUpStat({
+  value, style, duration = 900, easing = easeOutCubic, animate = false,
+}: {
+  value: string;
+  style?: React.CSSProperties;
+  duration?: number; // ms
+  easing?: (t: number) => number;
+  // Defaults to false: the prototype this site is built from never animates
+  // a number counting up — every stat just fades/rises into place like any
+  // other revealed content. Pass animate explicitly true for the rare case
+  // that calls for it.
+  animate?: boolean;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const [revealed, setRevealed] = useState(false);
   const [display, setDisplay] = useState<string>(() => {
     const parsed = parseValue(value);
-    return parsed ? `${parsed.prefix}0${parsed.suffix}` : value;
+    return animate && parsed ? `${parsed.prefix}0${parsed.suffix}` : value;
   });
 
   useEffect(() => {
@@ -30,15 +44,14 @@ export function CountUpStat({ value, style }: { value: string; style?: React.CSS
 
     const reveal = () => {
       setRevealed(true);
-      if (!parsed || reduceMotion) {
+      if (!animate || !parsed || reduceMotion) {
         setDisplay(value);
         return;
       }
-      const duration = 900;
       const start = performance.now();
       const tick = (now: number) => {
         const progress = Math.min(1, (now - start) / duration);
-        const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+        const eased = easing(progress);
         const current = Math.round(parsed.target * eased);
         setDisplay(`${parsed.prefix}${current.toLocaleString()}${parsed.suffix}`);
         if (progress < 1) requestAnimationFrame(tick);
@@ -58,7 +71,7 @@ export function CountUpStat({ value, style }: { value: string; style?: React.CSS
     observer.observe(el);
     return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [value, animate, duration]);
 
   return (
     <span

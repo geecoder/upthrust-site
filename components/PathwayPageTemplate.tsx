@@ -3,74 +3,134 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getPathway, formatDate, PATHWAY_LIST, COHORT, type PathwaySlug } from '@/lib/cohort-config';
+import { getPathway, formatDate, PATHWAY_LIST, COHORT, type PathwaySlug, type IntensiveSlug } from '@/lib/cohort-config';
 import { PATHWAY_CONTENT } from '@/lib/pathways-content';
-import { getPricing, formatPrice, REGION_LABELS, REGION_PROCESSOR } from '@/lib/config';
+import { INTENSIVE_CONTENT } from '@/lib/intensives-content';
+import { getPricing, getIntensivePricing, formatPrice, type Region } from '@/lib/config';
 import { useRegion } from '@/lib/useRegion';
 import WeekTrack from '@/components/WeekTrack';
-import NoiseToSequence from '@/components/diagrams/NoiseToSequence';
-import AsIsToBe from '@/components/diagrams/AsIsToBe';
-import ObservedFriction from '@/components/diagrams/ObservedFriction';
-import ThreeSourcesOneNumber from '@/components/diagrams/ThreeSourcesOneNumber';
+import { ArtefactStack } from '@/components/ArtefactStack';
+import { FacilitatorSlot } from '@/components/FacilitatorSlot';
+import { PricingSectionHeader } from '@/components/pricing/PricingSectionHeader';
+import { ComparisonTable, type ComparisonRow } from '@/components/pricing/ComparisonTable';
+import { PaymentPanel } from '@/components/pricing/PaymentPanel';
+import { Reveal } from '@/components/Reveal';
 
-const DIAGRAMS: Record<PathwaySlug, React.ComponentType> = {
-  'product-management': NoiseToSequence,
-  'business-analysis': AsIsToBe,
-  'product-design': ObservedFriction,
-  'payment-operations': ThreeSourcesOneNumber,
+// Which intensive is offered as the pricing section's cross-sell add-on, per
+// pathway — AI Product Builder on the Product Management page (thematic
+// fit), BA for AI & Automation everywhere else.
+const PATHWAY_ADDON_INTENSIVE: Record<PathwaySlug, IntensiveSlug> = {
+  'product-management': 'ai-product-builder',
+  'business-analysis': 'ba-for-ai-automation',
+  'product-design': 'ba-for-ai-automation',
+  'payment-operations': 'ba-for-ai-automation',
 };
 
-function PricingBlock({ slug }: { slug: PathwaySlug }) {
-  const [region] = useRegion('OTHER');
+// The hero stack shows the five artefacts up to and including the selected
+// curriculum week. Week 5 on first paint, so the deck arrives full rather
+// than as a single lonely card — from there it follows the week track.
+const INITIAL_HERO_WEEK = 4;
+
+function PricingBlock({ slug, initialRegion }: { slug: PathwaySlug; initialRegion: Region }) {
+  const [region] = useRegion(initialRegion);
+  const [tier, setTier] = useState<'standard' | 'premium'>('standard');
+  const [addOn, setAddOn] = useState(false);
   const p = getPricing(slug, region);
+  const addOnSlug = PATHWAY_ADDON_INTENSIVE[slug];
+  const addOnContent = INTENSIVE_CONTENT[addOnSlug];
+  const addOnPricing = getIntensivePricing(addOnSlug, region);
+  const base = tier === 'standard' ? p.standard : p.premium;
+  const dueToday = base + (addOn ? addOnPricing.bundled : 0);
+
+  const comparisonRows: ComparisonRow[] = [
+    { label: 'Live cohort sessions', standard: 'All 12 weeks', premium: 'All 12 weeks' },
+    { label: 'Templates and worked examples', standard: 'Full library', premium: 'Full library' },
+    { label: 'AI-assisted workflow', standard: 'Throughout', premium: 'Throughout' },
+    { label: 'Feedback on your artefacts', standard: 'Group review', premium: 'Individual, written' },
+    { label: 'Feedback turnaround', standard: `${COHORT.feedbackSlaHours}h`, premium: `${COHORT.feedbackSlaHours}h` },
+    { label: '1:1 portfolio review', standard: false, premium: 'One session' },
+    { label: 'Interview story bank', standard: 'You build it', premium: 'Reviewed with you' },
+    { label: 'Mock interview + written debrief', standard: false, premium: 'One session' },
+    { label: 'Demo Day presenting slot', standard: false, premium: true },
+    { label: 'Capstone defence', standard: true, premium: true },
+    { label: 'Rubric-level ratings', standard: false, premium: 'Per capability area' },
+    { label: 'Employer-verifiable link', standard: false, premium: true },
+    { label: 'Credential issued', standard: 'Capability Record', premium: 'Verified Passport' },
+  ];
+
+  // The add-on toggle affects the displayed due-today figure, but there's no
+  // bundle-checkout support in /enrol yet — when it's on, route to a
+  // consultation instead of silently promising a checkout that can't add it.
+  const enrolHref = addOn ? '/consultation' : `/enrol?pathway=${slug}&tier=${tier}`;
+  const ctaLabel = addOn ? 'Talk to us about bundling this in' : `Enrol on ${tier === 'standard' ? 'Standard' : 'Premium'}`;
+
   return (
-    <section style={{ borderBottom: '1px solid var(--border-soft)', background: 'var(--bone-dim)' }}>
+    <Reveal id="pricing" style={{ borderBottom: '1px solid var(--border-soft)', background: 'var(--bone-dim)' }}>
       <div className="container" style={{ padding: '80px 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', gap: 40, flexWrap: 'wrap' }}>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--fg-3)' }}>What it costs</div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3.2vw, 2.5rem)', fontWeight: 600, letterSpacing: '-0.026em', margin: '14px 0 0' }}>
-              Two tiers on {PATHWAY_CONTENT[slug].code}.
-            </h2>
-          </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', color: 'var(--fg-3)', textAlign: 'right' }}>
-            PRICING FOR<br />{REGION_LABELS[region].toUpperCase()}
-          </div>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 1, background: 'var(--border-soft)', border: '1px solid var(--border-soft)', margin: '36px 0 0' }}>
-          <div style={{ background: 'var(--paper)', padding: '30px 28px', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--fg-3)' }}>Choose how far you take it</div>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3.2vw, 2.5rem)', fontWeight: 600, letterSpacing: '-0.026em', margin: '14px 0 20px' }}>
+          Two tiers on {PATHWAY_CONTENT[slug].code}.
+        </h2>
+        <PricingSectionHeader region={region} />
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 1, background: 'var(--border-soft)', border: '1px solid var(--border-soft)' }}>
+          <button
+            onClick={() => setTier('standard')}
+            style={{ textAlign: 'left', background: 'var(--paper)', padding: '30px 28px', display: 'flex', flexDirection: 'column', border: `2px solid ${tier === 'standard' ? 'var(--ink-800)' : 'transparent'}`, cursor: 'pointer' }}
+          >
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.1em', color: 'var(--fg-3)' }}>TIER 01 · STANDARD</div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 600, letterSpacing: '-0.028em', margin: '14px 0 0', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(p.standard, region)}</div>
-            <div style={{ fontSize: 13, color: 'var(--fg-3)' }}>or {formatPrice(p.standardInstallment2, region)} × 2 installments</div>
+            <div style={{ fontSize: 13, color: 'var(--fg-3)' }}>or {formatPrice(p.standardInstallment2, region)} × 2 instalments</div>
             {['Live concept classes + labs', 'All templates and weekly assignments', 'Group feedback + community'].map((f) => (
               <div key={f} style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)', marginTop: f === 'Live concept classes + labs' ? 18 : 0 }}>{f}</div>
             ))}
-            <div style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)', borderBottom: '1px solid var(--border-hair)', color: 'var(--fg-4)' }}>Capability Passport — not included</div>
-            <span style={{ flex: 1, minHeight: 20 }} />
-            <Link href={`/enrol?pathway=${slug}&tier=standard&region=${region}`} className="btn" style={{ background: 'var(--ink-800)', color: 'var(--bone)', height: 46, justifyContent: 'center', marginTop: 20 }}>
-              Enrol on Standard
-            </Link>
-          </div>
-          <div style={{ background: 'var(--paper)', padding: '30px 28px', display: 'flex', flexDirection: 'column', position: 'relative', boxShadow: 'var(--shadow-2)' }}>
-            <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--seal-500)', color: 'var(--bone)', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', padding: '6px 10px' }}>RECOMMENDED</div>
+            <div style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)', borderBottom: '1px solid var(--border-hair)', color: 'var(--fg-4)' }}>Ends with a Capability Record</div>
+          </button>
+          <button
+            onClick={() => setTier('premium')}
+            style={{ textAlign: 'left', background: 'var(--paper)', padding: '30px 28px', display: 'flex', flexDirection: 'column', position: 'relative', boxShadow: 'var(--shadow-2)', border: `2px solid ${tier === 'premium' ? 'var(--seal-500)' : 'transparent'}`, cursor: 'pointer' }}
+          >
+            <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--seal-500)', color: 'var(--bone)', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', padding: '6px 10px' }}>MOST COMPLETE</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.1em', color: 'var(--fg-3)' }}>TIER 02 · PREMIUM</div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 600, letterSpacing: '-0.028em', margin: '14px 0 0', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(p.premium, region)}</div>
-            <div style={{ fontSize: 13, color: 'var(--fg-3)' }}>or {formatPrice(p.premiumInstallment2, region)} × 2 installments</div>
-            <div style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)', marginTop: 18 }}>Everything in Standard</div>
+            <div style={{ fontSize: 13, color: 'var(--fg-3)' }}>or {formatPrice(p.premiumInstallment2, region)} × 2 instalments</div>
+            <div style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)', marginTop: 18 }}>Everything in Standard, plus</div>
             <div style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)' }}>1:1 portfolio review + mock interview</div>
-            <div style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)', color: 'var(--seal-600)', fontWeight: 600 }}>Capability Passport eligibility</div>
+            <div style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)', color: 'var(--seal-600)', fontWeight: 600 }}>Ends with a verified Capability Passport</div>
             <div style={{ fontSize: 14, padding: '9px 0', borderTop: '1px solid var(--border-hair)', borderBottom: '1px solid var(--border-hair)' }}>Demo Day spotlight slot</div>
-            <span style={{ flex: 1, minHeight: 20 }} />
-            <Link href={`/enrol?pathway=${slug}&tier=premium&region=${region}`} className="btn" style={{ background: 'var(--seal-500)', color: 'var(--bone)', height: 46, justifyContent: 'center', marginTop: 20 }}>
-              Enrol on Premium
-            </Link>
+          </button>
+          <div style={{ background: 'var(--ink-800)', color: 'var(--bone)', padding: '30px 28px', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--seal-300)' }}>OPTIONAL · +5 WEEKS</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 600, letterSpacing: '-0.02em', margin: '14px 0 0' }}>{addOnContent.name}</div>
+            <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink-200)', margin: '10px 0 0' }}>{addOnContent.line}</p>
+            <div style={{ marginTop: 18, display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <span style={{ fontSize: 14, color: 'var(--ink-300)', textDecoration: 'line-through' }}>{formatPrice(addOnPricing.standalone, region)}</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{formatPrice(addOnPricing.bundled, region)}</span>
+            </div>
+            <span style={{ flex: 1, minHeight: 12 }} />
+            <button
+              onClick={() => setAddOn((a) => !a)}
+              style={{
+                marginTop: 18, height: 44, border: `1px solid ${addOn ? 'var(--moss-500)' : 'var(--border-on-ink)'}`,
+                background: addOn ? 'var(--moss-500)' : 'transparent', color: 'var(--bone)', fontWeight: 600, cursor: 'pointer', borderRadius: 'var(--radius-1)',
+              }}
+            >
+              {addOn ? '✓ Added to your enrolment' : `Add for ${formatPrice(addOnPricing.bundled, region)}`}
+            </button>
           </div>
         </div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.06em', color: 'var(--fg-3)', marginTop: 16 }}>
-          PROCESSED VIA {REGION_PROCESSOR[region].toUpperCase()} · BANK TRANSFER ON REQUEST
-        </div>
+
+        <ComparisonTable rows={comparisonRows} />
+
+        <PaymentPanel
+          dueToday={formatPrice(dueToday, region)}
+          planLabel={`${tier === 'standard' ? 'Standard' : 'Premium'}${addOn ? ` + ${addOnContent.name}` : ''} · pay in full`}
+          credentialLine={tier === 'premium' ? 'Ends with a verified Capability Passport' : 'Ends with a Capability Record'}
+          ctaHref={enrolHref}
+          ctaLabel={ctaLabel}
+        />
       </div>
-    </section>
+    </Reveal>
   );
 }
 
@@ -78,7 +138,7 @@ function FAQBlock({ slug }: { slug: PathwaySlug }) {
   const [open, setOpen] = useState<number | null>(null);
   const faqs = PATHWAY_CONTENT[slug].faq;
   return (
-    <section style={{ borderBottom: '1px solid var(--border-soft)' }}>
+    <Reveal style={{ borderBottom: '1px solid var(--border-soft)' }}>
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '80px 24px' }}>
         <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--fg-3)' }}>
           Questions about {PATHWAY_CONTENT[slug].name}
@@ -108,22 +168,23 @@ function FAQBlock({ slug }: { slug: PathwaySlug }) {
           <Link href="/consultation" className="btn" style={{ background: 'var(--seal-500)', color: 'var(--bone)', height: 46, padding: '0 22px' }}>Book a consultation</Link>
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }
 
-export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
-  const [region] = useRegion('OTHER');
+export function PathwayPageTemplate({ slug, initialRegion = 'OTHER' }: { slug: PathwaySlug; initialRegion?: Region }) {
+  const [region] = useRegion(initialRegion);
   const pathway = getPathway(slug);
   const content = PATHWAY_CONTENT[slug];
-  const Diagram = DIAGRAMS[slug];
   const otherPathways = PATHWAY_LIST.filter((p) => p.slug !== slug);
   const price = getPricing(slug, region);
+  const [heroWeek, setHeroWeek] = useState(INITIAL_HERO_WEEK);
+  const artefactStackItems = content.weekArt.map((label) => ({ label }));
 
   return (
     <>
       {/* 1. HERO */}
-      <section className="ledger-grid" style={{ borderBottom: '1px solid var(--border-soft)' }}>
+      <Reveal className="ledger-grid" style={{ borderBottom: '1px solid var(--border-soft)' }}>
         <div className="container" style={{ padding: '72px 24px 0' }}>
           <div className="stack-mobile" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 56, alignItems: 'center' }}>
             <div>
@@ -142,16 +203,11 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
               </div>
             </div>
             <div>
-              <div style={{ background: 'var(--paper)', border: '1px solid var(--border-strong)', padding: '22px 24px 18px' }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16, borderBottom: '1px solid var(--border-soft)', paddingBottom: 12 }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--fg-3)' }}>{content.diagram.label.toUpperCase()}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--seal-600)' }}>{content.code} · FIG 01</span>
-                </div>
-                <div style={{ paddingTop: 16 }}>
-                  <Diagram />
-                </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16, marginBottom: 10 }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--fg-3)' }}>A PREVIEW OF THE WORK</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--seal-600)' }}>{content.code} · {heroWeek + 1} OF 12</span>
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--fg-3)', marginTop: 10 }}>{content.diagram.caption.toUpperCase()}</div>
+              <ArtefactStack items={artefactStackItems} weekIndex={heroWeek} />
             </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', borderTop: '1px solid var(--ink-800)', margin: '56px 0 0' }}>
@@ -169,10 +225,10 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             ))}
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* 2. IS THIS YOU + NOT FOR YOU */}
-      <section style={{ borderBottom: '1px solid var(--border-soft)' }}>
+      <Reveal style={{ borderBottom: '1px solid var(--border-soft)' }}>
         <div className="container" style={{ padding: '80px 24px' }}>
           <div className="stack-mobile" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 56, alignItems: 'end' }}>
             <div>
@@ -199,10 +255,10 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             <span style={{ fontSize: 15, lineHeight: 1.6, color: 'var(--fg-1)' }}>{content.notFor}</span>
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* 3. BY WEEK 12 YOU CAN */}
-      <section style={{ background: 'var(--ink-800)', color: 'var(--bone)', borderBottom: '1px solid var(--border-soft)' }}>
+      <Reveal className="ledger-grid-dark" style={{ background: 'var(--ink-800)', color: 'var(--bone)', borderBottom: '1px solid var(--border-soft)' }}>
         <div className="container" style={{ padding: '72px 24px' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.14em', color: 'var(--seal-300)' }}>BY WEEK 12 YOU CAN</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 28, margin: '28px 0 0' }}>
@@ -214,10 +270,10 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             ))}
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* 4. THE TWELVE-WEEK TRACK */}
-      <section style={{ borderBottom: '1px solid var(--border-soft)', background: 'var(--bone-dim)' }}>
+      <Reveal style={{ borderBottom: '1px solid var(--border-soft)', background: 'var(--bone-dim)' }}>
         <div className="container" style={{ padding: '80px 24px' }}>
           <div className="stack-mobile" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 56, alignItems: 'end' }}>
             <div>
@@ -231,13 +287,13 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             </p>
           </div>
           <div style={{ margin: '44px 0 0' }}>
-            <WeekTrack pathwayLabel={content.name} weekArtefacts={content.weekArt} feedbackSlaHours={COHORT.feedbackSlaHours} resetKey={slug} />
+            <WeekTrack pathwayLabel={content.name} weekArtefacts={content.weekArt} feedbackSlaHours={COHORT.feedbackSlaHours} resetKey={slug} onWeekChange={setHeroWeek} />
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* 5. SAMPLE OF THE WORK + HOW YOU ARE ASSESSED */}
-      <section style={{ borderBottom: '1px solid var(--border-soft)' }}>
+      <Reveal style={{ borderBottom: '1px solid var(--border-soft)' }}>
         <div className="container stack-mobile" style={{ padding: '80px 24px', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 56, alignItems: 'start' }}>
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--fg-3)' }}>A sample of the work</div>
@@ -289,9 +345,12 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             </div>
             <div style={{ margin: '24px 0 0', borderTop: '1px solid var(--ink-800)' }}>
               {content.caps.map((c) => (
-                <div key={c} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', padding: '13px 0', borderBottom: '1px solid var(--border-hair)', fontSize: 15 }}>
-                  <span>{c}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--fg-3)', whiteSpace: 'nowrap' }}>RUBRIC-SCORED</span>
+                <div key={c.area} style={{ padding: '13px 0', borderBottom: '1px solid var(--border-hair)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', fontSize: 15 }}>
+                    <span>{c.area}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--fg-3)', whiteSpace: 'nowrap' }}>RUBRIC-SCORED</span>
+                  </div>
+                  <div style={{ fontSize: 13, lineHeight: 1.5, color: 'var(--fg-3)', marginTop: 4 }}>{c.desc}</div>
                 </div>
               ))}
             </div>
@@ -301,10 +360,10 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             </div>
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* 6. WHERE IT LEADS */}
-      <section style={{ borderBottom: '1px solid var(--border-soft)' }}>
+      <Reveal style={{ borderBottom: '1px solid var(--border-soft)' }}>
         <div className="container" style={{ padding: '80px 24px' }}>
           <div className="stack-mobile" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 56, alignItems: 'end' }}>
             <div>
@@ -316,9 +375,12 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             <p style={{ fontSize: 16, lineHeight: 1.6, color: 'var(--fg-2)', margin: 0 }}>{content.ladderNote}</p>
           </div>
           <div style={{ marginTop: 40 }}>
-            {content.ladder.map((l) => (
+            {content.ladder.map((l, i) => (
               <div key={l.role} className="stack-mobile-sm" style={{ display: 'grid', gridTemplateColumns: 'minmax(140px, 280px) minmax(0,1fr)', gap: 24, alignItems: 'center', padding: '16px 0', borderTop: '1px solid var(--border-soft)' }}>
-                <span style={{ fontSize: 17, fontWeight: 600 }}>{l.role}</span>
+                <span>
+                  <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--seal-600)' }}>{['NEXT ROLE', 'THEN', 'IN TIME'][i]}</span>
+                  <span style={{ fontSize: 17, fontWeight: 600 }}>{l.role}</span>
+                </span>
                 <span style={{ height: 14, background: 'var(--paper-dim)', display: 'block' }}>
                   <span style={{ display: 'block', height: 14, width: l.width, background: 'var(--ink-800)' }} />
                 </span>
@@ -334,10 +396,10 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             <span>Upthrust does not guarantee employment. We build capability, evidence, and readiness.</span>
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* 7. WHO TEACHES THIS */}
-      <section style={{ borderBottom: '1px solid var(--border-soft)' }}>
+      <Reveal style={{ borderBottom: '1px solid var(--border-soft)' }}>
         <div className="container stack-mobile" style={{ padding: '80px 24px', display: 'grid', gridTemplateColumns: 'minmax(0, 340px) minmax(0, 1fr)', gap: 56, alignItems: 'start' }}>
           <div>
             <div style={{ position: 'relative', width: '100%', maxWidth: 340, aspectRatio: '340/420', border: '1px solid var(--border-soft)' }}>
@@ -348,14 +410,14 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--fg-3)' }}>Who teaches this</div>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3.2vw, 2.5rem)', fontWeight: 600, letterSpacing: '-0.026em', lineHeight: 1.12, margin: '14px 0 0' }}>
-              You are in the room with someone who does this work.
+              Three slots, twelve weeks, one accountable panel.
             </h2>
             <p style={{ fontSize: 16, lineHeight: 1.65, color: 'var(--fg-2)', margin: '16px 0 0', maxWidth: '38em' }}>
-              Genesis is a Product Lead and CBAP-certified Business Analyst with over a decade across product, business analysis, and payments — currently building diaspora financial products at Rova. Every case in the curriculum is one he has worked, not one he read about.
+              Genesis is a Product Lead and CBAP-certified Business Analyst with over a decade across product, business analysis, and payments — currently building diaspora financial products at Rova. Every facilitator slot is named, or shown honestly as TBC — never filled with a placeholder.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '22px 0 0' }}>
-              {['CBAP CERTIFIED', 'MBA · UEL', '1,000+ TRAINED', 'IIBA NIGERIA'].map((chip) => (
-                <span key={chip} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.06em', border: '1px solid var(--border-strong)', padding: '6px 10px' }}>{chip}</span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 1, background: 'var(--border-soft)', border: '1px solid var(--border-soft)', margin: '28px 0 0' }}>
+              {content.facilitators.map((f, i) => (
+                <FacilitatorSlot key={i} slot={f} />
               ))}
             </div>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: 20, lineHeight: 1.45, fontStyle: 'italic', margin: '26px 0 0', paddingLeft: 20, borderLeft: '2px solid var(--seal-500)' }}>
@@ -377,16 +439,16 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             </div>
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* 8. PRICING */}
-      <PricingBlock slug={slug} />
+      <PricingBlock slug={slug} initialRegion={initialRegion} />
 
       {/* 9. FAQ */}
       <FAQBlock slug={slug} />
 
       {/* 10. CLOSING CTA */}
-      <section style={{ background: 'var(--ink-800)', color: 'var(--bone)' }}>
+      <Reveal className="ledger-grid-dark" style={{ background: 'var(--ink-800)', color: 'var(--bone)' }}>
         <div className="container" style={{ padding: '80px 24px' }}>
           <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--ink-200)' }}>Compare pathways</div>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3.4vw, 2.75rem)', fontWeight: 600, letterSpacing: '-0.028em', lineHeight: 1.1, margin: '18px 0 32px', color: 'var(--bone)' }}>
@@ -403,7 +465,7 @@ export function PathwayPageTemplate({ slug }: { slug: PathwaySlug }) {
             </Link>
           </div>
         </div>
-      </section>
+      </Reveal>
     </>
   );
 }

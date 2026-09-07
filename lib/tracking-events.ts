@@ -1,6 +1,20 @@
-import { trackEvent, type AnalyticsProperties } from '@/lib/analytics';
+import { trackEvent, type AnalyticsProperties } from '@/lib/analytics-legacy';
 
 export const TRACKING_EVENTS = {
+  // Enrolment funnel on the pathway pages. These four are the ones that answer
+  // "who is trying to pay, for what, and did they finish":
+  //   Enrol CTA Clicked  -> reached the pricing section
+  //   Tier Selected / Plan Selected / Add-On Toggled -> shaped the purchase
+  //   Bank Details Requested -> asked for the account (strongest intent)
+  //   Payment Declared -> opened the confirmation email having transferred
+  enrolCtaClicked: 'Enrol CTA Clicked',
+  pricingSectionViewed: 'Pricing Section Viewed',
+  tierSelected: 'Tier Selected',
+  planSelected: 'Plan Selected',
+  addOnToggled: 'Add-On Toggled',
+  bankDetailsRequested: 'Bank Details Requested',
+  bankDetailCopied: 'Bank Detail Copied',
+  paymentDeclared: 'Payment Declared',
   pageViewed: 'Page Viewed',
   navigationLinkClicked: 'Navigation Link Clicked',
   ctaClicked: 'CTA Clicked',

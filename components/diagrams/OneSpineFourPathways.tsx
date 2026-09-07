@@ -145,7 +145,7 @@ export default function OneSpineFourPathways() {
           marginTop: 10,
         }}
       >
-        FIG 01 · ONE TWELVE-WEEK SPINE, FOUR PATHWAY OUTPUTS — ALL START 20 SEPTEMBER 2026
+        FIG 01 · ONE TWELVE-WEEK SPINE, FOUR PATHWAY OUTPUTS — ALL START 26 SEPTEMBER 2026
       </figcaption>
     </figure>
   );

@@ -1,48 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import type { Region } from './config';
+import { useRegionContext } from './RegionContext';
 
-// Reads the region the server detected (passed via data-region on <body>).
-// Only Nigeria gets NGN, only the UK gets GBP, only Canada gets CAD —
-// everyone else (rest of Africa, the US, rest of world) gets USD ('OTHER').
-export function useRegion(initial: Region = 'OTHER'): [Region, (r: Region) => void] {
-  const [region, setRegionState] = useState<Region>(initial);
-
-  useEffect(() => {
-    // 1. Check if user has manually overridden via localStorage
-    try {
-      const stored = localStorage.getItem('upthrust_region') as Region | null;
-      if (stored && ['NG', 'GB', 'CA', 'US', 'OTHER'].includes(stored)) {
-        setRegionState(stored);
-        return;
-      }
-    } catch { /* localStorage unavailable */ }
-
-    // 2. Read the region the server geo-detected (set on <body data-region="...">)
-    const bodyRegion = document.body.getAttribute('data-region') as Region | null;
-    if (bodyRegion && ['NG', 'GB', 'CA', 'US', 'OTHER'].includes(bodyRegion)) {
-      setRegionState(bodyRegion);
-      return;
-    }
-
-    // 3. Fallback: timezone detection. Only Lagos maps to NG — every other
-    // African timezone falls through to the final USD default below.
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      if (tz === 'Africa/Lagos') { setRegionState('NG'); return; }
-      if (tz.includes('London') || tz.includes('Dublin')) { setRegionState('GB'); return; }
-      if (tz.includes('Toronto') || tz.includes('Vancouver') || tz.includes('Montreal')) { setRegionState('CA'); return; }
-      if (tz.startsWith('America/') && !tz.includes('Canada')) { setRegionState('US'); return; }
-    } catch { /* Intl unavailable */ }
-
-    setRegionState('OTHER'); // final default — USD
-  }, []);
-
-  const setRegion = (r: Region) => {
-    setRegionState(r);
-    try { localStorage.setItem('upthrust_region', r); } catch { /* ignore */ }
-  };
-
-  return [region, setRegion];
+// Reads the region resolved on the server (edge geo header, or a manual
+// override cookie) and shared through RegionProvider in app/layout.tsx.
+//
+// `initialRegion` is the server-rendered value the calling component was
+// given. It's used only as the fallback for the defensive case of no provider
+// in the tree; every real page has one, so the two agree. There is no
+// client-side detection here on purpose — a browser timezone is not a billing
+// location, and detecting after hydration would flash the wrong price.
+export function useRegion(initialRegion: Region = 'OTHER'): [Region, (r: Region) => void] {
+  const ctx = useRegionContext();
+  if (ctx) return [ctx.region, ctx.setRegion];
+  return [initialRegion, () => {}];
 }

@@ -3,7 +3,7 @@
 // reviewed before real sign-in and per-learner data are wired up.
 
 import { PATHWAY_CONTENT } from './pathways-content';
-import { COHORT } from './cohort-config';
+import { COHORT, PATHWAYS } from './cohort-config';
 
 export const CURRENT_WEEK = 6; // 1-12, drives the rail + artefact table below
 
@@ -18,8 +18,8 @@ export const LEARNER = {
 const learnerCaps = PATHWAY_CONTENT[LEARNER.pathwaySlug].caps;
 const learnerWeekArt = PATHWAY_CONTENT[LEARNER.pathwaySlug].weekArt;
 
-export const CAPABILITY_READINESS = learnerCaps.map((area, i) => ({
-  area,
+export const CAPABILITY_READINESS = learnerCaps.map((c, i) => ({
+  area: c.area,
   readiness: [78, 64, 52, 40, 25, 10][i] ?? 20,
 }));
 
@@ -49,8 +49,10 @@ export const THIS_WEEK = {
   deadline: `Week ${CURRENT_WEEK} assignment due Sunday 23:59 WAT`,
 };
 
+const learnerPathway = PATHWAYS[LEARNER.pathwaySlug];
+
 export const COHORT_METRICS = [
-  { label: 'Active learners', value: `${COHORT.seatsMax - COHORT.seatsRemaining}`, sub: `of ${COHORT.seatsMax} seats` },
+  { label: 'Active learners', value: `${learnerPathway.seatsMax - learnerPathway.seatsRemaining}`, sub: `of ${learnerPathway.seatsMax} seats` },
   { label: 'Artefacts submitted this week', value: '19', sub: 'across 4 pathways' },
   { label: 'Avg. defence readiness', value: '61%', sub: 'week 6 of 12' },
   { label: 'Feedback SLA compliance', value: '94%', sub: `within ${COHORT.feedbackSlaHours}h` },

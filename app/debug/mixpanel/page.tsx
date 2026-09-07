@@ -8,7 +8,7 @@ import {
   trackDebugEvent,
   type AnalyticsDiagnostics,
   type MixpanelHttpFallbackResult,
-} from '@/lib/analytics';
+} from '@/lib/analytics-legacy';
 
 export default function MixpanelDebugPage() {
   const [diagnostics, setDiagnostics] = useState<AnalyticsDiagnostics | null>(null);
@@ -84,9 +84,14 @@ export default function MixpanelDebugPage() {
               {diagnostics?.token_prefix || 'not set'}
             </dd>
 
-            <dt style={{ color: 'var(--ink-muted)' }}>Residency</dt>
+            <dt style={{ color: 'var(--ink-muted)' }}>Environment</dt>
             <dd style={{ margin: 0, color: 'var(--ink)', fontWeight: 700 }}>
-              {diagnostics?.residency || 'US'}
+              {diagnostics?.environment || 'development'}
+            </dd>
+
+            <dt style={{ color: 'var(--ink-muted)' }}>Consent</dt>
+            <dd style={{ margin: 0, color: 'var(--ink)', fontWeight: 700 }}>
+              {String(Boolean(diagnostics?.consent))}
             </dd>
 
             <dt style={{ color: 'var(--ink-muted)' }}>API host</dt>
@@ -96,12 +101,12 @@ export default function MixpanelDebugPage() {
 
             <dt style={{ color: 'var(--ink-muted)' }}>Initialised</dt>
             <dd style={{ margin: 0, color: 'var(--ink)', fontWeight: 700 }}>
-              {String(Boolean(diagnostics?.has_initialised))}
+              {String(Boolean(diagnostics?.initialised))}
             </dd>
 
             <dt style={{ color: 'var(--ink-muted)' }}>Current URL</dt>
             <dd style={{ margin: 0, color: 'var(--ink)', fontWeight: 700, wordBreak: 'break-word' }}>
-              {diagnostics?.current_url || ''}
+              {typeof window === 'undefined' ? '' : window.location.href}
             </dd>
           </dl>
         </div>
