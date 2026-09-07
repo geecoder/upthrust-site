@@ -7,7 +7,11 @@
       "Bash(node __TRACKED_VAR__/resp3.mjs)",
       "Bash(git fetch *)",
       "Bash(gh pr *)",
-      "Bash(echo \" main..branch: $\\(git rev-list --left-right --count origin/main...origin/port/prototype-fidelity-real-payment-details\\) \\(behind/ahead\\)\")"
+      "Bash(echo \" main..branch: $\\(git rev-list --left-right --count origin/main...origin/port/prototype-fidelity-real-payment-details\\) \\(behind/ahead\\)\")",
+      "Bash(node __TRACKED_VAR__/tok.mjs)",
+      "Bash(git add *)",
+      "Bash(git restore *)",
+      "Bash(git push *)"
     ]
   }
 }
