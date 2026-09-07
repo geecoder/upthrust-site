@@ -3,7 +3,7 @@
 // never be hardcoded in templates — nav badges, hero strips, facts strips, the
 // enrolment summary/confirmation, and /verify all read from here.
 //
-// All four 12-week pathways start 20 Sep 2026. PM and BA are running their
+// All four 12-week pathways start 26 Sep 2026. PM and BA are running their
 // Cohort 2; Product Design and Payment Operations open their Cohort 1. The
 // cohort number is a per-pathway property, not a global constant — do not
 // assume every pathway is on the same cohort number.
@@ -45,7 +45,7 @@ export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
     cohort: 2,
     trackCode: 'PM',
     passportPrefix: 'UP-C2',
-    start: '2026-09-20',
+    start: '2026-09-26',
     status: 'Cohort 2 · Open',
     seatsMax: 25,
     seatsRemaining: 14,
@@ -57,7 +57,7 @@ export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
     cohort: 2,
     trackCode: 'BA',
     passportPrefix: 'UP-C2',
-    start: '2026-09-20',
+    start: '2026-09-26',
     status: 'Cohort 2 · Open',
     seatsMax: 25,
     seatsRemaining: 16,
@@ -69,7 +69,7 @@ export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
     cohort: 1,
     trackCode: 'PD',
     passportPrefix: 'UP-C1',
-    start: '2026-09-20',
+    start: '2026-09-26',
     status: 'Cohort 1 · Open',
     seatsMax: 22,
     seatsRemaining: 20,
@@ -81,7 +81,7 @@ export const PATHWAYS: Record<PathwaySlug, PathwayCohort> = {
     cohort: 1,
     trackCode: 'PO',
     passportPrefix: 'UP-C1',
-    start: '2026-09-20',
+    start: '2026-09-26',
     status: 'Cohort 1 · Open',
     seatsMax: 22,
     seatsRemaining: 18,
@@ -140,10 +140,19 @@ export type ProgrammeSlug = PathwaySlug | IntensiveSlug;
 // Shared cohort facts that genuinely apply across every programme this cohort.
 // Seat counts live per-programme above, not here — see seatsLine()/siteSeatsLine().
 export const COHORT = {
-  startDate: '2026-09-20',
-  startDateDisplay: '20 Sep 2026',
-  applyByDate: '2026-09-15',
-  applyByDateDisplay: '15 Sep 2026',
+  // Moved from 20 September to make room for the free taster session on the
+  // 19th. Every surface derives its wording from here — see the DATES block
+  // at the foot of this file — so this is the only place to change it.
+  startDate: '2026-09-26',
+  startDateDisplay: '26 Sep 2026',
+  // Assumption, flagged at handover: applications now close after the taster
+  // rather than four days before it, which the old 15 September date would
+  // have done. Three clear days before the cohort starts.
+  applyByDate: '2026-09-23',
+  applyByDateDisplay: '23 Sep 2026',
+  // Free taster session — one open evening before enrolment closes.
+  tasterDate: '2026-09-19',
+  tasterDateDisplay: '19 Sep 2026',
   // Intensives run on their own, later cadence — see the doc comment above.
   intensiveStartDate: '2026-10-05',
   intensiveStartDateDisplay: '5 Oct 2026',
@@ -234,3 +243,44 @@ export function parsePassportId(id: string): { cohort: number; seq: number; trac
   if (!pathway) return null;
   return { cohort, seq, trackCode, pathway };
 }
+
+
+// ── Date wording ──────────────────────────────────────────
+// The prototype hardcoded "20 September" into a dozen components. Moving the
+// cohort meant hunting all of them, so the wording each surface needs is
+// derived here instead and every component reads from this block.
+
+const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+
+/** "26 September 2026" */
+export function formatLong(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${d} ${MONTHS_LONG[m - 1]} ${y}`;
+}
+
+/** "26 September" */
+export function formatDayMonth(iso: string): string {
+  const [, m, d] = iso.split('-').map(Number);
+  return `${d} ${MONTHS_LONG[m - 1]}`;
+}
+
+/** "26 Sep" */
+export function formatShort(iso: string): string {
+  const [, m, d] = iso.split('-').map(Number);
+  return `${d} ${MONTHS_SHORT[m - 1]}`;
+}
+
+export const DATES = {
+  cohortStartLong: formatLong(COHORT.startDate),          // 26 September 2026
+  cohortStartDayMonth: formatDayMonth(COHORT.startDate),  // 26 September
+  cohortStartShort: formatShort(COHORT.startDate),        // 26 Sep
+  applyByDayMonth: formatDayMonth(COHORT.applyByDate),    // 23 September
+  applyByLong: formatLong(COHORT.applyByDate),
+  tasterLong: formatLong(COHORT.tasterDate),              // 19 September 2026
+  tasterDayMonth: formatDayMonth(COHORT.tasterDate),      // 19 September
+  intensiveStartLong: formatLong(COHORT.intensiveStartDate),
+  intensiveStartDayMonth: formatDayMonth(COHORT.intensiveStartDate),
+  intensiveStartShort: formatShort(COHORT.intensiveStartDate),
+  intensiveApplyByDayMonth: formatDayMonth(COHORT.intensiveApplyByDate),
+} as const;

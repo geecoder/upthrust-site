@@ -15,6 +15,7 @@ import type {
   ConsultationSubmittedProps, CtaClickedProps, CurriculumInteractedProps,
   EnrolmentStartedProps, FaqExpandedProps, PaymentPlanSelectedProps,
   PricingTierSelectedProps, ProgramViewedProps, VideoPlayedProps,
+  TasterFormStartedProps, TasterSessionRegisteredProps,
 } from './types';
 import { track, trackBeforeNavigation } from './mixpanel';
 
@@ -51,6 +52,16 @@ export const analytics = {
 
   /** The recommendation, not the responses that produced it. */
   assessmentCompleted: (p: AssessmentCompletedProps) => track(EVENTS.assessmentCompleted, { ...p }),
+
+  /** First meaningful interaction with the taster form, once per instance. */
+  tasterFormStarted: (p: TasterFormStartedProps) => track(EVENTS.tasterFormStarted, { ...p }),
+
+  /**
+   * A confirmed taster registration — emitted only after the server accepts
+   * and stores it, never on submit. Carries whether a phone number was given,
+   * never the number.
+   */
+  tasterSessionRegistered: (p: TasterSessionRegisteredProps) => track(EVENTS.tasterSessionRegistered, { ...p }),
 
   consultationFormStarted: (p: ConsultationFormStartedProps) => track(EVENTS.consultationFormStarted, { ...p }),
 

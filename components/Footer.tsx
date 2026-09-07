@@ -10,7 +10,7 @@ const FULL_MONTHS = [
   'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER',
 ];
 
-// "NEXT COHORT · 20 SEPTEMBER 2026" — derived from COHORT.startDate (the
+// "NEXT COHORT · 26 SEPTEMBER 2026" — derived from COHORT.startDate (the
 // pathways cohort, the larger/first of the site's two cohort start dates)
 // rather than hardcoded, so this line stays correct whenever cohort-config
 // changes.

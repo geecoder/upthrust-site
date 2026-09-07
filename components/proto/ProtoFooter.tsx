@@ -7,6 +7,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FOOT, PROG_HREF, UPTHRUST_LI } from '@/lib/proto/data';
+import { DATES } from '@/lib/cohort-config';
 import { useProto } from '@/lib/proto/store';
 
 const ROUTE_HREF: Record<string, string> = {
@@ -39,7 +40,7 @@ export function ProtoFooter() {
           <p style={{ fontSize: 15, lineHeight: 1.55, color: 'var(--ink-200)', margin: '16px 0 0', maxWidth: '26em' }}>Live cohort programmes where professionals build evidence of capability, not another certificate.</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, margin: '20px 0 0' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--seal-500)', animation: 'v3pulse 1.6s ease-in-out infinite alternate' }} />
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.08em', color: 'var(--seal-300)' }}>NEXT COHORT · 20 SEPTEMBER 2026</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.08em', color: 'var(--seal-300)' }}>{`NEXT COHORT · ${DATES.cohortStartLong.toUpperCase()}`}</span>
           </div>
           {/* The prototype also shows Instagram and X chips. Only LinkedIn has
               a real account, and a chip that links nowhere is worse than no chip. */}

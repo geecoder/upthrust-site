@@ -11,6 +11,7 @@ If an event is not in this document, it should not be firing.
 Visitor  ($mp_web_page_view)
   └─ Program Viewed
        ├─ Assessment Started → Assessment Step Completed ×N → Assessment Completed
+       ├─ Taster Form Started → Taster Session Registered
        ├─ Consultation Form Started → Consultation Submitted
        └─ Pricing Tier Selected / Payment Plan Selected / Add-on Selected
             └─ Enrolment Started
@@ -231,6 +232,35 @@ purpose is drop-off measurement only.
 `recommended_program` (slug), `total_steps`, `duration_seconds`.
 
 **Never carries raw responses.**
+
+---
+
+### 11b. `Taster Form Started` / `Taster Session Registered`
+
+The free taster session is a lead, not a purchase — it sits alongside the
+assessment and consultation at the top of the funnel, outside the checkout path.
+Two events so completed registrations can be measured against form starts.
+
+**`Taster Form Started`** — first meaningful interaction with a taster form
+(typing or changing the pathway). Once per form instance, never on page load.
+`source_page`: `landing` \| `assessment` \| `program_pricing`.
+
+**`Taster Session Registered`** — **only after the server accepts and stores
+the registration.** Never on submit, and not emitted when the server reports
+that no storage sink is configured.
+
+| Property | Notes |
+|---|---|
+| `source_page` | which of the three placements |
+| `program_slug` | the pathway selected |
+| `program_name` | |
+| `has_phone` | boolean — **never the number itself** |
+
+Name, email and phone are **never** sent.
+
+**Source** — client · `components/proto/TasterForm.tsx`, rendered on the
+landing page, the assessment page (intro and result), and each programme's
+pricing panel.
 
 ---
 

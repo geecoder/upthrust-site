@@ -9,6 +9,7 @@ import { ABOUT, FOUNDER_IMG, FOUNDER_LI, FOUNDER_NAME, FOUNDER_TITLE } from '@/l
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
 import { Photo } from '@/components/proto/Photo';
 import { analytics } from '@/lib/analytics';
+import { DATES } from '@/lib/cohort-config';
 
 export function AboutContent() {
   useProtoRoute('about');
@@ -166,7 +167,7 @@ export function AboutContent() {
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(to right,rgba(244,239,230,.05) 0 1px,transparent 1px 32px),repeating-linear-gradient(to bottom,rgba(244,239,230,.05) 0 1px,transparent 1px 32px)', pointerEvents: 'none' }} />
         <div className="pv-wrap pv-2col" style={{ position: 'relative', padding: '64px 40px 70px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 44, alignItems: 'center' }}>
           <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', color: 'var(--seal-300)' }}>SIX PROGRAMMES · ALL START 20 SEPTEMBER</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', color: 'var(--seal-300)' }}>{`SIX PROGRAMMES · ALL START ${DATES.cohortStartDayMonth.toUpperCase()}`}</div>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,4.2vw,60px)', fontWeight: 600, letterSpacing: '-.04em', lineHeight: 1, margin: '16px 0 0', color: 'var(--bone)' }}>Come and build<br />something real.</h2>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

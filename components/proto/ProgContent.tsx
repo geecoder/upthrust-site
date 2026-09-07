@@ -23,9 +23,11 @@ import { getSessionToken } from '@/lib/payments/enrolment-reference';
 import { analytics, cohortFor, normalisePlan, normaliseTier, programContext, slugForKey } from '@/lib/analytics';
 import { P, PROG_HREF, type ProgKey } from '@/lib/proto/data';
 import { detail, type BankInput } from '@/lib/proto/detail';
+import { DATES } from '@/lib/cohort-config';
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
 import { AnonAvatar, Photo } from '@/components/proto/Photo';
 import { ToolIcon } from '@/components/proto/ToolIcon';
+import { TasterForm } from '@/components/proto/TasterForm';
 
 const WRAP = 'pv-wrap';
 
@@ -123,7 +125,7 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: d.tagfg, background: d.tagbg, padding: '3px 7px' }}>{d.tag}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', color: d.dim }}>{d.code} · STARTS 20 SEP</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', color: d.dim }}>{d.code} · STARTS {DATES.cohortStartShort.toUpperCase()}</span>
             </div>
 
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px,5.4vw,76px)', fontWeight: 600, letterSpacing: '-.04em', lineHeight: .98, margin: '20px 0 0', color: d.heroFg, animation: 'v3rise 620ms cubic-bezier(.22,1,.36,1) both' }}>{d.name}</h1>
@@ -528,6 +530,21 @@ export function ProgContent({ progKey, bank }: { progKey: ProgKey; bank: BankInp
               </div>
             </div>
           )}
+
+          {/* Not ready to pay today: the free taster is the softer next step,
+              pre-selected to the programme being viewed. */}
+          <div className="pv-2col" style={{ display: 'grid', gridTemplateColumns: '1.15fr .85fr', gap: 20, margin: '20px 0 0', alignItems: 'start' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10, padding: '4px 0' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.12em', color: 'var(--fg-3)' }}>NOT READY TO ENROL YET?</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,2.4vw,30px)', fontWeight: 600, letterSpacing: '-.026em', lineHeight: 1.12 }}>
+                Sit in on a live session first.
+              </div>
+              <p style={{ fontSize: 15, lineHeight: 1.55, color: 'var(--fg-2)', margin: 0, maxWidth: '30em' }}>
+                The taster runs on {DATES.tasterDayMonth}, a week before {d.name} starts. It costs nothing and commits you to nothing.
+              </p>
+            </div>
+            <TasterForm variant="panel" location="program_pricing" defaultProgramme={progKey} />
+          </div>
 
           {/* One transfer panel, shared by pathways and intensives. */}
               {d.payOpen && (

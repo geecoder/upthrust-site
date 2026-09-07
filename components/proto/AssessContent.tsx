@@ -9,6 +9,8 @@ import { DIMS, P, PROG_HREF, Q, type ProgKey } from '@/lib/proto/data';
 import { useProto, useProtoRoute } from '@/lib/proto/store';
 import { validateLeadEmail, validateLeadName } from '@/lib/validation/lead';
 import { analytics, slugForKey } from '@/lib/analytics';
+import { TasterForm } from '@/components/proto/TasterForm';
+import { DATES } from '@/lib/cohort-config';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
 const TRACKS: ProgKey[] = ['pm', 'ba', 'pd', 'po'];
@@ -185,6 +187,22 @@ export function AssessContent() {
         </section>
       )}
 
+      {/* ─────────── TASTER (intro) ─────────── */}
+      {s.aStage === 'intro' && (
+        <section style={{ borderBottom: '1px solid var(--border-strong)', background: 'var(--bone-dim)' }}>
+          <div className="pv-wrap pv-2col" style={{ padding: '52px 40px 56px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 44, alignItems: 'center' }}>
+            <div>
+              <div style={{ width: 34, height: 2, background: 'var(--seal-500)', marginBottom: 14 }} />
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(26px,3.2vw,40px)', fontWeight: 600, letterSpacing: '-.03em', lineHeight: 1.06, margin: 0 }}>Or come and watch<br />a session first.</h2>
+              <p style={{ fontSize: 16, lineHeight: 1.55, color: 'var(--fg-2)', margin: '16px 0 0', maxWidth: '30em' }}>
+                Free, live, on {DATES.tasterDayMonth} — a week before the cohort starts. No assessment required.
+              </p>
+            </div>
+            <TasterForm variant="full" location="assessment" />
+          </div>
+        </section>
+      )}
+
       {/* ─────────── QUIZ ─────────── */}
       {s.aStage === 'quiz' && qq && (
         <section>
@@ -273,6 +291,19 @@ export function AssessContent() {
                   </div>
                 ))}
               </div>
+              <div className="pv-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, margin: '36px 0 0', paddingTop: 30, borderTop: '1px solid var(--border-soft)', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.12em', color: 'var(--fg-3)' }}>BEFORE YOU DECIDE</div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,2.4vw,30px)', fontWeight: 600, letterSpacing: '-.026em', lineHeight: 1.12, marginTop: 10 }}>
+                    See {P[rTop].n} run for an evening.
+                  </div>
+                  <p style={{ fontSize: 15, lineHeight: 1.55, color: 'var(--fg-2)', margin: '8px 0 0', maxWidth: '30em' }}>
+                    The free taster is on {DATES.tasterDayMonth}. Your pathway is already selected — change it if you would rather see another.
+                  </p>
+                </div>
+                <TasterForm variant="panel" location="assessment" defaultProgramme={rTop} />
+              </div>
+
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '32px 0 0', flexWrap: 'wrap' }}>
                 <button onClick={() => { analytics.ctaClicked({ cta_name: `Open ${P[rTop].n}`, cta_location: 'assessment_result', destination: PROG_HREF[rTop], program_slug: slugForKey(rTop) }); router.push(PROG_HREF[rTop]); }} className="pv-h-seal600" style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 26px', background: 'var(--seal-500)', color: 'var(--bone)', border: 0, borderRadius: 4, cursor: 'pointer', transition: 'background 150ms' }}>Open {P[rTop].n} →</button>
                 <button onClick={() => { analytics.ctaClicked({ cta_name: 'See all six programmes', cta_location: 'assessment_result', destination: '/' }); router.push('/'); }} style={{ font: 'inherit', fontSize: 16, fontWeight: 500, height: 52, padding: '0 22px', background: 'none', color: 'var(--fg-1)', border: '1px solid var(--border-strong)', borderRadius: 4, cursor: 'pointer' }}>See all six programmes</button>

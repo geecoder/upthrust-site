@@ -138,6 +138,20 @@ export type AssessmentCompletedProps = {
 };
 
 export type ConsultationFormStartedProps = { source_page: string; program_interest?: string };
+
+// The taster session is a free open evening before enrolment closes, so a
+// registration is a lead rather than a purchase — it sits alongside the
+// assessment and consultation as a top-of-funnel signal, not in the checkout
+// path. Two events rather than folding it into CTA Clicked, because the point
+// is measuring completed registrations against form starts.
+export type TasterFormStartedProps = { source_page: 'landing' | 'assessment' | 'program_pricing' };
+export type TasterSessionRegisteredProps = {
+  source_page: 'landing' | 'assessment' | 'program_pricing';
+  program_slug: ProgramSlug;
+  program_name: string;
+  /** Whether the optional phone number was supplied. Never the number itself. */
+  has_phone: boolean;
+};
 export type ConsultationSubmittedProps = { source_page: string; program_interest?: string };
 
 export type EnrolmentStartedProps = ProgramContext & {
@@ -195,6 +209,8 @@ export const EVENTS = {
   assessmentStarted: 'Assessment Started',
   assessmentStepCompleted: 'Assessment Step Completed',
   assessmentCompleted: 'Assessment Completed',
+  tasterFormStarted: 'Taster Form Started',
+  tasterSessionRegistered: 'Taster Session Registered',
   consultationFormStarted: 'Consultation Form Started',
   consultationSubmitted: 'Consultation Submitted',
   enrolmentStarted: 'Enrolment Started',

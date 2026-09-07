@@ -17,6 +17,7 @@ import {
   type CurKey, type ProgKey,
 } from './data';
 import { CUR_REGION_NAME } from './region-map';
+import { DATES } from '@/lib/cohort-config';
 import { buildReference, referencePrefix } from '@/lib/payments/enrolment-reference';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -94,14 +95,14 @@ export function detail(k: ProgKey, S: DetailState, bank?: BankInput, payToken?: 
     tagbg: int ? 'var(--seal-500)' : 'var(--paper-dim)',
 
     facts: [
-      { n: int ? '5 Oct' : '20 Sep', l: 'COHORT STARTS' }, { n: p.wk, l: 'WEEKS' },
+      { n: int ? DATES.intensiveStartShort : DATES.cohortStartShort, l: 'COHORT STARTS' }, { n: p.wk, l: 'WEEKS' },
       { n: int ? '6–8h' : '8–10h', l: 'PER WEEK' }, { n: String(n), l: 'ARTEFACTS' },
       { n: 'Live', l: 'ONLINE' },
     ],
-    startDate: int ? '5 October 2026' : '20 September 2026',
-    startShort: int ? '5 October' : '20 September',
-    closeLine: int ? 'APPLICATIONS CLOSE 28 SEPTEMBER' : 'APPLICATIONS CLOSE 15 SEPTEMBER',
-    closeDate: int ? '28 September' : '15 September',
+    startDate: int ? DATES.intensiveStartLong : DATES.cohortStartLong,
+    startShort: int ? DATES.intensiveStartDayMonth : DATES.cohortStartDayMonth,
+    closeLine: 'APPLICATIONS CLOSE ' + (int ? DATES.intensiveApplyByDayMonth : DATES.applyByDayMonth).toUpperCase(),
+    closeDate: int ? DATES.intensiveApplyByDayMonth : DATES.applyByDayMonth,
 
     bothInc: [
       'All live cohort sessions', 'Every template and worked example',

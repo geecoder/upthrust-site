@@ -16,8 +16,10 @@ import {
   type ProgKey, CUR, money, priceFor,
 } from '@/lib/proto/data';
 import { scrollToId, useProto, useProtoRoute } from '@/lib/proto/store';
+import { COHORT, DATES } from '@/lib/cohort-config';
 import { analytics, programContext } from '@/lib/analytics';
 import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder';
+import { TasterForm } from '@/components/proto/TasterForm';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -26,7 +28,10 @@ const pad2 = (n: number) => String(n).padStart(2, '0');
 // year from now. The markup, labels and styling are the prototype's exactly —
 // only the digits are computed from the real close date after mount, which
 // also keeps the server and client render identical.
-const CLOSE = Date.UTC(2026, 8, 15, 23, 59);
+const CLOSE = (() => {
+  const [y, m, d] = COHORT.applyByDate.split('-').map(Number);
+  return Date.UTC(y, m - 1, d, 23, 59);
+})();
 
 function useCountdown() {
   const [c, setC] = useState({ d: '20', h: '06', m: '42' });
@@ -180,7 +185,7 @@ export function HomeContent() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, animation: 'v3drop 500ms cubic-bezier(.22,1,.36,1) both' }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--seal-500)', animation: 'v3pulse 1.6s ease-in-out infinite alternate' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.12em', color: 'var(--fg-2)' }}>ENROLLING NOW · SIX COHORTS START 20 SEP</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.12em', color: 'var(--fg-2)' }}>{`ENROLLING NOW · SIX COHORTS START ${DATES.cohortStartShort.toUpperCase()}`}</span>
             </div>
 
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(48px,6.4vw,92px)', fontWeight: 600, letterSpacing: '-.04em', lineHeight: .96, margin: '22px 0 0', animation: 'v3rise 700ms cubic-bezier(.22,1,.36,1) 80ms both' }}>Twelve weeks.<br />Then proof.</h1>
@@ -272,7 +277,7 @@ export function HomeContent() {
       <section id="v3-pick" style={{ borderBottom: '1px solid var(--border-strong)' }}>
         <div className="pv-wrap" style={{ padding: '64px 40px 72px' }}>
           <div data-rv="" style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(30px,3.6vw,46px)', fontWeight: 600, letterSpacing: '-.032em', lineHeight: 1.04, margin: 0 }}>Six programmes.<br />All start 20 September.</h2>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(30px,3.6vw,46px)', fontWeight: 600, letterSpacing: '-.032em', lineHeight: 1.04, margin: 0 }}>Six programmes.<br />All start {DATES.cohortStartDayMonth}.</h2>
             <div style={{ display: 'flex', gap: 8 }}>
               {famTabs.map(f => (
                 <button key={f.k} onClick={() => set({ fam: f.k })} style={{ font: 'inherit', fontSize: 13, fontWeight: 500, padding: '9px 15px', border: `1px solid ${s.fam === f.k ? 'var(--ink-900)' : 'var(--border-strong)'}`, background: s.fam === f.k ? 'var(--ink-900)' : 'var(--white)', color: s.fam === f.k ? 'var(--bone)' : 'var(--fg-2)', borderRadius: 3, cursor: 'pointer', transition: 'all 150ms cubic-bezier(.22,1,.36,1)' }}>{f.l}</button>
@@ -299,6 +304,34 @@ export function HomeContent() {
                 </span>
               </button>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────── 2b. TASTER SESSION ─────────── */}
+      <section style={{ borderBottom: '1px solid var(--border-strong)', background: 'var(--bone-dim)' }}>
+        <div className="pv-wrap pv-2col" style={{ padding: '58px 40px 62px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 44, alignItems: 'center' }}>
+          <div data-rv="">
+            <div style={{ width: 34, height: 2, background: 'var(--seal-500)', marginBottom: 14 }} />
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px,3.4vw,44px)', fontWeight: 600, letterSpacing: '-.032em', lineHeight: 1.04, margin: 0 }}>Try it before<br />you pay for it.</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.55, color: 'var(--fg-2)', margin: '18px 0 0', maxWidth: '30em' }}>
+              A free live session on {DATES.tasterDayMonth} — the same format as a cohort week, run by the people who run the cohort. Come, ask what you like, then decide.
+            </p>
+            <div className="pv-statrow" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,auto)', gap: '0 34px', margin: '30px 0 0', justifyContent: 'start' }}>
+              {[
+                { n: DATES.tasterDayMonth.split(' ')[0], l: DATES.tasterDayMonth.split(' ')[1].toUpperCase() },
+                { n: 'Free', l: 'NO CARD' },
+                { n: 'Live', l: 'ONLINE' },
+              ].map((x) => (
+                <span key={x.l} style={{ borderTop: '2px solid var(--ink-900)', paddingTop: 9 }}>
+                  <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 30, fontWeight: 600, letterSpacing: '-.03em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{x.n}</span>
+                  <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em', color: 'var(--fg-3)', marginTop: 5 }}>{x.l}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div data-rv="" data-d="80">
+            <TasterForm variant="full" location="landing" />
           </div>
         </div>
       </section>
@@ -526,7 +559,7 @@ export function HomeContent() {
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(to right,rgba(244,239,230,.05) 0 1px,transparent 1px 32px),repeating-linear-gradient(to bottom,rgba(244,239,230,.05) 0 1px,transparent 1px 32px)', pointerEvents: 'none' }} />
         <div className="pv-wrap pv-2col" style={{ position: 'relative', padding: '76px 40px 80px', display: 'grid', gridTemplateColumns: '1.15fr .85fr', gap: 52, alignItems: 'center' }}>
           <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', color: 'var(--seal-300)' }}>APPLICATIONS CLOSE 15 SEPTEMBER</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', color: 'var(--seal-300)' }}>{`APPLICATIONS CLOSE ${DATES.applyByDayMonth.toUpperCase()}`}</div>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px,4.6vw,68px)', fontWeight: 600, letterSpacing: '-.04em', lineHeight: .98, margin: '18px 0 0', color: 'var(--bone)' }}>{cd.d} days<br />to decide.</h2>
             <div style={{ display: 'flex', gap: 22, margin: '28px 0 0', flexWrap: 'wrap' }}>
               {[{ n: cd.d, l: 'DAYS' }, { n: cd.h, l: 'HOURS' }, { n: cd.m, l: 'MINUTES' }, { n: String(totalSeats), l: 'PLACES LEFT' }].map(c => (
